@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:timer_countdown/timer_countdown.dart';
+import 'package:flutter_timer_countdown/timer_countdown.dart';
 
 void main() {
   runApp(MyApp());
