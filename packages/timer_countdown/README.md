@@ -4,7 +4,7 @@ A simple customizable timer for counting down a given time.
 
 
 ## Preview
-![](https://github.com/appinioGmbH/flutter_packages/tree/main/assets/timer_countdown/screenshot_1.png)
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/timer_countdown/screenshot_1.png?raw=true" height="800">
 
 
 ## Getting Started
@@ -34,7 +34,7 @@ class MyTimer extends StatelessWidget {
 ```
 
 <hr/>
-Made with ❤ by Flutter team at [Appinio GmbH](https://appinio.com)
+Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
 
 
 
