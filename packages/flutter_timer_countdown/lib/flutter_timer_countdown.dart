@@ -1,4 +1,4 @@
-library timer_countdown;
+library flutter_timer_countdown;
 
 import 'dart:async';
 import 'package:flutter/widgets.dart';
