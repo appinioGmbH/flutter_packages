@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         onPageFinish: (BuildContext newContext) {
           Navigator.push(
             newContext,
-            MaterialPageRoute(
+            CupertinoPageRoute(
               builder: (context) => RegisterPage(),
             ),
           );
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         onFinish: (BuildContext newContext) {
           Navigator.push(
             newContext,
-            MaterialPageRoute(
+            CupertinoPageRoute(
               builder: (context) => LoginPage(),
             ),
           );
