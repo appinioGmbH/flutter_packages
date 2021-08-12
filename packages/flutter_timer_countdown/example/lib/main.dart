@@ -105,7 +105,7 @@ class MyApp extends StatelessWidget {
                   height: 30,
                 ),
                 Text(
-                  "Without minutes",
+                  "Without Minutes",
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -143,7 +143,7 @@ class MyApp extends StatelessWidget {
                   height: 30,
                 ),
                 Text(
-                  "Without hours",
+                  "Without Hours",
                   style: TextStyle(
                     fontSize: 20,
                   ),
