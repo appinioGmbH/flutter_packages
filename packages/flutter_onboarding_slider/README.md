@@ -2,6 +2,24 @@
 
 A page slider with parallex design that allows (Text) widgets or body to slide at a different speed with background.
 
+## Preview
+#### Swipe
+Touch swiping.
+
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/page_slider/swipe.gif?raw=true" height="400">
+
+
+#### Slide
+Swipe with the Floating Action Button.
+
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/page_slider/slide.gif?raw=true" height="400">
+
+
+#### Skip
+Skip to last Slide.
+
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/page_slider/skip.gif?raw=true" height="400">
+
 ## Features
 
 * Parralex design of the background that allows background to slide at a different speed.
@@ -35,104 +53,46 @@ You can place your `PageSlider` inside of a `MaterialApp`, optional parameters c
 class OnBoarding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-          home: PageSlider(
-            buttonText: 'New Page',
-            onPageFinish: (BuildContext newContext) {
-              Navigator.push(
-                newContext,
-                MaterialPageRoute(builder: (context) => NewPage()),
-              );
-            },
-            skipTextButton: Text('skip'),
-            finishButton: Text('new page'),
-            onFinish: (BuildContext newContext) {
-              Navigator.push(
-                newContext,
-                MaterialPageRoute(builder: (context) => NewPage()),
-              );
-            },
-            controllerColor: Colors.blue,
-            totalPage: 3,
-            headerBackgroundColor: Colors.white,
-            background: [
-              Image.asset('assets/flutter.jpg'),
-              Image.asset('assets/flutter.jpg'),
-              Image.asset('assets/flutter.jpg'),
-            ],
-            speed: 1.4,
-            bodyHeight: 540,
-            bodyWidth: 500,
-            pageBodies: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 200,
-                    ),
-                    Text(
-                      'Flutter Parallex Design Example',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 35.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                  ],
+    return CupertinoApp(
+      home: OnBoardingSlider(
+        headerBackgroundColor: Colors.white,
+        buttonText: 'Register',
+        skipTextButton: Text('Skip'),
+        finishButton: Text('Login'),
+        background: [
+          Image.asset('assets/slide_1.png'),
+          Image.asset('assets/slide_2.png'),
+        ],
+        totalPage: 2,
+        speed: 1.8,
+        bodyHeight: 650,
+        bodyWidth: 500,
+        pageBodies: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 480,
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 200,
-                    ),
-                    Text(
-                      'Flutter Parallex Design Example',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 35.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 200,
-                    ),
-                    Text(
-                      'Flutter Parallex Design Example',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 35.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                  ],
-                ),
-              ),
-            ],
+                Text('Description Text 1'),
+              ],
+            ),
           ),
-        );
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 480,
+                ),
+                Text('Description Text 2'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 ```
