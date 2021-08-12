@@ -24,6 +24,7 @@ class BackgroundController extends StatelessWidget {
           );
   }
 
+  /// List of the slides Indicators.
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
     for (int i = 0; i < totalPage; i++) {
@@ -32,6 +33,7 @@ class BackgroundController extends StatelessWidget {
     return list;
   }
 
+  /// Slide Controller / Indicator.
   Widget _indicator(bool isActive) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),

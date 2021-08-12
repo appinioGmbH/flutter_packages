@@ -13,26 +13,26 @@ import 'background_body.dart';
 export 'background.dart';
 
 class PageSlider extends StatefulWidget {
-  int totalPage;
-  Color headerBackgroundColor;
-  List<Widget> background;
-  double speed;
-  bool addButton;
-  Color? pageBackgroundColor;
-  Gradient? pageBackgroundGradient;
-  Function? onFinish;
-  Widget? finishButton;
-  Widget? skipTextButton;
-  List<Widget> pageBodies;
-  Function? onPageFinish;
-  Color? buttonBackgroundColor;
-  Color? buttonTextColor;
-  String? buttonText;
-  Color? controllerColor;
-  bool addController;
-  double imageVerticalOffset;
-  double bodyHeight;
-  double bodyWidth;
+  final int totalPage;
+  final Color headerBackgroundColor;
+  final List<Widget> background;
+  final double speed;
+  final bool addButton;
+  final Color? pageBackgroundColor;
+  final Gradient? pageBackgroundGradient;
+  final Function? onFinish;
+  final Widget? finishButton;
+  final Widget? skipTextButton;
+  final List<Widget> pageBodies;
+  final Function? onPageFinish;
+  final Color? buttonBackgroundColor;
+  final Color? buttonTextColor;
+  final String? buttonText;
+  final Color? controllerColor;
+  final bool addController;
+  final double imageVerticalOffset;
+  final double bodyHeight;
+  final double bodyWidth;
 
   PageSlider({
     required this.totalPage,
@@ -132,12 +132,14 @@ class _PageSliderState extends State<PageSlider> {
     );
   }
 
+  /// Slide to Next Page.
   void slide(int page) {
     setState(() {
       _currentPage = page;
     });
   }
 
+  /// Skip to last Slide.
   void _onSkip() {
     _pageController.jumpToPage(widget.totalPage - 1);
     setState(() {

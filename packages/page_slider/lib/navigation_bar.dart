@@ -35,6 +35,7 @@ class NavigationBar extends StatelessWidget
       automaticallyImplyLeading: false,
       trailing: currentPage == totalPage - 1
           ? Container(
+              color: Colors.transparent,
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
@@ -44,6 +45,7 @@ class NavigationBar extends StatelessWidget
               ),
             )
           : Container(
+              color: Colors.transparent,
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {

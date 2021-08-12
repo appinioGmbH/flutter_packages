@@ -64,6 +64,7 @@ class BackgroundFinalButton extends StatelessWidget {
         : SizedBox.shrink();
   }
 
+  /// Switch to Next Slide using the Floating Action Button.
   void _goToNextPage(BuildContext context) {
     pageController.nextPage(
       duration: Duration(milliseconds: 500),

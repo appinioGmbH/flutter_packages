@@ -19,14 +19,16 @@ class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(background.length == totalPage);
-    return Stack(children: [
-      for (int i = 0; i < totalPage; i++)
-        BackgroundImage(
-            imageVerticalOffset: imageVerticalOffset,
-            id: totalPage - i,
-            speed: speed,
-            background: background[totalPage - i - 1]),
-      child,
-    ]);
+    return Stack(
+      children: [
+        for (int i = 0; i < totalPage; i++)
+          BackgroundImage(
+              imageVerticalOffset: imageVerticalOffset,
+              id: totalPage - i,
+              speed: speed,
+              background: background[totalPage - i - 1]),
+        child,
+      ],
+    );
   }
 }
