@@ -17,6 +17,7 @@ class ProfileSliverElement extends RenderObjectElement {
     visitor(_header!);
   }
 
+  /// remove the child
   @override
   void forgetChild(Element child) {
     if (child == _body) {
@@ -29,6 +30,7 @@ class ProfileSliverElement extends RenderObjectElement {
     }
   }
 
+  /// mount the child to the tree
   @override
   void mount(Element? parent, dynamic newSlot) {
     super.mount(parent, newSlot);
@@ -36,6 +38,7 @@ class ProfileSliverElement extends RenderObjectElement {
     _header = updateChild(_header, widget.header, 1);
   }
 
+  /// used when udpating a widget
   @override
   void update(ProfileSliver newWidget) {
     super.update(newWidget);
@@ -44,6 +47,7 @@ class ProfileSliverElement extends RenderObjectElement {
     _header = updateChild(_header, widget.header, 1);
   }
 
+  /// insert a render object
   @override
   void insertRenderObjectChild(covariant RenderBox child, dynamic slot) {
     final ProfileSliverRenderObject renderObject =
@@ -53,12 +57,14 @@ class ProfileSliverElement extends RenderObjectElement {
     assert(renderObject == this.renderObject);
   }
 
+  /// move a render object child
   @override
   void moveRenderObjectChild(
       covariant RenderObject child, dynamic oldSlot, dynamic newSlot) {
     assert(false);
   }
 
+  /// remove render object child
   @override
   void removeRenderObjectChild(covariant RenderObject child, dynamic slot) {
     final ProfileSliverRenderObject renderObject =

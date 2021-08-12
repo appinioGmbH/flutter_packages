@@ -17,10 +17,16 @@ class ProfileSliverRenderObject extends RenderSliver with RenderSliverHelpers {
     if (header != null) this.header = header;
   }
 
+  /// return the height of the entire height of the header
   double get mainHeight => bodyExtent + headerHeight;
+
+  /// return whether the header is being streched
   bool get isStretching => scrollOffset <= 0;
+
+  /// get the scrolloffset that includes the overlapped area
   double get scrollOffset => constraints.scrollOffset + constraints.overlap;
 
+  /// get the height of the header
   double get headerHeight => _headerHeight;
   set headerHeight(double value) {
     if (headerHeight == value) return;
@@ -28,6 +34,7 @@ class ProfileSliverRenderObject extends RenderSliver with RenderSliverHelpers {
     markNeedsLayout();
   }
 
+  /// get the height of the body
   double get bodyExtent {
     if (body == null) {
       return 0.0;
@@ -37,6 +44,7 @@ class ProfileSliverRenderObject extends RenderSliver with RenderSliverHelpers {
     return body!.size.height;
   }
 
+  /// get the height of the background
   double get backgroundExtent {
     if (header == null) {
       return 0.0;
@@ -161,6 +169,7 @@ class ProfileSliverRenderObject extends RenderSliver with RenderSliverHelpers {
     }
   }
 
+  /// change the position
   @override
   double childMainAxisPosition(covariant RenderObject child) {
     final double offset = isStretching ? 0 : -constraints.scrollOffset;
@@ -176,6 +185,7 @@ class ProfileSliverRenderObject extends RenderSliver with RenderSliverHelpers {
     return 0.0;
   }
 
+  /// hit text logic
   @override
   bool hitTest(SliverHitTestResult result,
       {required double mainAxisPosition, required double crossAxisPosition}) {
@@ -202,6 +212,7 @@ class ProfileSliverRenderObject extends RenderSliver with RenderSliverHelpers {
     return false;
   }
 
+  /// adapt hit test logic to children
   @override
   bool hitTestChildren(SliverHitTestResult result,
       {required double mainAxisPosition, required double crossAxisPosition}) {
@@ -222,6 +233,7 @@ class ProfileSliverRenderObject extends RenderSliver with RenderSliverHelpers {
     return false;
   }
 
+  /// get the child scroll offset
   @override
   double? childScrollOffset(covariant RenderObject child) {
     assert(child.parent == this);
@@ -237,6 +249,7 @@ class ProfileSliverRenderObject extends RenderSliver with RenderSliverHelpers {
     applyPaintTransformForBoxChild(child as RenderBox, transform);
   }
 
+  /// paint
   @override
   void paint(PaintingContext context, Offset offset) {
     if (geometry!.visible) {
@@ -250,6 +263,7 @@ class ProfileSliverRenderObject extends RenderSliver with RenderSliverHelpers {
     }
   }
 
+  /// debug fill properties
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);

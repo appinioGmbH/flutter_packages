@@ -17,6 +17,7 @@ class ProfileSliver extends RenderObjectWidget {
   @override
   ProfileSliverElement createElement() => ProfileSliverElement(this);
 
+  /// create a render object instance of the profile sliver
   @override
   ProfileSliverRenderObject createRenderObject(BuildContext context) {
     return ProfileSliverRenderObject(headerHeight: headerHeight);

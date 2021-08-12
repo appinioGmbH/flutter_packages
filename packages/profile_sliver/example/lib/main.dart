@@ -9,32 +9,58 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
-      appBar: AppBar(
-        title: Text("ProfileSliver Example"),
-      ),
-      body: CustomScrollView(
-        slivers: [
-          ProfileSliver(
-            headerHeight: 200,
-            header: Container(
-              height: 20,
-              color: Colors.white,
-              child: Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus maximus fringilla massa et eleifend. Duis pharetra tellus ante, in lacinia ligula egestas eu. Donec ut efficitur augue, sed laoreet massa. Pellentesque risus felis, volutpat a elementum at, semper mattis velit. Fusce a sapien est. Integer maximus odio eu est aliquam imperdiet. In egestas venenatis dolor, id posuere velit ornare consequat. Donec eu suscipit orci, eget egestas justo. Proin suscipit blandit est, eget consectetur nisi pretium a. Aenean lobortis vehicula arcu, sit amet scelerisque metus elementum quis. Aenean maximus, nisl nec iaculis pulvinar, lorem neque feugiat dui, vel viverra velit quam sit amet nulla. Nullam semper suscipit enim ut tincidunt. Quisque vitae enim vel diam volutpat sollicitudin. Suspendisse eros urna, hendrerit eu ipsum ac, tristique mattis ante. Phasellus suscipit dui eu diam vehicula gravida. Duis ultrices faucibus nunc vitae aliquam.'),
+          appBar: AppBar(
+            title: Text(
+              'Profile Sliver Example',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
             ),
-            body: Container(
-              color: Colors.blue,
-              height: 60,
-              child: Center(child: Text("Body")),
-            ),
+            centerTitle: true,
+            actions: [Icon(Icons.notifications)],
           ),
-          SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-            return Container(height: 50, child: Center(child: Text("$index")));
-          }, childCount: 50))
-        ],
-      ),
-    ));
+          body: CustomScrollView(
+            slivers: [
+              ProfileSliver(
+                headerHeight: 200,
+                header: Container(
+                  height: 20,
+                  color: Color(0xFF053149),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 50),
+                      SizedBox(height: 20),
+                      Icon(
+                        Icons.arrow_downward,
+                        size: 40,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                ),
+                body: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    ),
+                  ),
+                  height: 60,
+                  child: Center(child: Text("Body")),
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                return Container(
+                    height: 50, child: Center(child: Text("$index")));
+              }, childCount: 50))
+            ],
+          ),
+        ));
   }
 }
