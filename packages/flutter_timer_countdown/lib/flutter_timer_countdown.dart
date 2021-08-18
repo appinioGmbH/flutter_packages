@@ -277,21 +277,29 @@ class _TimerCountdownState extends State<TimerCountdown> {
 
   /// Convert [Duration] in hours to String for UI.
   String _durationToStringHours(Duration duration) {
-    return _twoDigits(duration.inHours.remainder(24), "hours").toString();
+    if (widget.format == CountDownTimerFormat.hoursMinutesSeconds ||
+        widget.format == CountDownTimerFormat.hoursMinutes ||
+        widget.format == CountDownTimerFormat.hoursOnly) {
+      return _twoDigits(duration.inHours, "hours");
+    } else
+      return _twoDigits(duration.inHours.remainder(24), "hours").toString();
   }
 
   /// Convert [Duration] in minutes to String for UI.
   String _durationToStringMinutes(Duration duration) {
-    String twoDigitMinutes =
-        _twoDigits(duration.inMinutes.remainder(60), "minutes");
-    return "$twoDigitMinutes";
+    if (widget.format == CountDownTimerFormat.minutesSeconds ||
+        widget.format == CountDownTimerFormat.minutesOnly) {
+      return _twoDigits(duration.inMinutes, "minutes");
+    } else
+      return _twoDigits(duration.inMinutes.remainder(60), "minutes");
   }
 
   /// Convert [Duration] in seconds to String for UI.
   String _durationToStringSeconds(Duration duration) {
-    String twoDigitSeconds =
-        _twoDigits(duration.inSeconds.remainder(60), "seconds");
-    return "$twoDigitSeconds";
+    if (widget.format == CountDownTimerFormat.secondsOnly) {
+      return _twoDigits(duration.inSeconds, "seconds");
+    } else
+      return _twoDigits(duration.inSeconds.remainder(60), "seconds");
   }
 
   /// Switches the UI to be displayed based on [CountDownTimerFormat].

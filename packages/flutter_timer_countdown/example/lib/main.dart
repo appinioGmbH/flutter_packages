@@ -15,9 +15,9 @@ class MyApp extends StatelessWidget {
           middle: Text("Timer Countdown"),
         ),
         child: SafeArea(
+          minimum: EdgeInsets.all(20),
           child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: ListView(
               children: [
                 SizedBox(
                   height: 20,
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 TimerCountdown(
                   format: CountDownTimerFormat.daysHoursMinutesSeconds,
@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 TimerCountdown(
                   format: CountDownTimerFormat.daysHoursMinutes,
@@ -111,7 +111,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 TimerCountdown(
                   format: CountDownTimerFormat.daysHours,
@@ -149,10 +149,44 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 TimerCountdown(
                   format: CountDownTimerFormat.daysOnly,
+                  endTime: DateTime.now().add(
+                    Duration(
+                      days: 5,
+                      hours: 14,
+                      minutes: 27,
+                      seconds: 34,
+                    ),
+                  ),
+                  onEnd: () {
+                    print("Timer finished");
+                  },
+                  timeTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                  ),
+                  descriptionTextStyle: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  "Only Minutes",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TimerCountdown(
+                  format: CountDownTimerFormat.minutesOnly,
                   endTime: DateTime.now().add(
                     Duration(
                       days: 5,
