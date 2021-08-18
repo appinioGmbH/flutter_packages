@@ -24,10 +24,10 @@ class MyTimer extends StatelessWidget {
           minutes: 27,
           seconds: 34,
         ),
-        onEnd: () {
-          print("Timer finished");
-        },
       ),
+      onEnd: () {
+        print("Timer finished");
+      },
     );
   }
 }
