@@ -17,22 +17,37 @@ enum CountDownTimerFormat {
 }
 
 class TimerCountdown extends StatefulWidget {
-  /// Choose between different ```CountDownTimerFormat```s
+  /// Choose between different `CountDownTimerFormat`s
   final CountDownTimerFormat format;
+
+  /// Defines the time when the timer is over.
   final DateTime endTime;
 
+  /// Function to call when the timer is over.
   final VoidCallback? onEnd;
 
+  /// Toggle time units descriptions.
   final bool enableDescriptions;
 
+  /// `TextStyle` for the time numbers.
   final TextStyle? timeTextStyle;
+
+  /// `TextStyle` for the colons betwenn the time numbers.
   final TextStyle? colonsTextStyle;
+
+  /// `TextStyle`
   final TextStyle? descriptionTextStyle;
 
-  // unit descriptions
+  /// days unit description
   final String daysDescription;
+
+  /// hours unit description
   final String hoursDescription;
+
+  /// minutes unit description
   final String minutesDescription;
+
+  /// seconds unit description
   final String secondsDescription;
 
   TimerCountdown({
