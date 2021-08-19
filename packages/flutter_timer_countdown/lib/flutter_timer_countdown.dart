@@ -38,17 +38,20 @@ class TimerCountdown extends StatefulWidget {
   /// `TextStyle`
   final TextStyle? descriptionTextStyle;
 
-  /// days unit description
+  /// Days unit description.
   final String daysDescription;
 
-  /// hours unit description
+  /// Hours unit description.
   final String hoursDescription;
 
-  /// minutes unit description
+  /// Minutes unit description.
   final String minutesDescription;
 
-  /// seconds unit description
+  /// Seconds unit description.
   final String secondsDescription;
+
+  /// Defines the width between the colons and the units.
+  final double spacerWidth;
 
   TimerCountdown({
     required this.endTime,
@@ -62,6 +65,7 @@ class TimerCountdown extends StatefulWidget {
     this.hoursDescription = "Hours",
     this.minutesDescription = "Minutes",
     this.secondsDescription = "Seconds",
+    this.spacerWidth = 10,
   });
 
   @override
@@ -127,7 +131,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
     return Row(
       children: [
         SizedBox(
-          width: 10,
+          width: widget.spacerWidth,
         ),
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -149,7 +153,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
           ],
         ),
         SizedBox(
-          width: 10,
+          width: widget.spacerWidth,
         ),
       ],
     );

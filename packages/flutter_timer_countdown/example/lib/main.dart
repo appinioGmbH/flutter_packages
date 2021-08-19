@@ -10,6 +10,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
+      theme: CupertinoThemeData(
+        brightness: Brightness.light,
+      ),
       home: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text("Timer Countdown"),
@@ -58,6 +61,7 @@ class MyApp extends StatelessWidget {
                     color: Colors.red,
                     fontSize: 18,
                   ),
+                  spacerWidth: 20,
                   daysDescription: "d",
                   hoursDescription: "h",
                   minutesDescription: "m",
