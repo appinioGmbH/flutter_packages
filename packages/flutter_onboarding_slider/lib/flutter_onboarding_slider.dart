@@ -13,25 +13,64 @@ import 'background_body.dart';
 export 'background.dart';
 
 class OnBoardingSlider extends StatefulWidget {
+  /// Number of total pages.
   final int totalPage;
+
+  /// NavigationBars color.
   final Color headerBackgroundColor;
+
+  /// List of Widgets to be shown in the backgrounds of the pages. For example a picture or some illustration.
   final List<Widget> background;
+
+  /// The speed of the animation for the [background].
   final double speed;
-  final bool addButton;
+
+  /// Background Color of whole screen apart from the NavigationBar.
   final Color? pageBackgroundColor;
+
+  /// Background Gradient of whole screen apart from the NavigationBar.
   final Gradient? pageBackgroundGradient;
+
+  /// Callback to be executed when clicked on the [finishButton].
   final Function? onFinish;
+
+  /// NavigationBar trailing widget when on last screen.
   final Widget? finishButton;
+
+  /// NavigationBar trailing widget when not on last screen.
   final Widget? skipTextButton;
+
+  /// The main content ont the screen displayed above the [background].
   final List<Widget> pageBodies;
+
+  /// Callback to be executed when clicked on the last pages bottom button.
   final Function? onPageFinish;
+
+  /// Color of the bottom button on the last page.
   final Color? buttonBackgroundColor;
+
+  /// Color of the text inside the [finishButton].
   final Color? buttonTextColor;
+
+  /// Text inside last pages bottom button.
   final String? buttonText;
+
+  /// Color of the bottom page indicators.
   final Color? controllerColor;
+
+  /// Toggle bottom button.
+  final bool addButton;
+
+  /// Toggle bottom page controller visibilty.
   final bool addController;
+
+  /// Defines the vertical offset of the [background].
   final double imageVerticalOffset;
+
+  /// Height of the foreground content of the page.
   final double bodyHeight;
+
+  /// Width of the foreground content of the page.
   final double bodyWidth;
 
   OnBoardingSlider({
