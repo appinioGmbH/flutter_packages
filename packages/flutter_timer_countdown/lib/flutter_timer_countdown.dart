@@ -97,28 +97,38 @@ class _TimerCountdownState extends State<TimerCountdown> {
   /// Then create a periodic `Timer` which updates all fields every second depending on the time difference which is getting smaller.
   /// When this difference reached `Duration.zero` the `Timer` is stopped and the [onEnd] callback is invoked.
   void _startTimer() {
-    difference = widget.endTime.difference(DateTime.now());
+    if (widget.endTime.isBefore(DateTime.now())) {
+      difference = Duration.zero;
+    } else {
+      difference = widget.endTime.difference(DateTime.now());
+    }
 
     countdownDays = _durationToStringDays(difference);
     countdownHours = _durationToStringHours(difference);
     countdownMinutes = _durationToStringMinutes(difference);
     countdownSeconds = _durationToStringSeconds(difference);
 
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      difference = widget.endTime.difference(DateTime.now());
-      setState(() {
-        countdownDays = _durationToStringDays(difference);
-        countdownHours = _durationToStringHours(difference);
-        countdownMinutes = _durationToStringMinutes(difference);
-        countdownSeconds = _durationToStringSeconds(difference);
-      });
-      if (difference < Duration.zero) {
-        timer.cancel();
-        if (widget.onEnd != null) {
-          widget.onEnd!();
-        }
+    if (difference == Duration.zero) {
+      if (widget.onEnd != null) {
+        widget.onEnd!();
       }
-    });
+    } else {
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        difference = widget.endTime.difference(DateTime.now());
+        setState(() {
+          countdownDays = _durationToStringDays(difference);
+          countdownHours = _durationToStringHours(difference);
+          countdownMinutes = _durationToStringMinutes(difference);
+          countdownSeconds = _durationToStringSeconds(difference);
+        });
+        if (difference <= Duration.zero) {
+          timer.cancel();
+          if (widget.onEnd != null) {
+            widget.onEnd!();
+          }
+        }
+      });
+    }
   }
 
   @override
