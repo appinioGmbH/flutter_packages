@@ -1,6 +1,6 @@
-## [1.0.2] - 2021.08.19
+## [1.0.2] - 2021.08.23
 
-* Customizable space between the number units and the colons.
+* Customizable space between number units and colons.
 * Bugfixes
 
 ## [1.0.1] - 2021.08.12
