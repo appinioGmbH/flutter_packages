@@ -56,9 +56,9 @@ class OnBoarding extends StatelessWidget {
     return CupertinoApp(
       home: OnBoardingSlider(
         headerBackgroundColor: Colors.white,
-        buttonText: 'Register',
+        finishButtonText: 'Register',
         skipTextButton: Text('Skip'),
-        finishButton: Text('Login'),
+        trailing: Text('Login'),
         background: [
           Image.asset('assets/slide_1.png'),
           Image.asset('assets/slide_2.png'),

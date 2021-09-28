@@ -7,6 +7,7 @@ class Background extends StatelessWidget {
   final List<Widget> background;
   final double speed;
   final double imageVerticalOffset;
+  final double imageHorizontalOffset;
 
   Background({
     required this.imageVerticalOffset,
@@ -14,6 +15,7 @@ class Background extends StatelessWidget {
     required this.totalPage,
     required this.background,
     required this.speed,
+    required this.imageHorizontalOffset,
   });
 
   @override
@@ -23,6 +25,7 @@ class Background extends StatelessWidget {
       children: [
         for (int i = 0; i < totalPage; i++)
           BackgroundImage(
+              imageHorizontalOffset: imageHorizontalOffset,
               imageVerticalOffset: imageVerticalOffset,
               id: totalPage - i,
               speed: speed,

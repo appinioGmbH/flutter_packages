@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
       home: OnBoardingSlider(
-        buttonText: 'Register',
-        onPageFinish: (BuildContext newContext) {
+        finishButtonText: 'Register',
+        onFinish: (BuildContext newContext) {
           Navigator.push(
             newContext,
             CupertinoPageRoute(
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
             ),
           );
         },
-        buttonBackgroundColor: kDarkBlueColor,
+        finishButtonColor: kDarkBlueColor,
         skipTextButton: Text(
           'Skip',
           style: TextStyle(
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        finishButton: Text(
+        trailing: Text(
           'Login',
           style: TextStyle(
             fontSize: 16,
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        onFinish: (BuildContext newContext) {
+        trailingFunction: (BuildContext newContext) {
           Navigator.push(
             newContext,
             CupertinoPageRoute(
