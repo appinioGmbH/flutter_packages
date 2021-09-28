@@ -1,39 +1,65 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Flutter Tab Toggle Animated
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+A custom tab viewer with built-in animation.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+## Preview
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/tab_toggle/example.gif?raw=true" height="400">
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+* a tabviewer ready to be customized
+* built-in animation
+* different design from default `TabViewer`
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+In the `pubspec.yaml` of your flutter project, add the following dependency:
+
+```yaml
+dependencies:
+  ...
+  flutter_tab_toggle_animated:
+```
+
+In your library add the following import:
+
+```dart
+import 'package:flutter_tab_toggle_animated/flutter_tab_toggle_animated.dart';
+```
+
+For help getting started with Flutter, view the online [documentation](https://flutter.io/).
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+You can place your `FlutterTabToggleAnimated` inside of a `MaterialApp`, optional parameters can be defined to enable different featiures. See the following example
 
 ```dart
-const like = 'sample';
+class OnBoarding extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoApp(
+      home: FlutterTabToggleAnimated(
+              callback: (int i) {},
+              tabTexts: const [
+                'make',
+                'your',
+                'tabs :)',
+              ],
+              height: 40,
+              width: 300,
+              boxDecoration: BoxDecoration(color: Color(0xFFc3d2db),),
+              animatedBox: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+              ),
+              activeStyle: const TextStyle( color: Colors.blue,),
+              inactiveStyle: const TextStyle( color: Colors.black,),
+            );
+  }
+}
 ```
 
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+<hr/>
+Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
