@@ -3,6 +3,7 @@
 This package wraps the official video_player package by flutter and extends it with a fully customisable control bar and a fullscreen mode for mobile. For the control bar you can decide for each element if you want to show it and if so how it should look.
 
 <br />
+
 ## Top Features
 
 * Fullscreen Mode
@@ -10,10 +11,12 @@ This package wraps the official video_player package by flutter and extends it w
 * Prevent Seeking in progress bar
 
 <br />
+
 ## Preview
   <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_1.png?raw=true" height="600" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_2.png?raw=true" height="600" />
 
 <br />
+
 ## Getting started
 
 - To get started just create a VideoPlayerController as you would for the normal video_player and define a source to use.
@@ -21,6 +24,7 @@ This package wraps the official video_player package by flutter and extends it w
 - On the examples tab you can see all parameters you can customize to your needs.
 
 <br />
+
 ## Usage
 
 ```dart
