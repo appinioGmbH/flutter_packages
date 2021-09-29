@@ -8,6 +8,9 @@ This package wraps the official video_player package by flutter and extends it w
 * Fully Customizable Controls
 * Prevent Seeking in progress bar
 
+## Preview
+
+
 ## Getting started
 
 To get started just create a VideoPlayerController as you would for the normal video_player and define a source to use. Secondly create a CustomVideoPlayerController to access the fullscreen and control bar visibility switches by yourself. Pass the controllers to a CustomVideoPlayer widget to use all its functionality and customisation oppurtunities. On the examples tab you can see all parameters you can customize to your needs.
