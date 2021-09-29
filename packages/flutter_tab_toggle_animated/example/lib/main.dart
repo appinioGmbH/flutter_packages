@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Tab Toggle Animated'),
+      home: const MyHomePage(title: 'Animated Toggle Tab'),
     );
   }
 }
@@ -32,20 +32,36 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final Color kDarkBlueColor = const Color(0xFF053149);
+  final BoxShadow kDefaultBoxshadow = const BoxShadow(
+    color: Color(0xFFDFDFDF),
+    spreadRadius: 1,
+    blurRadius: 10,
+    offset: Offset(2, 2),
+  );
+
+  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue[100],
       appBar: AppBar(
+        backgroundColor: kDarkBlueColor,
         title: Text(widget.title),
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const SizedBox(
+              height: 200,
+            ),
             FlutterTabToggleAnimated(
-              duration: Duration(milliseconds: 150),
-              callback: (int i) {},
+              duration: const Duration(milliseconds: 150),
+              callback: (int index) {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
               tabTexts: const [
                 'make',
                 'your',
@@ -54,8 +70,11 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 40,
               width: 300,
               boxDecoration: BoxDecoration(
-                color: Color(0xFFc3d2db),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
+                boxShadow: [
+                  kDefaultBoxshadow,
+                ],
               ),
               animatedBox: Container(
                 width: 90,
@@ -69,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       offset: const Offset(2, 2),
                     ),
                   ],
-                  color: Colors.white,
+                  color: kDarkBlueColor,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(5),
                   ),
@@ -81,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               activeStyle: const TextStyle(
                 fontSize: 16,
-                color: Colors.blue,
+                color: Colors.white,
                 fontWeight: FontWeight.w600,
               ),
               inactiveStyle: const TextStyle(
@@ -89,7 +108,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.black,
                 fontWeight: FontWeight.w400,
               ),
-            )
+            ),
+            const SizedBox(
+              height: 70,
+            ),
+            Text(
+              'Current Index: $currentIndex',
+              style: TextStyle(
+                fontSize: 20,
+                color: kDarkBlueColor,
+              ),
+            ),
           ],
         ),
       ),
