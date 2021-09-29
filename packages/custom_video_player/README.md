@@ -1,9 +1,16 @@
 # Custom Video Player
 
 This package wraps the official video_player package by flutter and extends it with a fully customisable control bar and a fullscreen mode for mobile. For the control bar you can decide for each element if you want to show it and if so how it should look. 
+
+## Top Features
+
+* Fullscreen Mode
+* Fully Customizable Controls
+* Prevent Seeking in progress bar
+
 ## Getting started
 
-To get started just create a VideoPlayerController as you would for the normal video_player and define a source to use. Secondly create a CustomVideoPlayerController to access the fullscreen and control bar visibility switches by yourself. Pass the controllers to the a CustomVideoPlayer widget to use all its functionality and customisation oppurtunities. On the examples tab you can see all parameters you can customize to your needs.
+To get started just create a VideoPlayerController as you would for the normal video_player and define a source to use. Secondly create a CustomVideoPlayerController to access the fullscreen and control bar visibility switches by yourself. Pass the controllers to a CustomVideoPlayer widget to use all its functionality and customisation oppurtunities. On the examples tab you can see all parameters you can customize to your needs.
 
 ## Usage
 
