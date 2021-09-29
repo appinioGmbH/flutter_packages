@@ -1,7 +1,6 @@
 import 'package:custom_video_player/src/fullscreen_video_player.dart';
 import 'package:custom_video_player/src/video_values_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -12,40 +11,36 @@ class CustomVideoPlayerService {
     VideoPlayerController videoPlayerController,
     VideoValuesProvider videoValuesProvider,
   ) async {
-    if (!kIsWeb) {
-      final TransitionRoute<void> route = PageRouteBuilder<void>(
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return AnimatedBuilder(
-              animation: animation,
-              builder: (BuildContext context, Widget? child) {
-                return ChangeNotifierProvider<VideoValuesProvider>.value(
-                  value: videoValuesProvider,
-                  child: const FullscreenVideo(),
-                );
-              });
-        },
-      );
-      setOrientationForVideo(videoPlayerController);
-      Navigator.of(context).push(route);
-      SystemChrome.setEnabledSystemUIMode(videoValuesProvider
-          .customVideoPlayerSettings.systemUIModeInsideFullscreen);
-    }
+    final TransitionRoute<void> route = PageRouteBuilder<void>(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return AnimatedBuilder(
+            animation: animation,
+            builder: (BuildContext context, Widget? child) {
+              return ChangeNotifierProvider<VideoValuesProvider>.value(
+                value: videoValuesProvider,
+                child: const FullscreenVideo(),
+              );
+            });
+      },
+    );
+    setOrientationForVideo(videoPlayerController);
+    Navigator.of(context).push(route);
+    SystemChrome.setEnabledSystemUIMode(videoValuesProvider
+        .customVideoPlayerSettings.systemUIModeInsideFullscreen);
   }
 
   static exitFullscreen(
     BuildContext context,
     VideoValuesProvider videoValuesProvider,
   ) async {
-    if (!kIsWeb) {
-      await SystemChrome.setEnabledSystemUIMode(videoValuesProvider
-          .customVideoPlayerSettings.systemUIModeAfterFullscreen);
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+    await SystemChrome.setEnabledSystemUIMode(videoValuesProvider
+        .customVideoPlayerSettings.systemUIModeAfterFullscreen);
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
-      Navigator.of(context).pop();
-    }
+    Navigator.of(context).pop();
   }
 
   static void setOrientationForVideo(

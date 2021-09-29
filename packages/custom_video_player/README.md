@@ -1,9 +1,30 @@
 # Custom Video Player
 
-This package wraps the official video_player package by flutter and extends it with a fully customisable control bar and a fullscreen mode for mobile. For the control bar you can decide for each element if you want to show it and if so how it should look. 
+This package wraps the official video_player package by flutter and extends it with a fully customisable control bar and a fullscreen mode. For the control bar you can decide for each element if you want to show it and if so how it should look.
+
+<br />
+
+## Top Features
+
+* Fullscreen Mode
+* Fully Customizable Controls
+* Fluid Progress Bar
+* Prevent Seeking in Progress Bar
+
+<br />
+
+## Preview
+  <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_1.png?raw=true" height="600" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_2.png?raw=true" height="600" />
+
+<br />
+
 ## Getting started
 
-To get started just create a VideoPlayerController as you would for the normal video_player and define a source to use. Secondly create a CustomVideoPlayerController to access the fullscreen and control bar visibility switches by yourself. Pass the controllers to the a CustomVideoPlayer widget to use all its functionality and customisation oppurtunities. On the examples tab you can see all parameters you can customize to your needs.
+- To get started just create a VideoPlayerController as you would for the normal video_player and define a source to use.
+- Secondly create a CustomVideoPlayerController to access the fullscreen and control bar visibility switches by yourself. Pass the controllers to a CustomVideoPlayer widget to use all its functionality and customisation oppurtunities.
+- On the examples tab you can see all parameters you can customize to your needs.
+
+<br />
 
 ## Usage
 
@@ -14,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
       CustomVideoPlayerController();
 
   String videoUrl =
-      "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
+      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
   @override
   void initState() {
@@ -47,3 +68,5 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 ```
 
+<hr/>
+Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
