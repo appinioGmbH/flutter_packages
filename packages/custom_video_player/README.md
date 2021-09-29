@@ -8,7 +8,8 @@ This package wraps the official video_player package by flutter and extends it w
 
 * Fullscreen Mode
 * Fully Customizable Controls
-* Prevent Seeking in progress bar
+* Fluid Progress Bar
+* Prevent Seeking in Progress Bar
 
 <br />
 
