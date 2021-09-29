@@ -1,6 +1,6 @@
 # Custom Video Player
 
-This package wraps the official video_player package by flutter and extends it with a fully customisable control bar and a fullscreen mode for mobile. For the control bar you can decide for each element if you want to show it and if so how it should look.
+This package wraps the official video_player package by flutter and extends it with a fully customisable control bar and a fullscreen mode. For the control bar you can decide for each element if you want to show it and if so how it should look.
 
 <br />
 

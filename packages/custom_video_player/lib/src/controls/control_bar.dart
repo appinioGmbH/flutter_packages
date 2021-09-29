@@ -74,8 +74,7 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
                 ),
               ),
             if (_videoValuesProvider
-                    .customVideoPlayerSettings.showFullscreenButton &&
-                !kIsWeb)
+                .customVideoPlayerSettings.showFullscreenButton)
               const CustomVideoPlayerFullscreenButton()
           ],
         ),
