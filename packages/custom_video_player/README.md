@@ -14,7 +14,7 @@ class _MyHomePageState extends State<MyHomePage> {
       CustomVideoPlayerController();
 
   String videoUrl =
-      "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
+      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
   @override
   void initState() {

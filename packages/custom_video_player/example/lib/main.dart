@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CupertinoApp(
+      debugShowCheckedModeBanner: false,
       theme: CupertinoThemeData(
         brightness: Brightness.light,
       ),
@@ -36,6 +37,10 @@ class _MyHomePageState extends State<MyHomePage> {
   CustomVideoPlayerController customVideoPlayerController =
       CustomVideoPlayerController();
 
+  late VideoPlayerController videoPlayerController2;
+  CustomVideoPlayerController customVideoPlayerController2 =
+      CustomVideoPlayerController();
+
   String videoUrlLandscape =
       "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
   String videoUrlPortrait =
@@ -47,7 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.network(videoUrlPortrait)
+    videoPlayerController = VideoPlayerController.network(longVideo)
+      ..initialize();
+    videoPlayerController2 = VideoPlayerController.network(longVideo)
       ..initialize();
   }
 
@@ -65,68 +72,107 @@ class _MyHomePageState extends State<MyHomePage> {
         middle: Text(widget.title),
       ),
       child: SafeArea(
-        child: ListView(
-          children: [
-            CustomVideoPlayer(
-              customVideoPlayerController: customVideoPlayerController,
-              videoPlayerController: videoPlayerController,
-              customVideoPlayerSettings: CustomVideoPlayerSettings(
-                //TODO: play around with these paramters
-
-                // controlBarAvailable: true,
-                // controlBarMargin:const EdgeInsets.all(10),
-                // controlBarPadding: const EdgeInsets.all(0),
-                // showPlayButton: true,
-                // playButton: Container(
-                //   width: 30,
-                //   height: 30,
-                //   color: Colors.green,
-                // ),
-                // pauseButton: Container(
-                //   width: 30,
-                //   height: 30,
-                //   color: Colors.red,
-                // ),
-                // enterFullscreenButton: Container(
-                //   width: 30,
-                //   height: 30,
-                //   color: Colors.yellow,
-                // ),
-                // exitFullscreenButton: Container(
-                //   width: 30,
-                //   height: 30,
-                //   color: Colors.purple,
-                // ),
-                // controlBarDecoration: BoxDecoration(
-                //   borderRadius: BorderRadius.circular(50),
-                //   color: Colors.blue,
-                // ),
-                // showFullscreenButton: false,
-                // showDurationPlayed: false,
-                // showDurationRemaining: false,
-                // enterFullscreenOnStart: true,
-                // exitFullscreenOnEnd: true,
-                // durationRemainingTextStyle:
-                //     const TextStyle(color: Colors.red),
-                // durationPlayedTextStyle: const TextStyle(color: Colors.green),
-                // systemUIModeAfterFullscreen: SystemUiMode.leanBack
-                // systemUIModeInsideFullscreen: SystemUiMode.edgeToEdge,
-                customVideoPlayerProgressBarSettings:
-                    const CustomVideoPlayerProgressBarSettings(
-                        // reachableProgressBarPadding: EdgeInsets.all(10),
-                        // progressBarHeight: 10,
-                        // progressBarBorderRadius: 30,
-                        // progressBarColors: CustomVideoPlayerProgressBarColors(
-                        //   bufferedColor: Colors.red,
-                        //   progressColor: Colors.green,
-                        //   backgroundColor: Colors.purple,
-                        // ),
-                        // allowScrubbing: false,
-                        // showProgressBar: false,
-                        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 20,
               ),
-            ),
-          ],
+              const Text("Customized Icons",
+                  style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
+              const SizedBox(
+                height: 20,
+              ),
+              CustomVideoPlayer(
+                customVideoPlayerController: customVideoPlayerController,
+                videoPlayerController: videoPlayerController,
+                customVideoPlayerSettings: CustomVideoPlayerSettings(
+                  //TODO: play around with these paramters
+
+                  // controlBarAvailable: true,
+                  // controlBarMargin:const EdgeInsets.all(10),
+                  // controlBarPadding: const EdgeInsets.all(0),
+                  // showPlayButton: true,
+                  // playButton: const Icon(
+                  //   Icons.play_circle,
+                  //   color: Colors.white,
+                  // ),
+                  // pauseButton: const Icon(
+                  //   Icons.pause_circle,
+                  //   color: Colors.white,
+                  // ),
+                  // enterFullscreenButton: const Icon(
+                  //   Icons.fullscreen,
+                  //   color: Colors.white,
+                  // ),
+                  // exitFullscreenButton: const Icon(
+                  //   Icons.fullscreen_exit,
+                  //   color: Colors.white,
+                  // ),
+                  // controlBarDecoration: BoxDecoration(
+                  //   borderRadius: BorderRadius.circular(50),
+                  //   color: Colors.blue,
+                  // ),
+                  // showFullscreenButton: false,
+                  // showDurationPlayed: false,
+                  // showDurationRemaining: false,
+                  // enterFullscreenOnStart: true,
+                  // exitFullscreenOnEnd: true,
+                  // durationRemainingTextStyle:
+                  //     const TextStyle(color: Colors.red),
+                  // durationPlayedTextStyle: const TextStyle(color: Colors.green),
+                  // systemUIModeAfterFullscreen: SystemUiMode.leanBack
+                  // systemUIModeInsideFullscreen: SystemUiMode.edgeToEdge,
+                  customVideoPlayerProgressBarSettings:
+                      const CustomVideoPlayerProgressBarSettings(
+                          // reachableProgressBarPadding: EdgeInsets.all(10),
+                          // progressBarHeight: 10,
+                          // progressBarBorderRadius: 30,
+                          // progressBarColors: CustomVideoPlayerProgressBarColors(
+                          //   bufferedColor: Colors.red,
+                          //   progressColor: Colors.green,
+                          //   backgroundColor: Colors.purple,
+                          // ),
+                          // allowScrubbing: false,
+                          // showProgressBar: false,
+                          ),
+                ),
+              ),
+              const SizedBox(
+                height: 100,
+              ),
+              const Text("Hiding specific controls",
+                  style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
+              const SizedBox(
+                height: 20,
+              ),
+              CustomVideoPlayer(
+                videoPlayerController: videoPlayerController2,
+                customVideoPlayerController: customVideoPlayerController2,
+                customVideoPlayerSettings: CustomVideoPlayerSettings(
+                  showFullscreenButton: false,
+                  showDurationPlayed: false,
+                  showDurationRemaining: false,
+                  controlBarPadding: const EdgeInsets.all(0),
+                  controlBarDecoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.4),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  controlBarMargin: const EdgeInsets.all(10),
+                  customVideoPlayerProgressBarSettings:
+                      const CustomVideoPlayerProgressBarSettings(
+                    reachableProgressBarPadding: EdgeInsets.all(6),
+                    progressBarHeight: 15,
+                    progressBarBorderRadius: 30,
+                    bufferedColor: Color.fromRGBO(0, 140, 255, 1),
+                    progressColor: Color.fromRGBO(0, 80, 255, 1),
+                    backgroundColor: Color.fromRGBO(0, 190, 255, 1),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

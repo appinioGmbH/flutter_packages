@@ -31,8 +31,8 @@ class CustomVideoPlayerProgressBarSettings {
     this.reachableProgressBarPadding = const EdgeInsets.all(5),
     this.progressBarHeight = 10,
     this.progressBarBorderRadius = 10,
-    this.progressColor = const Color.fromRGBO(0, 145, 255, 1),
-    this.bufferedColor = const Color.fromRGBO(0, 106, 255, 0.4),
+    this.progressColor = const Color.fromRGBO(255, 255, 255, 1),
+    this.bufferedColor = const Color.fromRGBO(255, 255, 255, 0.3),
     this.backgroundColor = const Color.fromRGBO(156, 156, 156, 0.5),
   });
 }
