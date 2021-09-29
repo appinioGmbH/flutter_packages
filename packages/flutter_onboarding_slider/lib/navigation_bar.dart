@@ -10,6 +10,8 @@ class NavigationBar extends StatelessWidget
   final Widget? finishButton;
   final Widget? skipTextButton;
   final Color headerBackgroundColor;
+  final Widget? leading;
+  final Widget? middle;
 
   NavigationBar({
     required this.currentPage,
@@ -19,6 +21,8 @@ class NavigationBar extends StatelessWidget
     this.onFinish,
     this.finishButton,
     this.skipTextButton,
+    this.leading,
+    this.middle,
   });
 
   @override
@@ -33,6 +37,8 @@ class NavigationBar extends StatelessWidget
   Widget build(BuildContext context) {
     return CupertinoNavigationBar(
       automaticallyImplyLeading: false,
+      leading: leading,
+      middle: middle,
       trailing: currentPage == totalPage - 1
           ? Container(
               color: Colors.transparent,
