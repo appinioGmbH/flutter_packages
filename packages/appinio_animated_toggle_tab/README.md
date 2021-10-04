@@ -1,4 +1,4 @@
-# Flutter Tab Toggle Animated
+# Appinio Animated Toggle Tab
 
 A custom tab viewer with built-in animation.
 
@@ -19,27 +19,27 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  flutter_tab_toggle_animated:
+  appinio_tanimated_toggle_tab:
 ```
 
 In your library add the following import:
 
 ```dart
-import 'package:flutter_tab_toggle_animated/flutter_tab_toggle_animated.dart';
+import 'package:appinio_animated_toggle_tab/appinio_animated_toggle_tab.dart';
 ```
 
 For help getting started with Flutter, view the online [documentation](https://flutter.io/).
 
 ## Usage
 
-You can place your `FlutterTabToggleAnimated` inside of a `MaterialApp`, optional parameters can be defined to enable different featiures. See the following example
+You can place your `AppinioAnimatedToggleTab` inside of a `MaterialApp`, optional parameters can be defined to enable different featiures. See the following example
 
 ```dart
 class OnBoarding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      home: FlutterTabToggleAnimated(
+      home: AppinioAnimatedToggleTab(
               callback: (int i) {},
               tabTexts: const [
                 'make',

@@ -1,5 +1,5 @@
+import 'package:appinio_animated_toggle_tab/appinio_animated_toggle_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tab_toggle_animated/flutter_tab_toggle_animated.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(
               height: 200,
             ),
-            FlutterTabToggleAnimated(
+            AppinioAnimatedToggleTab(
               duration: const Duration(milliseconds: 150),
               callback: (int index) {
                 setState(() {

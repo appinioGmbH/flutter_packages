@@ -29,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_tab_toggle_animated:
+  appinio_animated_toggle_tab:
     path: ../
 
 

@@ -1,8 +1,8 @@
-library flutter_tab_toggle_animated;
+library appinio_animated_toggle_tab;
 
 import 'package:flutter/cupertino.dart';
 
-class FlutterTabToggleAnimated extends StatefulWidget {
+class AppinioAnimatedToggleTab extends StatefulWidget {
   /// function(int) for call back and control the view of tabs
   final Function(int) callback;
 
@@ -33,7 +33,7 @@ class FlutterTabToggleAnimated extends StatefulWidget {
   /// animation duration for the toggling
   final Duration duration;
 
-  const FlutterTabToggleAnimated({
+  const AppinioAnimatedToggleTab({
     Key? key,
     required this.callback,
     required this.tabTexts,
@@ -48,10 +48,10 @@ class FlutterTabToggleAnimated extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _FlutterTabToggleAnimatedState();
+  State<StatefulWidget> createState() => _AppinioAnimatedToggleTabState();
 }
 
-class _FlutterTabToggleAnimatedState extends State<FlutterTabToggleAnimated> {
+class _AppinioAnimatedToggleTabState extends State<AppinioAnimatedToggleTab> {
   int index = 0;
 
   @override
