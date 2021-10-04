@@ -1,7 +1,8 @@
 name: appinio_animated_toggle_tab
-description: A new Flutter package project.
-version: 0.0.1
-homepage:
+description: A custom tab viewer with built-in animation and different design from default `TabViewer`.
+version: 1.0.0
+homepage: https://github.com/appinioGmbH/flutter_packages
+repository: https://github.com/appinioGmbH/flutter_packages/tree/main/packages/appinio_animated_toggle_tab
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
