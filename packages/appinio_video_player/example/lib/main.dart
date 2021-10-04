@@ -10,7 +10,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return const CupertinoApp(
@@ -37,10 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
   CustomVideoPlayerController customVideoPlayerController =
       CustomVideoPlayerController();
 
-  late VideoPlayerController videoPlayerController2;
-  CustomVideoPlayerController customVideoPlayerController2 =
-      CustomVideoPlayerController();
-
   String videoUrlLandscape =
       "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
   String videoUrlPortrait =
@@ -53,8 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     videoPlayerController = VideoPlayerController.network(longVideo)
-      ..initialize();
-    videoPlayerController2 = VideoPlayerController.network(longVideo)
       ..initialize();
   }
 
@@ -139,38 +132,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                 ),
               ),
-              const SizedBox(
-                height: 100,
-              ),
-              const Text("Hiding specific controls",
-                  style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
-              const SizedBox(
-                height: 20,
-              ),
-              CustomVideoPlayer(
-                videoPlayerController: videoPlayerController2,
-                customVideoPlayerController: customVideoPlayerController2,
-                customVideoPlayerSettings: CustomVideoPlayerSettings(
-                  showFullscreenButton: false,
-                  showDurationPlayed: false,
-                  showDurationRemaining: false,
-                  controlBarPadding: const EdgeInsets.all(0),
-                  controlBarDecoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  controlBarMargin: const EdgeInsets.all(10),
-                  customVideoPlayerProgressBarSettings:
-                      const CustomVideoPlayerProgressBarSettings(
-                    reachableProgressBarPadding: EdgeInsets.all(6),
-                    progressBarHeight: 15,
-                    progressBarBorderRadius: 30,
-                    bufferedColor: Color.fromRGBO(0, 140, 255, 1),
-                    progressColor: Color.fromRGBO(0, 80, 255, 1),
-                    backgroundColor: Color.fromRGBO(0, 190, 255, 1),
-                  ),
-                ),
-              )
             ],
           ),
         ),
