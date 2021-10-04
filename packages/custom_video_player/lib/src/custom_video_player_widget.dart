@@ -1,7 +1,6 @@
-import 'package:custom_video_player/custom_video_player.dart';
-import 'package:custom_video_player/src/embedded_video_player.dart';
-import 'package:custom_video_player/src/models/custom_video_player_settings.dart';
-import 'package:custom_video_player/src/video_values_provider.dart';
+import 'package:appinio_video_player/appinio_video_player.dart';
+import 'package:appinio_video_player/src/embedded_video_player.dart';
+import 'package:appinio_video_player/src/video_values_provider.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';

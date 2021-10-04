@@ -1,4 +1,4 @@
-library custom_video_player;
+library appinio_video_player;
 
 export 'src/custom_video_player_widget.dart';
 export 'src/custom_video_player_controller.dart';

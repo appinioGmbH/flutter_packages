@@ -1,4 +1,4 @@
-name: custom_video_player
+name: appinio_video_player
 description: This custom video player builds on top of the official video_player package by flutter and adds a fully customisable control bar and the fullscreen functionality (on mobile) to it.
 version: 0.0.1
 homepage: https://github.com/appinioGmbH/flutter_packages

@@ -1,5 +1,5 @@
-import 'package:custom_video_player/src/models/custom_video_player_progress_bar_settings.dart';
-import 'package:custom_video_player/src/video_values_provider.dart';
+import 'package:appinio_video_player/src/models/custom_video_player_progress_bar_settings.dart';
+import 'package:appinio_video_player/src/video_values_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';

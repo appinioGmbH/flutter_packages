@@ -1,4 +1,4 @@
-import 'package:custom_video_player/src/embedded_video_player.dart';
+import 'package:appinio_video_player/src/embedded_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

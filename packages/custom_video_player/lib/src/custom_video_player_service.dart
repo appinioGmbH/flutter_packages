@@ -1,5 +1,5 @@
-import 'package:custom_video_player/src/fullscreen_video_player.dart';
-import 'package:custom_video_player/src/video_values_provider.dart';
+import 'package:appinio_video_player/src/fullscreen_video_player.dart';
+import 'package:appinio_video_player/src/video_values_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

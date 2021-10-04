@@ -1,10 +1,9 @@
-library custom_video_player;
-
-import 'package:custom_video_player/src/controls/fullscreen_button.dart';
-import 'package:custom_video_player/src/controls/play_button.dart';
-import 'package:custom_video_player/src/models/custom_video_player_progress_bar_settings.dart';
+import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
+import 'package:appinio_video_player/src/controls/play_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'custom_video_player_progress_bar_settings.dart';
 
 class CustomVideoPlayerSettings {
   /// Set to false if no control bar should be available.
