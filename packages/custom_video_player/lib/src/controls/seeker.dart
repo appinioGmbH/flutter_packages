@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class CustomVideoPlayerScrubber extends StatefulWidget {
-  const CustomVideoPlayerScrubber({
+class CustomVideoPlayerSeeker extends StatefulWidget {
+  const CustomVideoPlayerSeeker({
     Key? key,
     required this.child,
     required this.videoPlayerController,
@@ -14,11 +14,11 @@ class CustomVideoPlayerScrubber extends StatefulWidget {
   final VideoPlayerController videoPlayerController;
 
   @override
-  _CustomVideoPlayerScrubberState createState() =>
-      _CustomVideoPlayerScrubberState();
+  _CustomVideoPlayerSeekerState createState() =>
+      _CustomVideoPlayerSeekerState();
 }
 
-class _CustomVideoPlayerScrubberState extends State<CustomVideoPlayerScrubber> {
+class _CustomVideoPlayerSeekerState extends State<CustomVideoPlayerSeeker> {
   bool _videoPlaying = false;
 
   @override

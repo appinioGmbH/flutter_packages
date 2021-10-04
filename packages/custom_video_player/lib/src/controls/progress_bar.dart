@@ -1,5 +1,5 @@
 import 'package:custom_video_player/src/controls/progress_bar_indicator.dart';
-import 'package:custom_video_player/src/controls/scrubber.dart';
+import 'package:custom_video_player/src/controls/seeker.dart';
 import 'package:custom_video_player/src/models/custom_video_player_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +96,7 @@ class _VideoProgressIndicatorState extends State<CustomVideoPlayerProgressBar> {
     );
 
     if (settings.customVideoPlayerProgressBarSettings.allowScrubbing) {
-      return CustomVideoPlayerScrubber(
+      return CustomVideoPlayerSeeker(
         child: paddedProgressIndicator,
         videoPlayerController: widget.controller,
       );
