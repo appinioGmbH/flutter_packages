@@ -35,7 +35,7 @@ For help getting started with Flutter, view the online [documentation](https://f
 You can place your `AppinioAnimatedToggleTab` inside of a `MaterialApp`, optional parameters can be defined to enable different featiures. See the following example
 
 ```dart
-class OnBoarding extends StatelessWidget {
+class TabsViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(

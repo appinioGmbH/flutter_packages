@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Color(0xFFc3d2db).withOpacity(0.1),
+                      color: const Color(0xFFc3d2db).withOpacity(0.1),
                       spreadRadius: 1,
                       blurRadius: 5,
                       offset: const Offset(2, 2),
