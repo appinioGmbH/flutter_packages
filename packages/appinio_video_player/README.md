@@ -17,7 +17,7 @@ This package wraps the official video_player package by flutter and extends it w
   <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_1.png?raw=true" height="600" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_2.png?raw=true" height="600" />
 
 ### Fullscreen
-  <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_3.png?raw=true" height="600" />
+  <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_3.png?raw=true" />
 <br />
 
 ## Getting started
