@@ -15,6 +15,7 @@ class VideoValuesProvider extends ChangeNotifier {
   bool privateIsFullscreen = false;
   Duration videoProgress = Duration.zero;
   Timer? _timer;
+  bool mounted = true;
 
   CustomVideoPlayerSettings customVideoPlayerSettings;
 
@@ -26,7 +27,6 @@ class VideoValuesProvider extends ChangeNotifier {
     required this.customVideoPlayerSettings,
   }) {
     videoPlayerController.addListener(listener);
-
     customVideoPlayerController.addListener(fullscreenListener);
   }
 
@@ -49,8 +49,11 @@ class VideoValuesProvider extends ChangeNotifier {
       _timer ??= Timer.periodic(const Duration(milliseconds: 100),
           (Timer timer) async {
         if (videoPlayerController.value.isInitialized) {
-          videoProgress = (await videoPlayerController.position)!;
-          notifyListeners();
+          if (mounted) {
+            videoProgress =
+                await videoPlayerController.position ?? videoProgress;
+            notifyListeners();
+          }
         }
       });
     } else {
@@ -88,5 +91,14 @@ class VideoValuesProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    mounted = false;
+    _timer?.cancel();
+    videoPlayerController.removeListener(listener);
+    customVideoPlayerController.removeListener(fullscreenListener);
+    super.dispose();
   }
 }

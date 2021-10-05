@@ -23,8 +23,8 @@ class CustomVideoPlayerService {
             });
       },
     );
-    setOrientationForVideo(videoPlayerController);
     Navigator.of(context).push(route);
+    setOrientationForVideo(videoPlayerController);
     SystemChrome.setEnabledSystemUIMode(videoValuesProvider
         .customVideoPlayerSettings.systemUIModeInsideFullscreen);
   }
