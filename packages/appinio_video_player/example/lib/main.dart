@@ -40,9 +40,8 @@ class _MyHomePageState extends State<MyHomePage> {
       "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
   String videoUrlPortrait =
       'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4';
-
   String longVideo =
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
   @override
   void initState() {
