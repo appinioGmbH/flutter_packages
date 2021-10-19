@@ -1,0 +1,3 @@
+${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh
+${BUILT_PRODUCTS_DIR}/video_player/video_player.framework
+${BUILT_PRODUCTS_DIR}/wakelock/wakelock.framework

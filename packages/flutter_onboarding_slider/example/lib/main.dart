@@ -16,6 +16,8 @@ class MyApp extends StatelessWidget {
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
       home: OnBoardingSlider(
+        indicatorAbove: true,
+        hasSkip: false,
         finishButtonText: 'Register',
         onFinish: (BuildContext newContext) {
           Navigator.push(
@@ -69,8 +71,6 @@ class MyApp extends StatelessWidget {
           ),
         ],
         speed: 1.8,
-        bodyHeight: 650,
-        bodyWidth: 500,
         pageBodies: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 40),

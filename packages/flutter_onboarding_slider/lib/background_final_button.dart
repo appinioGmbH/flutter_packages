@@ -7,8 +7,10 @@ class BackgroundFinalButton extends StatelessWidget {
   final bool addButton;
   final Function? onPageFinish;
   final Color? buttonBackgroundColor;
-  final Color? buttonTextColor;
+  final TextStyle buttonTextStyle;
   final String? buttonText;
+  final bool hasSkip;
+  final Icon skipIcon;
 
   BackgroundFinalButton({
     required this.currentPage,
@@ -16,51 +18,66 @@ class BackgroundFinalButton extends StatelessWidget {
     required this.totalPage,
     this.onPageFinish,
     this.buttonBackgroundColor,
-    this.buttonTextColor,
     this.buttonText,
+    required this.buttonTextStyle,
     required this.addButton,
+    required this.hasSkip,
+    required this.skipIcon,
   });
 
   @override
   Widget build(BuildContext context) {
     return addButton
-        ? AnimatedContainer(
-            padding: currentPage == totalPage - 1
-                ? EdgeInsets.symmetric(horizontal: 30)
-                : EdgeInsets.all(0),
-            width: currentPage == totalPage - 1
-                ? MediaQuery.of(context).size.width - 30
-                : 60,
-            duration: Duration(milliseconds: 100),
-            child: currentPage == totalPage - 1
-                ? FloatingActionButton.extended(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    onPressed: () =>
-                        onPageFinish == null ? () {} : onPageFinish!(context),
-                    elevation: 0,
-                    label: buttonText == null
-                        ? SizedBox.shrink()
-                        : Text(
-                            buttonText!,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: buttonTextColor,
-                              letterSpacing: 0,
-                            ),
-                          ),
-                    backgroundColor: buttonBackgroundColor,
-                  )
-                : FloatingActionButton(
-                    onPressed: () => _goToNextPage(context),
-                    elevation: 0,
-                    child: Icon(
-                      Icons.arrow_forward,
-                      color: buttonTextColor,
-                    ),
-                    backgroundColor: buttonBackgroundColor,
-                  ),
-          )
+        ? hasSkip
+            ? AnimatedContainer(
+                padding: currentPage == totalPage - 1
+                    ? EdgeInsets.symmetric(horizontal: 30)
+                    : EdgeInsets.all(0),
+                width: currentPage == totalPage - 1
+                    ? MediaQuery.of(context).size.width - 30
+                    : 60,
+                duration: Duration(milliseconds: 100),
+                child: currentPage == totalPage - 1
+                    ? FloatingActionButton.extended(
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0))),
+                        onPressed: () => onPageFinish == null
+                            ? () {}
+                            : onPageFinish!(context),
+                        elevation: 0,
+                        label: buttonText == null
+                            ? SizedBox.shrink()
+                            : Text(
+                                buttonText!,
+                                style: buttonTextStyle,
+                              ),
+                        backgroundColor: buttonBackgroundColor,
+                      )
+                    : FloatingActionButton(
+                        onPressed: () => _goToNextPage(context),
+                        elevation: 0,
+                        child: skipIcon,
+                        backgroundColor: buttonBackgroundColor,
+                      ),
+              )
+            : Container(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                width: MediaQuery.of(context).size.width - 30,
+                child: FloatingActionButton.extended(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  onPressed: () =>
+                      onPageFinish == null ? () {} : onPageFinish!(context),
+                  elevation: 0,
+                  label: buttonText == null
+                      ? SizedBox.shrink()
+                      : Text(
+                          buttonText!,
+                          style: buttonTextStyle,
+                        ),
+                  backgroundColor: buttonBackgroundColor,
+                ))
         : SizedBox.shrink();
   }
 
