@@ -5,12 +5,14 @@ class BackgroundController extends StatelessWidget {
   final int totalPage;
   final Color? controllerColor;
   final bool indicatorAbove;
+  final double indicatorPosition;
 
   BackgroundController({
     required this.currentPage,
     required this.totalPage,
     required this.controllerColor,
     required this.indicatorAbove,
+    required this.indicatorPosition,
   });
 
   @override
@@ -50,7 +52,9 @@ class BackgroundController extends StatelessWidget {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
       margin: EdgeInsets.only(
-          left: 8.0, right: 8.0, bottom: indicatorAbove ? 70 : 28),
+          left: 8.0,
+          right: 8.0,
+          bottom: indicatorAbove ? indicatorPosition : 28),
       height: 8.0,
       width: isActive ? 28.0 : 8.0,
       decoration: BoxDecoration(

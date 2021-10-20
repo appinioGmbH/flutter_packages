@@ -16,8 +16,6 @@ class MyApp extends StatelessWidget {
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
       home: OnBoardingSlider(
-        indicatorAbove: true,
-        hasSkip: false,
         finishButtonText: 'Register',
         onFinish: (BuildContext newContext) {
           Navigator.push(

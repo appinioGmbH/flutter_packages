@@ -1,3 +1,7 @@
+## [1.0.3] - 2021.10.20
+
+* added parameters to allow further customization.
+* fixed bugs on background widgets sizes.
 ## [1.0.2] - 2021.09.29
 
 * Renamed parameters.

@@ -88,6 +88,9 @@ class OnBoardingSlider extends StatefulWidget {
   /// is the indicator located on top of the screen
   final bool indicatorAbove;
 
+  /// distance of indicator from bottom
+  final double indicatorPosition;
+
   OnBoardingSlider({
     required this.totalPage,
     required this.headerBackgroundColor,
@@ -120,6 +123,7 @@ class OnBoardingSlider extends StatefulWidget {
       color: Colors.white,
     ),
     this.indicatorAbove = false,
+    this.indicatorPosition = 90,
   });
 
   @override
@@ -195,6 +199,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
                       ),
                       widget.addController
                           ? BackgroundController(
+                              indicatorPosition: widget.indicatorPosition,
                               indicatorAbove: widget.indicatorAbove,
                               currentPage: _currentPage,
                               totalPage: widget.totalPage,
