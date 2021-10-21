@@ -65,8 +65,6 @@ class OnBoarding extends StatelessWidget {
         ],
         totalPage: 2,
         speed: 1.8,
-        bodyHeight: 650,
-        bodyWidth: 500,
         pageBodies: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 40),
