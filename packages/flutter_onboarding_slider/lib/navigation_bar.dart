@@ -44,7 +44,7 @@ class NavigationBar extends StatelessWidget
               color: Colors.transparent,
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () => onFinish == null ? () {} : onFinish!(context),
+                onPressed: () => onFinish?.call(),
                 child: finishButton ?? SizedBox.shrink(),
               ),
             )

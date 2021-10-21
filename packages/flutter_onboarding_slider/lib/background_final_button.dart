@@ -42,9 +42,7 @@ class BackgroundFinalButton extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0))),
-                        onPressed: () => onPageFinish == null
-                            ? () {}
-                            : onPageFinish!(context),
+                        onPressed: () => onPageFinish?.call(),
                         elevation: 0,
                         label: buttonText == null
                             ? SizedBox.shrink()
@@ -67,8 +65,7 @@ class BackgroundFinalButton extends StatelessWidget {
                 child: FloatingActionButton.extended(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  onPressed: () =>
-                      onPageFinish == null ? () {} : onPageFinish!(context),
+                  onPressed: () => onPageFinish?.call(),
                   elevation: 0,
                   label: buttonText == null
                       ? SizedBox.shrink()
