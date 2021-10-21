@@ -1,6 +1,6 @@
 name: flutter_onboarding_slider
 description: A page slider with parallex design that allows (Text) widgets or body to slide at a different speed with background.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/appinioGmbH/flutter_packages
 repository: https://github.com/appinioGmbH/flutter_packages/tree/main/packages/flutter_onboarding_slider
 
