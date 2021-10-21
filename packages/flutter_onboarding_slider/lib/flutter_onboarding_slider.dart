@@ -160,25 +160,25 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
                 hasSkip: widget.hasSkip,
               )
             : SizedBox.shrink(),
-        body: SafeArea(
-          child: CupertinoPageScaffold(
-            navigationBar: NavigationBar(
-              leading: widget.leading,
-              middle: widget.middle,
-              totalPage: widget.totalPage,
-              currentPage: _currentPage,
-              onSkip: _onSkip,
-              headerBackgroundColor: widget.headerBackgroundColor,
-              onFinish: widget.trailingFunction,
-              finishButton: widget.trailing,
-              skipTextButton: widget.skipTextButton,
+        body: CupertinoPageScaffold(
+          navigationBar: NavigationBar(
+            leading: widget.leading,
+            middle: widget.middle,
+            totalPage: widget.totalPage,
+            currentPage: _currentPage,
+            onSkip: _onSkip,
+            headerBackgroundColor: widget.headerBackgroundColor,
+            onFinish: widget.trailingFunction,
+            finishButton: widget.trailing,
+            skipTextButton: widget.skipTextButton,
+          ),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              gradient: widget.pageBackgroundGradient ?? null,
+              color: widget.pageBackgroundColor ?? null,
             ),
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                gradient: widget.pageBackgroundGradient ?? null,
-                color: widget.pageBackgroundColor ?? null,
-              ),
+            child: SafeArea(
               child: Background(
                 imageHorizontalOffset: widget.imageHorizontalOffset,
                 imageVerticalOffset: widget.imageVerticalOffset,
