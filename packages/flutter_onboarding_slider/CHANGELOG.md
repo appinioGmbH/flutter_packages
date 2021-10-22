@@ -1,3 +1,7 @@
+## [1.0.4] - 2021.10.22
+
+* Bug fixes.
+
 ## [1.0.3] - 2021.10.21
 
 * Added parameters to allow further customization.
