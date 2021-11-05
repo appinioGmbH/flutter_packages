@@ -40,24 +40,28 @@ class NavigationBar extends StatelessWidget
       leading: leading,
       middle: middle,
       trailing: currentPage == totalPage - 1
-          ? Container(
-              color: Colors.transparent,
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () => onFinish?.call(),
-                child: finishButton ?? SizedBox.shrink(),
-              ),
-            )
-          : Container(
-              color: Colors.transparent,
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  onSkip();
-                },
-                child: skipTextButton ?? SizedBox.shrink(),
-              ),
-            ),
+          ? finishButton == null
+              ? Container(
+                  color: Colors.transparent,
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => onFinish?.call(),
+                    child: finishButton!,
+                  ),
+                )
+              : SizedBox.shrink()
+          : skipTextButton == null
+              ? Container(
+                  color: Colors.transparent,
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      onSkip();
+                    },
+                    child: skipTextButton!,
+                  ),
+                )
+              : SizedBox.shrink(),
       border: Border(
         bottom: BorderSide(color: Colors.transparent),
       ),
