@@ -91,6 +91,9 @@ class OnBoardingSlider extends StatefulWidget {
   /// distance of indicator from bottom
   final double indicatorPosition;
 
+  /// override the function for kip button in the navigator.
+  final Function? skipFunctionOverride;
+
   OnBoardingSlider({
     required this.totalPage,
     required this.headerBackgroundColor,
@@ -124,6 +127,7 @@ class OnBoardingSlider extends StatefulWidget {
     ),
     this.indicatorAbove = false,
     this.indicatorPosition = 90,
+    this.skipFunctionOverride,
   });
 
   @override
@@ -162,6 +166,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
             : SizedBox.shrink(),
         body: CupertinoPageScaffold(
           navigationBar: NavigationBar(
+            skipFunctionOverride: widget.skipFunctionOverride,
             leading: widget.leading,
             middle: widget.middle,
             totalPage: widget.totalPage,

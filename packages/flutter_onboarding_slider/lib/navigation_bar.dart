@@ -12,6 +12,7 @@ class NavigationBar extends StatelessWidget
   final Color headerBackgroundColor;
   final Widget? leading;
   final Widget? middle;
+  final Function? skipFunctionOverride;
 
   NavigationBar({
     required this.currentPage,
@@ -23,6 +24,7 @@ class NavigationBar extends StatelessWidget
     this.skipTextButton,
     this.leading,
     this.middle,
+    this.skipFunctionOverride,
   });
 
   @override
@@ -41,7 +43,8 @@ class NavigationBar extends StatelessWidget
       middle: middle,
       trailing: currentPage == totalPage - 1
           ? finishButton == null
-              ? Container(
+              ? SizedBox.shrink()
+              : Container(
                   color: Colors.transparent,
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -49,19 +52,22 @@ class NavigationBar extends StatelessWidget
                     child: finishButton!,
                   ),
                 )
-              : SizedBox.shrink()
           : skipTextButton == null
-              ? Container(
+              ? SizedBox.shrink()
+              : Container(
                   color: Colors.transparent,
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      onSkip();
+                      if (skipFunctionOverride == null) {
+                        onSkip();
+                      } else {
+                        skipFunctionOverride!();
+                      }
                     },
                     child: skipTextButton!,
                   ),
-                )
-              : SizedBox.shrink(),
+                ),
       border: Border(
         bottom: BorderSide(color: Colors.transparent),
       ),
