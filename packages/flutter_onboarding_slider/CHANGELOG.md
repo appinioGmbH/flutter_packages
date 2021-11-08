@@ -1,3 +1,7 @@
+## [1.0.5] - 2021.11.08
+
+* Bug fixes & improvements.
+
 ## [1.0.4] - 2021.10.22
 
 * Bug fixes.
