@@ -14,28 +14,16 @@ We build this package because we wanted to:
 - choose our own settings for the swiper such as duration, angle, padding..
 - add functions while un-/swiping, on end or when the swiper is disabled
 
-<video height="400" autoplay loop>  
-<source src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe1.mov?raw=true" type="video/mp4">
-Your browser does not support the video tag.</video> <video height="400" autoplay loop>  
-<source src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe2.mov?raw=true" type="video/mp4">
-Your browser does not support the video tag.  
-</video>
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe1.gif?raw=true" height="400" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe2.gif?raw=true" height="400" />
 
 Trigger the unswipe however you want..    
-<video height="400" autoplay loop>
-<source src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe3.mov?raw=true" type="video/mp4">
-Your browser does not support the video tag.</video> <video height="400" autoplay loop>  
-<source src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe4.mov?raw=true" type="video/mp4">
-Your browser does not support the video tag.  
-</video>
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe3.gif?raw=true" height="400" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe4.gif?raw=true" height="400" />
 
 Customize the angle..    
-<video height="400" autoplay loop> <source src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe6.mov?raw=true" type="video/mp4">
-Your browser does not support the video tag.</video>
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe6.gif?raw=true" height="400" />
 
 Customize the threshold of the swiper, when the card should slide away..    
-<video height="400" autoplay loop> <source src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe5.mov?raw=true" type="video/mp4">
-Your browser does not support the video tag.</video>
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe5.gif?raw=true" height="400" />
 
 ## Installation
 Add
