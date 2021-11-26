@@ -10,7 +10,7 @@ Flutter packages maintained and used by [Appinio](https://appinio.com).
 - [appinio_swiper](packages/appinio_swiper/)
 
 ### Authors (Alphabetically)
-[Bilal Hammoud](https://github.com/bilalhammoud)
-[Chenhui Xu](https://github.com/CHENHUI-XU)
-[Talissa Hackbarth](https://github.com/thackbarth)
-[Tobias Bentin](https://github.com/tobiasbentin)
+- [Bilal Hammoud](https://github.com/bilalhammoud)
+- [Chenhui Xu](https://github.com/CHENHUI-XU)
+- [Talissa Hackbarth](https://github.com/thackbarth)
+- [Tobias Bentin](https://github.com/tobiasbentin)

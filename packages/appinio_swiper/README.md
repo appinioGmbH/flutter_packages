@@ -16,13 +16,16 @@ We build this package because we wanted to:
 
 <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe1.gif?raw=true" height="400" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe2.gif?raw=true" height="400" />
 
-Trigger the unswipe however you want..    
+Trigger the unswipe however you want..
+
 <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe3.gif?raw=true" height="400" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe4.gif?raw=true" height="400" />
 
-Customize the angle..    
+Customize the angle..
+
 <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe6.gif?raw=true" height="400" />
 
-Customize the threshold of the swiper, when the card should slide away..    
+Customize the threshold of the swiper, when the card should slide away..
+
 <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/swipe5.gif?raw=true" height="400" />
 
 ## Installation
