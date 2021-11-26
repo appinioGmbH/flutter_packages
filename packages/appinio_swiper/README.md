@@ -1,6 +1,6 @@
 ```appinio_swiper``` is a Flutter package for a Tinder Card Swiper. ✨
 
-It allows swiping in all directions with every Custom Widget you want (Stateless or Statefull).
+It allows swiping in all directions with any Custom Widget (Stateless or Statefull).
 
 Very smooth animations supporting Android, iOS & WebApp.
 
