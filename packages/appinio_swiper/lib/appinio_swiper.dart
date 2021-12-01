@@ -25,6 +25,9 @@ class AppinioSwiper extends StatefulWidget {
   /// set to true when swiping should be disabled
   final bool isDisabled;
 
+  /// set to false when unswipe should be disabled
+  final bool allowUnswipe;
+
   /// function that gets called with the new index when the user swiped
   final Function onSwipe;
 
@@ -33,6 +36,9 @@ class AppinioSwiper extends StatefulWidget {
 
   /// function that gets triggered when the swiper is disabled
   final Function onTapDisabled;
+
+  /// function that gets called with the boolean true when the last card gets unswiped
+  final Function unswipe;
 
   const AppinioSwiper({
     Key? key,
@@ -43,9 +49,11 @@ class AppinioSwiper extends StatefulWidget {
     this.maxAngle = 30,
     this.threshold = 50,
     this.isDisabled = false,
+    this.allowUnswipe = true,
     this.onTapDisabled = emptyFunction,
     this.onSwipe = emptyFunctionIndex,
     this.onEnd = emptyFunction,
+    this.unswipe = emptyFunctionBool,
   })  : assert(maxAngle >= 0 && maxAngle <= 360),
         assert(threshold >= 1 && threshold <= 100),
         super(key: key);
@@ -91,8 +99,11 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       widget.controller!.addListener(() {
         if (widget.controller!.state == AppinioSwiperState.unswipe) {
           if (_lastCard != null) {
-            _unSwipe();
-            _animationController.forward();
+            if (widget.allowUnswipe) {
+              widget.unswipe(true);
+              _unSwipe();
+              _animationController.forward();
+            }
           }
         }
       });
@@ -450,6 +461,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 //for null safety
 void emptyFunction() {}
 void emptyFunctionIndex(int index) {}
+void emptyFunctionBool(bool unswiped) {}
 
 //to call the unswipe function from outside of the appinio swiper
 class AppinioSwiperController extends ChangeNotifier {
