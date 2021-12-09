@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:example/example_card.dart';

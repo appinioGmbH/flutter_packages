@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:appinio_video_player/src/custom_video_player_service.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_settings.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';

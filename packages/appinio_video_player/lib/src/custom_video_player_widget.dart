@@ -4,7 +4,6 @@ import 'package:appinio_video_player/src/video_values_provider.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 
 class CustomVideoPlayer extends StatelessWidget {
   /// Allows to provide an aspect ratio other than the video originally has. Remaining space will be black.
