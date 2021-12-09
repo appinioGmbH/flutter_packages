@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class NavigationBar extends StatelessWidget
+class OnBoardingNavigationBar extends StatelessWidget
     implements ObstructingPreferredSizeWidget {
   final int currentPage;
   final Function onSkip;
@@ -14,7 +14,7 @@ class NavigationBar extends StatelessWidget
   final Widget? middle;
   final Function? skipFunctionOverride;
 
-  NavigationBar({
+  OnBoardingNavigationBar({
     required this.currentPage,
     required this.onSkip,
     required this.headerBackgroundColor,

@@ -1,3 +1,7 @@
+## [1.0.7] - 2021.12.09
+
+* Bug fix: resolving dependencies conflict.
+
 ## [1.0.6] - 2021.11.08
 
 * Improvements.

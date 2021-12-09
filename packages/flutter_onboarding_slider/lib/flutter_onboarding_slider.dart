@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/background_controller.dart';
 import 'package:flutter_onboarding_slider/background_final_button.dart';
-import 'package:flutter_onboarding_slider/navigation_bar.dart';
+import 'package:flutter_onboarding_slider/onboarding_navigation_bar.dart';
 import 'package:flutter_onboarding_slider/page_offset_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -165,7 +165,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
               )
             : SizedBox.shrink(),
         body: CupertinoPageScaffold(
-          navigationBar: NavigationBar(
+          navigationBar: OnBoardingNavigationBar(
             skipFunctionOverride: widget.skipFunctionOverride,
             leading: widget.leading,
             middle: widget.middle,
