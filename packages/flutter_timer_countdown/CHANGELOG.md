@@ -1,11 +1,11 @@
-## [1.0.3] - 2021.12.08
+## [1.0.3] - 2021.12.09
 
-* Fixing late initialization bug
+* Bug fix: Fixing late initialization
 
 ## [1.0.2] - 2021.08.23
 
-* Customizable space between number units and colons.
-* Bugfixes
+* Feature: Customizable space between number units and colons.
+* Bug fixes
 
 ## [1.0.1] - 2021.08.12
 
@@ -13,4 +13,4 @@
 
 ## [1.0.0] - 2021.08.11
 
-* initial version 
+* Initial version 
