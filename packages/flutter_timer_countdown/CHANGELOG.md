@@ -1,3 +1,7 @@
+## [1.0.3] - 2021.12.08
+
+* Fixing late initialization bug
+
 ## [1.0.2] - 2021.08.23
 
 * Customizable space between number units and colons.
