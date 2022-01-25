@@ -21,8 +21,8 @@ class AppinioAnimatedToggleTab extends StatefulWidget {
   /// decoration of the tab
   final BoxDecoration boxDecoration;
 
-  /// the animated box used to toggle
-  final Widget animatedBox;
+  /// the decoration of animated box used to toggle
+  final BoxDecoration animatedBoxDecoration;
 
   /// width of the tab
   final double width;
@@ -39,7 +39,7 @@ class AppinioAnimatedToggleTab extends StatefulWidget {
     required this.tabTexts,
     required this.height,
     required this.boxDecoration,
-    required this.animatedBox,
+    required this.animatedBoxDecoration,
     required this.activeStyle,
     required this.inactiveStyle,
     required this.width,
@@ -68,7 +68,11 @@ class _AppinioAnimatedToggleTabState extends State<AppinioAnimatedToggleTab> {
                   widget.offset,
               0),
           duration: widget.duration,
-          child: widget.animatedBox,
+          child: Container(
+            width: (widget.width / 3),
+            height: widget.height * 0.9,
+            decoration: widget.animatedBoxDecoration,
+          ),
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,

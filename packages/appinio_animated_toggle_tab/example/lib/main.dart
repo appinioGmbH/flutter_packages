@@ -57,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             AppinioAnimatedToggleTab(
               duration: const Duration(milliseconds: 150),
+              offset: 0,
               callback: (int index) {
                 setState(() {
                   currentIndex = index;
@@ -76,26 +77,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   kDefaultBoxshadow,
                 ],
               ),
-              animatedBox: Container(
-                width: 90,
-                height: 35,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFFc3d2db).withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                  color: kDarkBlueColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(5),
+              animatedBoxDecoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFc3d2db).withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: const Offset(2, 2),
                   ),
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1,
-                  ),
+                ],
+                color: kDarkBlueColor,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1,
                 ),
               ),
               activeStyle: const TextStyle(
