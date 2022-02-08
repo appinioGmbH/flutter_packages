@@ -50,7 +50,7 @@ class AppinioSwiper extends StatefulWidget {
     this.isDisabled = false,
     this.allowUnswipe = true,
     this.onTapDisabled = emptyFunction,
-    this.onSwipe = emptyFunctionIndex,
+    this.onSwipe = emptyFunctionIndexString,
     this.onEnd = emptyFunction,
     this.unswipe = emptyFunctionBool,
   })  : assert(maxAngle >= 0 && maxAngle <= 360),
@@ -84,8 +84,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   bool _vertical = false;
   bool _horizontal = false;
-  int _swipedDirectionVertical = 0; //-1 left, 1 right
-  int _swipedDirectionHorizontal = 0; //-1 bottom, 1 top
+  int _swipedDirectionVertical = 0; //-1 bottom, 1 top
+  int _swipedDirectionHorizontal = 0; //-1 left, 1 right
 
   Widget? _lastCard;
 
@@ -103,6 +103,28 @@ class _AppinioSwiperState extends State<AppinioSwiper>
               _unSwipe();
               _animationController.forward();
             }
+          }
+        }
+        if(widget.cards!.length != 0){
+          if (widget.controller!.state == AppinioSwiperState.swipeRight) {
+            _left = widget.threshold + 1;
+            _swipeHorizontal(context);
+            _animationController.forward();
+          }
+          if (widget.controller!.state == AppinioSwiperState.swipeLeft) {
+            _left = -widget.threshold - 1;
+            _swipeHorizontal(context);
+            _animationController.forward();
+          }
+          if (widget.controller!.state == AppinioSwiperState.swipeUp) {
+            _top = -widget.threshold - 1;
+            _swipeVertical(context);
+            _animationController.forward();
+          }
+          if (widget.controller!.state == AppinioSwiperState.swipeDown) {
+            _top = widget.threshold + 1;
+            _swipeVertical(context);
+            _animationController.forward();
           }
         }
       });
@@ -139,13 +161,25 @@ class _AppinioSwiperState extends State<AppinioSwiper>
           if (_swipeTyp == 1) {
             _lastCard = widget.cards!.last;
             widget.cards!.removeLast();
+            String direction;
+            if(_horizontal){
+              (_swipedDirectionHorizontal == 1)
+                ? direction = 'right'
+                : direction = 'left';
+            }else{
+              (_swipedDirectionVertical == 1)
+                ? direction = 'top'
+                : direction = 'bottom';
+            }
 
-            widget.onSwipe(widget.cards!.length);
+            widget.onSwipe(widget.cards!.length, direction);
             if (widget.cards!.isEmpty) widget.onEnd();
           } else if (_swipeTyp == 2) {
             _lastCard = null;
           }
           _animationController.reset();
+          _horizontal = false;
+          _vertical = false;
           _left = 0;
           _top = 0;
           _total = 0;
@@ -255,7 +289,6 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         onPanStart: (tapInfo) {
           RenderBox renderBox = context.findRenderObject() as RenderBox;
           Offset position = renderBox.globalToLocal(tapInfo.globalPosition);
-
           if (position.dy < renderBox.size.height / 2) _tapOnTop = true;
         },
         onPanUpdate: (tapInfo) {
@@ -334,7 +367,9 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     (_left > widget.threshold)
         ? _swipedDirectionHorizontal = 1
         : _swipedDirectionHorizontal = -1;
-    (_top <= 0) ? _swipedDirectionVertical = 1 : _swipedDirectionVertical = -1;
+    (_top <= 0) 
+      ? _swipedDirectionVertical = 1 
+      : _swipedDirectionVertical = -1;
     _horizontal = true;
   }
 
@@ -368,6 +403,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         ? _swipedDirectionHorizontal = 1
         : _swipedDirectionHorizontal = -1;
     _vertical = true;
+
   }
 
   //moves the card back to starting position
@@ -456,8 +492,9 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
 //for null safety
 void emptyFunction() {}
-void emptyFunctionIndex(int index) {}
+void emptyFunctionIndexString(int index, String direction) {}
 void emptyFunctionBool(bool unswiped) {}
+void emptyFuntionString(String direction) {}
 
 //to call the unswipe function from outside of the appinio swiper
 class AppinioSwiperController extends ChangeNotifier {
@@ -468,6 +505,24 @@ class AppinioSwiperController extends ChangeNotifier {
     state = AppinioSwiperState.unswipe;
     notifyListeners();
   }
+  void swipeRight(){
+    state = AppinioSwiperState.swipeRight;
+    notifyListeners();
+  }
+  void swipeLeft(){
+    state = AppinioSwiperState.swipeLeft;
+    notifyListeners();
+  }
+
+  void swipeUp(){
+    state = AppinioSwiperState.swipeUp;
+    notifyListeners();
+  }
+
+  void swipeDown(){
+    state = AppinioSwiperState.swipeDown;
+    notifyListeners();
+  }
 }
 
-enum AppinioSwiperState { unswipe }
+enum AppinioSwiperState { unswipe, swipeLeft, swipeRight, swipeUp, swipeDown }

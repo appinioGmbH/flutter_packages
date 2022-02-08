@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:example/example_card.dart';
 
+import 'example_card.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -77,12 +79,33 @@ class _ExamplePageState extends State<Example> {
             color: const Color(0xFF053149),
             onPressed: () => controller.unswipe(),
           ),
+          CupertinoButton(
+            child: const Text("left"),
+            color: const Color(0xFF053149),
+            onPressed: () => controller.swipeLeft(),
+          ),
+          CupertinoButton(
+            child: const Text("right"),
+            color: const Color(0xFF053149),
+            onPressed: () => controller.swipeRight(),
+          ),
+          CupertinoButton(
+            child: const Text("up"),
+            color: const Color(0xFF053149),
+            onPressed: () => controller.swipeUp(),
+          ),
+          CupertinoButton(
+            child: const Text("down"),
+            color: const Color(0xFF053149),
+            onPressed: () => controller.swipeDown(),
+          ),
         ],
       ),
     );
   }
 
-  void _swipe(int index) {
+  void _swipe(int index,String direction) {
+    print(direction);
     //print("swipe");
   }
 
