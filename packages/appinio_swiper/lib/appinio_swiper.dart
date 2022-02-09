@@ -178,8 +178,6 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             _lastCard = null;
           }
           _animationController.reset();
-          _horizontal = false;
-          _vertical = false;
           _left = 0;
           _top = 0;
           _total = 0;
