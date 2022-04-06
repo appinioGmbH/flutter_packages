@@ -1,19 +1,20 @@
-import 'package:appinio_video_player/src/models/custom_video_player_progress_bar_settings.dart';
-import 'package:appinio_video_player/src/video_values_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:provider/provider.dart';
+
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 
 class CustomVideoPlayerProgressIndicator extends StatefulWidget {
-  final double? progress;
+  final double progress;
+  final CustomVideoPlayerController customVideoPlayerController;
   final Color progressColor;
   final Color backgroundColor;
 
   const CustomVideoPlayerProgressIndicator({
     Key? key,
-    required this.progress,
+    required this.customVideoPlayerController,
     required this.progressColor,
     required this.backgroundColor,
+    required this.progress,
   }) : super(key: key);
 
   @override
@@ -36,17 +37,17 @@ class _State extends State<CustomVideoPlayerProgressIndicator> {
   }
 
   Widget _getProgressBar() {
-    CustomVideoPlayerProgressBarSettings _progressBarSettings =
-        Provider.of<VideoValuesProvider>(context)
-            .customVideoPlayerSettings
-            .customVideoPlayerProgressBarSettings;
     return Container(
       width: double.infinity,
-      height: _progressBarSettings.progressBarHeight,
+      height: widget.customVideoPlayerController.customVideoPlayerSettings
+          .customVideoPlayerProgressBarSettings.progressBarHeight,
       decoration: BoxDecoration(
         color: widget.backgroundColor,
-        borderRadius:
-            BorderRadius.circular(_progressBarSettings.progressBarBorderRadius),
+        borderRadius: BorderRadius.circular(widget
+            .customVideoPlayerController
+            .customVideoPlayerSettings
+            .customVideoPlayerProgressBarSettings
+            .progressBarBorderRadius),
       ),
       child: Align(
         alignment: Alignment.centerLeft,
@@ -55,7 +56,9 @@ class _State extends State<CustomVideoPlayerProgressIndicator> {
           decoration: BoxDecoration(
             color: widget.progressColor,
             borderRadius: BorderRadius.circular(
-                _progressBarSettings.progressBarBorderRadius),
+              widget.customVideoPlayerController.customVideoPlayerSettings
+                  .customVideoPlayerProgressBarSettings.progressBarBorderRadius,
+            ),
           ),
           duration: const Duration(milliseconds: 100),
           curve: Curves.linear,

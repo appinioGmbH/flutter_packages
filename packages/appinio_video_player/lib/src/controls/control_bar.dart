@@ -1,80 +1,85 @@
+import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
 import 'package:appinio_video_player/src/controls/progress_bar.dart';
-import 'package:appinio_video_player/src/video_values_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CustomVideoPlayerControlBar extends StatelessWidget {
+  final bool visible;
+  final CustomVideoPlayerSettings customVideoPlayerSettings;
+  final CustomVideoPlayerController customVideoPlayerController;
   const CustomVideoPlayerControlBar({
     Key? key,
+    required this.visible,
+    required this.customVideoPlayerSettings,
+    required this.customVideoPlayerController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    VideoValuesProvider _videoValuesProvider = Provider.of<VideoValuesProvider>(
-      context,
-    );
-
     return Visibility(
-      visible:
-          _videoValuesProvider.customVideoPlayerController.controlBarVisible,
+      visible: visible,
       maintainAnimation: true,
       maintainState: true,
       child: Container(
-        margin: _videoValuesProvider.customVideoPlayerSettings.controlBarMargin,
-        padding:
-            _videoValuesProvider.customVideoPlayerSettings.controlBarPadding,
-        decoration:
-            _videoValuesProvider.customVideoPlayerSettings.controlBarDecoration,
+        margin: customVideoPlayerSettings.controlBarMargin,
+        padding: customVideoPlayerSettings.controlBarPadding,
+        decoration: customVideoPlayerSettings.controlBarDecoration,
         child: Row(
           children: [
-            if (_videoValuesProvider.customVideoPlayerSettings.showPlayButton)
-              const CustomVideoPlayerPlayPauseButton(),
-            if (_videoValuesProvider
-                .customVideoPlayerSettings.showDurationPlayed)
+            if (customVideoPlayerSettings.showPlayButton)
+              CustomVideoPlayerPlayPauseButton(
+                customVideoPlayerController: customVideoPlayerController,
+              ),
+            if (customVideoPlayerSettings.showDurationPlayed)
               Padding(
                 padding: const EdgeInsets.only(
                   left: 5.0,
                   right: 5.0,
                 ),
-                child: Text(
-                  getDurationAsString(_videoValuesProvider
-                      .videoPlayerController.value.position),
-                  style: _videoValuesProvider
-                      .customVideoPlayerSettings.durationPlayedTextStyle,
+                child: ValueListenableBuilder<Duration>(
+                  valueListenable:
+                      customVideoPlayerController.videoProgressNotifier,
+                  builder: ((context, progress, child) {
+                    return Text(
+                      getDurationAsString(progress),
+                      style: customVideoPlayerSettings.durationPlayedTextStyle,
+                    );
+                  }),
                 ),
               ),
-            if (_videoValuesProvider.customVideoPlayerSettings
-                .customVideoPlayerProgressBarSettings.showProgressBar)
-              Expanded(
-                child: CustomVideoPlayerProgressBar(
-                  controller:
-                      Provider.of<VideoValuesProvider>(context, listen: false)
-                          .videoPlayerController,
-                ),
+            Expanded(
+              child: CustomVideoPlayerProgressBar(
+                customVideoPlayerController: customVideoPlayerController,
               ),
-            if (_videoValuesProvider
-                .customVideoPlayerSettings.showDurationRemaining)
+            ),
+            if (customVideoPlayerSettings.showDurationRemaining)
               Padding(
                 padding: const EdgeInsets.only(
                   left: 5.0,
                   right: 5.0,
                 ),
-                child: Text(
-                  "-" +
-                      getDurationAsString(_videoValuesProvider
-                              .videoPlayerController.value.duration -
-                          _videoValuesProvider
-                              .videoPlayerController.value.position),
-                  style: _videoValuesProvider
-                      .customVideoPlayerSettings.durationRemainingTextStyle,
+                child: ValueListenableBuilder<Duration>(
+                  valueListenable:
+                      customVideoPlayerController.videoProgressNotifier,
+                  builder: ((context, progress, child) {
+                    return Text(
+                      "-" +
+                          getDurationAsString(customVideoPlayerController
+                                  .videoPlayerController.value.duration -
+                              progress),
+                      style:
+                          customVideoPlayerSettings.durationRemainingTextStyle,
+                    );
+                  }),
                 ),
               ),
-            if (_videoValuesProvider
-                .customVideoPlayerSettings.showFullscreenButton)
-              const CustomVideoPlayerFullscreenButton()
+            if (customVideoPlayerSettings.showFullscreenButton)
+              CustomVideoPlayerFullscreenButton(
+                customVideoPlayerController: customVideoPlayerController,
+                customVideoPlayerSettings: customVideoPlayerSettings,
+              )
           ],
         ),
       ),

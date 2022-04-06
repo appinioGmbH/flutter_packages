@@ -1,11 +1,14 @@
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
+import 'package:appinio_video_player/src/models/custom_video_player_progress_bar_settings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'custom_video_player_progress_bar_settings.dart';
-
 class CustomVideoPlayerSettings {
+  /// Define a custom aspect ratio for the video.
+  final double? customAspectRatio;
+
   /// Set to false if no control bar should be available.
   final bool controlBarAvailable;
 
@@ -42,13 +45,10 @@ class CustomVideoPlayerSettings {
   /// If set the video will leave the fullscreen mode when its finished. Nothing happens if video wasn't in fullscreen before.
   final bool exitFullscreenOnEnd;
 
-  /// If set the screen doesn't go to sleep when the video plays.
-  final bool enableWakeLockWhenPlaying;
-
   /// If set to false no play/pause button will not be displayed.
   final bool showPlayButton;
 
-  /// If set to false no enter/exit fullscrenn button will not be displayed.
+  /// If set to false no enter/exit fullscrenn button will not be displayed. Default it wont be displayed in web because there fullscreen doesnt work properly
   final bool showFullscreenButton;
 
   /// The [TextStyle] of the played duration left from the progress bar.
@@ -67,13 +67,8 @@ class CustomVideoPlayerSettings {
   final CustomVideoPlayerProgressBarSettings
       customVideoPlayerProgressBarSettings;
 
-  /// A callback to be executed when the video starts.
-  final VoidCallback? onStart;
-
-  /// A callback to be executed when the video ends.
-  final VoidCallback? onEnd;
-
-  CustomVideoPlayerSettings({
+  const CustomVideoPlayerSettings({
+    this.customAspectRatio,
     this.controlBarMargin = const EdgeInsets.all(5),
     this.controlBarPadding = const EdgeInsets.all(5),
     this.playButton = const CustomVideoPlayerPlayButton(),
@@ -99,11 +94,8 @@ class CustomVideoPlayerSettings {
     this.enterFullscreenOnStart = false,
     this.exitFullscreenOnEnd = false,
     this.showPlayButton = true,
-    this.showFullscreenButton = true,
-    this.enableWakeLockWhenPlaying = true,
+    this.showFullscreenButton = !kIsWeb,
     this.systemUIModeAfterFullscreen = SystemUiMode.edgeToEdge,
     this.systemUIModeInsideFullscreen = SystemUiMode.leanBack,
-    this.onStart,
-    this.onEnd,
   });
 }

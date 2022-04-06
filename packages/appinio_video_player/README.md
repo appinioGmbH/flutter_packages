@@ -6,17 +6,19 @@ This package wraps the official video_player package by flutter and extends it w
 
 ## Top Features
 
-* Fullscreen Mode
-* Fully Customizable Controls
-* Fluid Progress Bar
-* Prevent Seeking in Progress Bar
+- Fullscreen Mode
+- Fully Customizable Controls
+- Fluid Progress Bar
+- Prevent Seeking in Progress Bar
 
 <br />
 
 ## Preview
-  <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_1.png?raw=true" height="600" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_2.png?raw=true" height="600" />
+
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_1.png?raw=true" height="600" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_2.png?raw=true" height="600" />
 
 ### Fullscreen
+
   <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/video_player/screenshot_3.png?raw=true" />
 <br />
 
@@ -43,7 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     videoPlayerController = VideoPlayerController.network(videoUrl)
-      ..initialize();
+      ..initialize().then((value) => setState(() {}));
+    customVideoPlayerController = CustomVideoPlayerController(
+      context: context,
+      videoPlayerController: videoPlayerController,
+    );
   }
 
   @override
@@ -61,8 +67,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       child: SafeArea(
         child: CustomVideoPlayer(
-          customVideoPlayerController: customVideoPlayerController,
-          videoPlayerController: videoPlayerController,
+          customVideoPlayerController: CustomVideoPlayerController(
+            context: context,
+            videoPlayerController: videoPlayerController,
+          ),
         ),
       ),
     );

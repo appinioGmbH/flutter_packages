@@ -1,9 +1,13 @@
-import 'package:appinio_video_player/src/embedded_video_player.dart';
+import 'package:appinio_video_player/src/custom_video_player.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:flutter/material.dart';
 
-class FullscreenVideo extends StatelessWidget {
-  const FullscreenVideo({
+class FullscreenVideoPlayer extends StatelessWidget {
+  final CustomVideoPlayerController customVideoPlayerController;
+
+  const FullscreenVideoPlayer({
     Key? key,
+    required this.customVideoPlayerController,
   }) : super(key: key);
 
   @override
@@ -13,7 +17,9 @@ class FullscreenVideo extends StatelessWidget {
       body: Container(
         alignment: Alignment.center,
         color: Colors.black,
-        child: const EmbeddedVideoPlayer(),
+        child: CustomVideoPlayer(
+          customVideoPlayerController: customVideoPlayerController,
+        ),
       ),
     );
   }
