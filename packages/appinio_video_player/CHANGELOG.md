@@ -1,4 +1,4 @@
-## [1.1.0] - 2022.04.06
+## [1.0.2] - 2022.04.21
 
 - Removed dependencies from other packages (provider, wakelock)
 - Restructuring
