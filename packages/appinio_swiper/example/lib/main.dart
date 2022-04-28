@@ -73,6 +73,14 @@ class _ExamplePageState extends State<Example> {
             ),
           ),
           CupertinoButton(
+            child: const Text("swipe"),
+            color: const Color(0xFF053149),
+            onPressed: () => controller.swipe(),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          CupertinoButton(
             child: const Text("unswipe"),
             color: const Color(0xFF053149),
             onPressed: () => controller.unswipe(),

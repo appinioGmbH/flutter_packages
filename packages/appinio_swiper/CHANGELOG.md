@@ -1,3 +1,7 @@
+## [1.0.2] - 2022.04.28
+
+* Trigger swipe through controller.
+
 ## [1.0.2] - 2021.12.8
 
 * Bug fix.

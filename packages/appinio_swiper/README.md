@@ -11,6 +11,7 @@ We build this package because we wanted to:
 - have a complete customizable slider
 - be able to swipe in every direction
 - trigger unswipe however we want
+- trigger swipe however we want ❗NEW❗
 - choose our own settings for the swiper such as duration, angle, padding..
 - add functions while un-/swiping, on end or when the swiper is disabled
 
@@ -104,17 +105,19 @@ class Example extends StatelessWidget {
 | duration      | 200 milliseconds    |   The duration that every animation should last | false
 | maxAngle | 30      |    Maximum angle the card reaches while swiping | false
 | threshold | 50     |    Threshold from which the card is swiped away | false
-| isDisabled | false      |   Set to ```true``` when swiping should be disabled | false
+| isDisabled | false      |   Set to ```true``` when swiping should be disabled, has no impact when triggered from the outside | false
 | onTapDisabled | -     |    Function that get triggered when the swiper is disabled | false
 | onSwipe | -    |    Called with the new index when the user swiped | false
 | onEnd | -    |    Called when there is no Widget left to be swiped away | false
+| direction | right    |    Direction in which the card is swiped away when triggered from the outside | false
 
 #### Controller
 
-The ```Controller``` is used to control the ```unswipe``` function of the swiper from outside of the widget. You can create a controller called ```AppinioSwiperController``` and save the instance for further usage. Please have a closer look to our Example for the usage.
+The ```Controller``` is used to control the ```swipe``` or ```unswipe``` function of the swiper from outside of the widget. You can create a controller called ```AppinioSwiperController``` and save the instance for further usage. Please have a closer look to our Example for the usage.
 
 | Method        | Description
 | ------------- |:-------------
+| swipe      | Changes the state of the controller to swipe and swipes the card in your selected direction.
 | unswipe      | Changes the state of the controller to unswipe and brings back the last card that was swiped away.
 
 
