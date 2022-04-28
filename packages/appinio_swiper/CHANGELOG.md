@@ -1,4 +1,4 @@
-## [1.0.2] - 2022.04.28
+## [1.0.3] - 2022.04.28
 
 * Trigger swipe through controller.
 
