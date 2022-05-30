@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_progress_bar_settings.dart';
@@ -96,10 +98,12 @@ class CustomVideoPlayerSettings {
     this.durationPlayedTextStyle = const TextStyle(
       color: Colors.white,
       fontSize: 14,
+      fontFeatures: [FontFeature.tabularFigures()],
     ),
     this.durationRemainingTextStyle = const TextStyle(
       color: Colors.white,
       fontSize: 14,
+      fontFeatures: [FontFeature.tabularFigures()],
     ),
     this.customVideoPlayerProgressBarSettings =
         const CustomVideoPlayerProgressBarSettings(),
@@ -123,6 +127,7 @@ class CustomVideoPlayerSettings {
     this.playbackButtonTextStyle = const TextStyle(
       color: Colors.white,
       fontSize: 14,
+      fontFeatures: [FontFeature.tabularFigures()],
     ),
   });
 }
