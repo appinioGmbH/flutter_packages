@@ -12,8 +12,11 @@ class CustomVideoPlayerSettings {
   /// Set to false if no control bar should be available.
   final bool controlBarAvailable;
 
-  /// The margin of the control bar to the edges of the video player.
-  final EdgeInsets controlBarMargin;
+  /// Set to false if no playback speed adjustment button should be shown.
+  final bool playbackSpeedButtonAvailable;
+
+  // The padding between the controls and the edges of the video player
+  final EdgeInsets controlsPadding;
 
   /// The padding of the control bar from the edges to its contents.
   final EdgeInsets controlBarPadding;
@@ -67,17 +70,29 @@ class CustomVideoPlayerSettings {
   final CustomVideoPlayerProgressBarSettings
       customVideoPlayerProgressBarSettings;
 
+  /// Decoration for the playback speed button.
+  final BoxDecoration playbackSpeedButtonDecoration;
+
+  /// Padding for the playback speed button.
+  final EdgeInsets playbackButtonPadding;
+
+  /// TextStyle for the playback speed.
+  final TextStyle playbackButtonTextStyle;
+
   const CustomVideoPlayerSettings({
     this.customAspectRatio,
-    this.controlBarMargin = const EdgeInsets.all(5),
+    this.controlsPadding = const EdgeInsets.all(5),
     this.controlBarPadding = const EdgeInsets.all(5),
     this.playButton = const CustomVideoPlayerPlayButton(),
     this.pauseButton = const CustomVideoPlayerPauseButton(),
     this.enterFullscreenButton = const CustomVideoPlayerEnterFullscreenButton(),
     this.exitFullscreenButton = const CustomVideoPlayerExitFullscreenButton(),
     this.controlBarDecoration = const BoxDecoration(
-        color: Color.fromRGBO(0, 0, 0, 0.5),
-        borderRadius: BorderRadius.all(Radius.circular(10))),
+      color: Color.fromRGBO(0, 0, 0, 0.5),
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+    ),
     this.durationPlayedTextStyle = const TextStyle(
       color: Colors.white,
       fontSize: 14,
@@ -97,5 +112,17 @@ class CustomVideoPlayerSettings {
     this.showFullscreenButton = !kIsWeb,
     this.systemUIModeAfterFullscreen = SystemUiMode.edgeToEdge,
     this.systemUIModeInsideFullscreen = SystemUiMode.leanBack,
+    this.playbackSpeedButtonDecoration = const BoxDecoration(
+      color: Color.fromRGBO(0, 0, 0, 0.5),
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+    ),
+    this.playbackSpeedButtonAvailable = true,
+    this.playbackButtonPadding = const EdgeInsets.all(8),
+    this.playbackButtonTextStyle = const TextStyle(
+      color: Colors.white,
+      fontSize: 14,
+    ),
   });
 }

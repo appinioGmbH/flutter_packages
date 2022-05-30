@@ -7,12 +7,10 @@ import 'package:flutter/material.dart';
 
 class CustomVideoPlayerControlBar extends StatelessWidget {
   final bool visible;
-  final CustomVideoPlayerSettings customVideoPlayerSettings;
   final CustomVideoPlayerController customVideoPlayerController;
   const CustomVideoPlayerControlBar({
     Key? key,
     required this.visible,
-    required this.customVideoPlayerSettings,
     required this.customVideoPlayerController,
   }) : super(key: key);
 
@@ -23,16 +21,20 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
       maintainAnimation: true,
       maintainState: true,
       child: Container(
-        margin: customVideoPlayerSettings.controlBarMargin,
-        padding: customVideoPlayerSettings.controlBarPadding,
-        decoration: customVideoPlayerSettings.controlBarDecoration,
+        alignment: Alignment.bottomCenter,
+        padding: customVideoPlayerController
+            .customVideoPlayerSettings.controlBarPadding,
+        decoration: customVideoPlayerController
+            .customVideoPlayerSettings.controlBarDecoration,
         child: Row(
           children: [
-            if (customVideoPlayerSettings.showPlayButton)
+            if (customVideoPlayerController
+                .customVideoPlayerSettings.showPlayButton)
               CustomVideoPlayerPlayPauseButton(
                 customVideoPlayerController: customVideoPlayerController,
               ),
-            if (customVideoPlayerSettings.showDurationPlayed)
+            if (customVideoPlayerController
+                .customVideoPlayerSettings.showDurationPlayed)
               Padding(
                 padding: const EdgeInsets.only(
                   left: 5.0,
@@ -44,7 +46,8 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
                   builder: ((context, progress, child) {
                     return Text(
                       getDurationAsString(progress),
-                      style: customVideoPlayerSettings.durationPlayedTextStyle,
+                      style: customVideoPlayerController
+                          .customVideoPlayerSettings.durationPlayedTextStyle,
                     );
                   }),
                 ),
@@ -54,7 +57,8 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
                 customVideoPlayerController: customVideoPlayerController,
               ),
             ),
-            if (customVideoPlayerSettings.showDurationRemaining)
+            if (customVideoPlayerController
+                .customVideoPlayerSettings.showDurationRemaining)
               Padding(
                 padding: const EdgeInsets.only(
                   left: 5.0,
@@ -69,16 +73,16 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
                           getDurationAsString(customVideoPlayerController
                                   .videoPlayerController.value.duration -
                               progress),
-                      style:
-                          customVideoPlayerSettings.durationRemainingTextStyle,
+                      style: customVideoPlayerController
+                          .customVideoPlayerSettings.durationRemainingTextStyle,
                     );
                   }),
                 ),
               ),
-            if (customVideoPlayerSettings.showFullscreenButton)
+            if (customVideoPlayerController
+                .customVideoPlayerSettings.showFullscreenButton)
               CustomVideoPlayerFullscreenButton(
                 customVideoPlayerController: customVideoPlayerController,
-                customVideoPlayerSettings: customVideoPlayerSettings,
               )
           ],
         ),

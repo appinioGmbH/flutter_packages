@@ -4,12 +4,10 @@ import 'package:appinio_video_player/appinio_video_player.dart';
 
 class CustomVideoPlayerFullscreenButton extends StatelessWidget {
   final CustomVideoPlayerController customVideoPlayerController;
-  final CustomVideoPlayerSettings customVideoPlayerSettings;
   final bool? isFullscreen;
   const CustomVideoPlayerFullscreenButton({
     Key? key,
     required this.customVideoPlayerController,
-    required this.customVideoPlayerSettings,
     this.isFullscreen,
   }) : super(key: key);
 
@@ -25,8 +23,10 @@ class CustomVideoPlayerFullscreenButton extends StatelessWidget {
         }
       },
       child: customVideoPlayerController.isFullscreen
-          ? customVideoPlayerSettings.exitFullscreenButton
-          : customVideoPlayerSettings.enterFullscreenButton,
+          ? customVideoPlayerController
+              .customVideoPlayerSettings.exitFullscreenButton
+          : customVideoPlayerController
+              .customVideoPlayerSettings.enterFullscreenButton,
     );
   }
 }
