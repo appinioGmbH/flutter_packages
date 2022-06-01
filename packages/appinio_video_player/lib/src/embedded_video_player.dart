@@ -21,6 +21,7 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
   @override
   void initState() {
     super.initState();
+
     if (!widget.isFullscreen) {
       widget.customVideoPlayerController.updateViewAfterFullscreen =
           _updateVideoState;

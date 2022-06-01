@@ -1,6 +1,6 @@
+import 'package:appinio_video_player/src/custom_video_player_controller_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 
 class VideoSourceButton extends StatefulWidget {
@@ -17,27 +17,6 @@ class VideoSourceButton extends StatefulWidget {
 }
 
 class _VideoSourceButtonState extends State<VideoSourceButton> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<void> _switchVideoSource(String sourcePath) async {
-    Duration _playedDuration =
-        widget.customVideoPlayerController.videoPlayerController.value.position;
-    widget.customVideoPlayerController.videoPlayerController.dispose();
-    widget.customVideoPlayerController.videoPlayerController = widget
-        .customVideoPlayerController.additionalVideoSources!.entries
-        .toList()[1]
-        .value;
-    await widget.customVideoPlayerController.videoPlayerController.initialize();
-    widget.customVideoPlayerController.initialize();
-    await widget.customVideoPlayerController.videoPlayerController
-        .seekTo(_playedDuration);
-    await widget.customVideoPlayerController.videoPlayerController.play();
-    widget.updateVideoState();
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget.customVideoPlayerController.additionalVideoSources != null &&

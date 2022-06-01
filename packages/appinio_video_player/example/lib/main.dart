@@ -150,7 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
               CupertinoButton(
                 child: const Text("Play Fullscreen"),
                 onPressed: () {
-                  // _customVideoPlayerController.videoPlayerController.play();
                   _customVideoPlayerController.setFullscreen(true);
                   _customVideoPlayerController.videoPlayerController.play();
                 },
