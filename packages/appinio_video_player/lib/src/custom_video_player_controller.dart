@@ -20,11 +20,12 @@ class CustomVideoPlayerController extends CustomVideoPlayerControllerBase {
     customVideoPlayerController = this;
   }
 
-  /// T
+  /// Toggles the fullscreen view on and off.
   Future<void> setFullscreen(bool fullscreen) async {
     await setFullscreenMethod(fullscreen);
   }
 
+  /// Disposes all created resources. Call it at your widgets dispose method when the `CustomVideoPlayer` is not used anymore.
   void dispose() {
     disposeMethod();
   }

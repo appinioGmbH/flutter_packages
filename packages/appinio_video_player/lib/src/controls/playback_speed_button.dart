@@ -47,9 +47,9 @@ class PlaybackSpeedButton extends StatelessWidget {
     // limiting the speed because it is not supported more by iOS
     if (customVideoPlayerController.playbackSpeedNotifier.value < 2.0) {
       customVideoPlayerController.videoPlayerController.setPlaybackSpeed(
-          customVideoPlayerController.playbackSpeedNotifier.value + 0.5);
+          customVideoPlayerController.playbackSpeedNotifier.value + 0.25);
     } else {
-      customVideoPlayerController.videoPlayerController.setPlaybackSpeed(1);
+      customVideoPlayerController.videoPlayerController.setPlaybackSpeed(0.25);
     }
   }
 }
