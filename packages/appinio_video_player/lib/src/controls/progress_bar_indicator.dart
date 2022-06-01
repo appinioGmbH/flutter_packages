@@ -42,11 +42,10 @@ class _State extends State<CustomVideoPlayerProgressIndicator> {
           .customVideoPlayerProgressBarSettings.progressBarHeight,
       decoration: BoxDecoration(
         color: widget.backgroundColor,
-        borderRadius: BorderRadius.circular(widget
-            .customVideoPlayerController
-            .customVideoPlayerSettings
-            .customVideoPlayerProgressBarSettings
-            .progressBarBorderRadius),
+        borderRadius: BorderRadius.circular(
+          widget.customVideoPlayerController.customVideoPlayerSettings
+              .customVideoPlayerProgressBarSettings.progressBarBorderRadius,
+        ),
       ),
       child: Align(
         alignment: Alignment.centerLeft,

@@ -56,11 +56,10 @@ class _VideoProgressIndicatorState extends State<CustomVideoPlayerProgressBar> {
         }
 
         progressIndicator = ClipRRect(
-          borderRadius: BorderRadius.circular(widget
-              .customVideoPlayerController
-              .customVideoPlayerSettings
-              .customVideoPlayerProgressBarSettings
-              .progressBarBorderRadius),
+          borderRadius: BorderRadius.circular(
+            widget.customVideoPlayerController.customVideoPlayerSettings
+                .customVideoPlayerProgressBarSettings.progressBarBorderRadius,
+          ),
           child: Stack(
             children: [
               CustomVideoPlayerProgressIndicator(
@@ -78,32 +77,32 @@ class _VideoProgressIndicatorState extends State<CustomVideoPlayerProgressBar> {
                     .backgroundColor,
               ),
               ValueListenableBuilder<Duration>(
-                  valueListenable:
-                      widget.customVideoPlayerController.videoProgressNotifier,
-                  builder: (context, progress, child) {
-                    return CustomVideoPlayerProgressIndicator(
-                      customVideoPlayerController:
-                          widget.customVideoPlayerController,
-                      progress: progress.inMilliseconds / duration,
-                      progressColor: widget
-                          .customVideoPlayerController
-                          .customVideoPlayerSettings
-                          .customVideoPlayerProgressBarSettings
-                          .progressColor,
-                      backgroundColor: Colors.transparent,
-                    );
-                  }),
+                valueListenable:
+                    widget.customVideoPlayerController.videoProgressNotifier,
+                builder: (context, progress, child) {
+                  return CustomVideoPlayerProgressIndicator(
+                    customVideoPlayerController:
+                        widget.customVideoPlayerController,
+                    progress: progress.inMilliseconds / duration,
+                    progressColor: widget
+                        .customVideoPlayerController
+                        .customVideoPlayerSettings
+                        .customVideoPlayerProgressBarSettings
+                        .progressColor,
+                    backgroundColor: Colors.transparent,
+                  );
+                },
+              ),
             ],
           ),
         );
       } else {
         progressIndicator = LinearProgressIndicator(
           value: null,
-          valueColor: AlwaysStoppedAnimation<Color>(widget
-              .customVideoPlayerController
-              .customVideoPlayerSettings
-              .customVideoPlayerProgressBarSettings
-              .progressColor),
+          valueColor: AlwaysStoppedAnimation<Color>(
+            widget.customVideoPlayerController.customVideoPlayerSettings
+                .customVideoPlayerProgressBarSettings.progressColor,
+          ),
           backgroundColor: widget
               .customVideoPlayerController
               .customVideoPlayerSettings

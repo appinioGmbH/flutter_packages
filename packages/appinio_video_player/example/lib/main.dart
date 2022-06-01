@@ -12,11 +12,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CupertinoApp(
-      localizationsDelegates: [
-        DefaultMaterialLocalizations.delegate,
-        DefaultCupertinoLocalizations.delegate,
-        DefaultWidgetsLocalizations.delegate,
-      ],
       debugShowCheckedModeBanner: false,
       theme: CupertinoThemeData(
         brightness: Brightness.light,
@@ -36,7 +31,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late VideoPlayerController _videoPlayerController, _videoPlayerController2;
+  late VideoPlayerController _videoPlayerController,
+      _videoPlayerController2,
+      _videoPlayerController3;
   late CustomVideoPlayerController _customVideoPlayerController;
   String videoUrlLandscape =
       "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
@@ -56,54 +53,53 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final CustomVideoPlayerSettings _customVideoPlayerSettings =
       const CustomVideoPlayerSettings(
-          //TODO: play around with these parameters
+    //TODO: play around with these parameters
 
-          // controlBarAvailable: false,
-          // playbackSpeedButtonAvailable: false,
-          // controlBarMargin: const EdgeInsets.all(10),
-          // controlBarPadding: const EdgeInsets.all(0),
-          // showPlayButton: true,
-          // playButton: const Icon(
-          //   Icons.play_circle,
-          //   color: Colors.white,
-          // ),
-          // pauseButton: const Icon(
-          //   Icons.pause_circle,
-          //   color: Colors.white,
-          // ),
-          // enterFullscreenButton: const Icon(
-          //   Icons.fullscreen,
-          //   color: Colors.white,
-          // ),
-          // exitFullscreenButton: const Icon(
-          //   Icons.fullscreen_exit,
-          //   color: Colors.white,
-          // ),
-          // controlBarDecoration: BoxDecoration(
-          //   borderRadius: BorderRadius.circular(50),
-          //   color: Colors.blue,
-          // ),
-          // showFullscreenButton: false,
-          // showDurationPlayed: false,
-          // showDurationRemaining: false,
-          // enterFullscreenOnStart: true,
-          // exitFullscreenOnEnd: true,
-          // durationRemainingTextStyle: const TextStyle(color: Colors.red),
-          // durationPlayedTextStyle: const TextStyle(color: Colors.green),
-          // systemUIModeAfterFullscreen: SystemUiMode.leanBack,
-          // systemUIModeInsideFullscreen: SystemUiMode.edgeToEdge,
-          // customVideoPlayerProgressBarSettings:
-          //     const CustomVideoPlayerProgressBarSettings(
-          //   reachableProgressBarPadding: EdgeInsets.all(10),
-          //   progressBarHeight: 10,
-          //   progressBarBorderRadius: 30,
-          //   bufferedColor: Colors.red,
-          //   progressColor: Colors.green,
-          //   backgroundColor: Colors.purple,
-          //   allowScrubbing: false,
-          //   showProgressBar: false,
-          // ),
-          );
+    // controlBarAvailable: false,
+    // playbackSpeedButtonAvailable: false,
+    // controlBarMargin: const EdgeInsets.all(10),
+    // controlBarPadding: const EdgeInsets.all(0),
+    // showPlayButton: true,
+    // playButton: const Icon(
+    //   Icons.play_circle,
+    //   color: Colors.white,
+    // ),
+    // pauseButton: const Icon(
+    //   Icons.pause_circle,
+    //   color: Colors.white,
+    // ),
+    // enterFullscreenButton: const Icon(
+    //   Icons.fullscreen,
+    //   color: Colors.white,
+    // ),
+    // exitFullscreenButton: const Icon(
+    //   Icons.fullscreen_exit,
+    //   color: Colors.white,
+    // ),
+    // controlBarDecoration: BoxDecoration(
+    //   borderRadius: BorderRadius.circular(50),
+    //   color: Colors.blue,
+    // ),
+    // showFullscreenButton: false,
+    // showDurationPlayed: false,
+    // showDurationRemaining: false,
+    // enterFullscreenOnStart: true,
+    // exitFullscreenOnEnd: true,
+    // durationRemainingTextStyle: const TextStyle(color: Colors.red),
+    // durationPlayedTextStyle: const TextStyle(color: Colors.green),
+    // systemUIModeAfterFullscreen: SystemUiMode.leanBack,
+    // systemUIModeInsideFullscreen: SystemUiMode.edgeToEdge,
+    customVideoPlayerProgressBarSettings: CustomVideoPlayerProgressBarSettings(
+      reachableProgressBarPadding: EdgeInsets.all(10),
+      progressBarHeight: 10,
+      progressBarBorderRadius: 30,
+      bufferedColor: Colors.red,
+      progressColor: Colors.green,
+      backgroundColor: Colors.purple,
+      allowScrubbing: false,
+      // showProgressBar: false,
+    ),
+  );
 
   @override
   void initState() {
@@ -112,21 +108,23 @@ class _MyHomePageState extends State<MyHomePage> {
       video720,
     )..initialize().then((value) => setState(() {}));
 
-    _videoPlayerController2 = VideoPlayerController.network(videoUrlPortrait);
+    _videoPlayerController2 = VideoPlayerController.network(video240);
+    _videoPlayerController3 = VideoPlayerController.network(video480);
     _customVideoPlayerController = CustomVideoPlayerController(
-        context: context,
-        videoPlayerController: _videoPlayerController,
-        customVideoPlayerSettings: _customVideoPlayerSettings,
-        additionalVideoSources: {
-          "Default": _videoPlayerController,
-          "Low": _videoPlayerController2,
-        });
+      context: context,
+      videoPlayerController: _videoPlayerController,
+      customVideoPlayerSettings: _customVideoPlayerSettings,
+      additionalVideoSources: {
+        "240p": _videoPlayerController2,
+        "480p": _videoPlayerController3,
+        "720p": _videoPlayerController,
+      },
+    );
   }
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
-    // _customVideoPlayerController.dispose(); TODO: impleemt dispose
+    _customVideoPlayerController.dispose();
     super.dispose();
   }
 

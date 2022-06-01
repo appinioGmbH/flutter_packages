@@ -2,54 +2,57 @@ import 'package:appinio_video_player/src/custom_video_player_controller_base.dar
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
+import 'package:video_player/video_player.dart';
 
-class VideoSourceButton extends StatefulWidget {
+class VideoSourceButton extends StatelessWidget {
   final CustomVideoPlayerController customVideoPlayerController;
   final Function updateVideoState;
+  final bool visible;
   const VideoSourceButton({
     Key? key,
     required this.customVideoPlayerController,
     required this.updateVideoState,
+    required this.visible,
   }) : super(key: key);
 
   @override
-  State<VideoSourceButton> createState() => _VideoSourceButtonState();
-}
-
-class _VideoSourceButtonState extends State<VideoSourceButton> {
-  @override
   Widget build(BuildContext context) {
-    if (widget.customVideoPlayerController.additionalVideoSources != null &&
-        widget.customVideoPlayerController.additionalVideoSources!.entries
-            .isNotEmpty) {
-      return GestureDetector(
-        onTap: () => _openChangeQualityDialog(),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(0, 0, 0, 0.5),
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
+    if (customVideoPlayerController.additionalVideoSources != null &&
+        customVideoPlayerController
+            .additionalVideoSources!.entries.isNotEmpty) {
+      return Visibility(
+        visible: visible,
+        maintainAnimation: true,
+        maintainState: true,
+        child: GestureDetector(
+          onTap: () => _openChangeQualityDialog(),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(0, 0, 0, 0.5),
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
             ),
-          ),
-          child: Row(
-            children: const [
-              Icon(
-                CupertinoIcons.settings,
-                color: Colors.white,
-                size: 14,
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Text(
-                "HD",
-                style: TextStyle(
+            child: Row(
+              children: [
+                const Icon(
+                  CupertinoIcons.settings,
                   color: Colors.white,
-                  fontSize: 14,
+                  size: 14,
                 ),
-              ),
-            ],
+                const SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  _getNameOfDefaultVideoPlayerController(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -58,11 +61,20 @@ class _VideoSourceButtonState extends State<VideoSourceButton> {
     }
   }
 
+  String _getNameOfDefaultVideoPlayerController() {
+    MapEntry<String, VideoPlayerController> defaultVideoPlayerSource =
+        customVideoPlayerController.additionalVideoSources!.entries.firstWhere(
+            (element) =>
+                element.value ==
+                customVideoPlayerController.videoPlayerController);
+    return defaultVideoPlayerSource.key;
+  }
+
   _openChangeQualityDialog() async {
     // showDialog(
     //     context: context, builder: (context) => ChangeVideoQualityDialog());
-    await widget.customVideoPlayerController.switchVideoSource("dsaf");
-    widget.updateVideoState();
+    await customVideoPlayerController.switchVideoSource("dsaf");
+    updateVideoState();
     // _switchVideoSource(
     //     'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4');
   }

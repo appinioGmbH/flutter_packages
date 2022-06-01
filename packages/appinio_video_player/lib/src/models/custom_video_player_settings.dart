@@ -41,6 +41,9 @@ class CustomVideoPlayerSettings {
   /// The [SystemUiMode] when entering the fullscreen mode. Defaults to [SystemUiMode.leanBack].
   final SystemUiMode systemUIModeInsideFullscreen;
 
+  /// The possible device orientations after leaving fullscreen. For example if the app was a portrait only app before then set the orientations to DeviceOrientation.portraitUp here again.
+  final List<DeviceOrientation> deviceOrientationsAfterFullscreen;
+
   /// The appearance of the control bar.
   final BoxDecoration controlBarDecoration;
 
@@ -116,6 +119,7 @@ class CustomVideoPlayerSettings {
     this.showFullscreenButton = !kIsWeb,
     this.systemUIModeAfterFullscreen = SystemUiMode.edgeToEdge,
     this.systemUIModeInsideFullscreen = SystemUiMode.leanBack,
+    this.deviceOrientationsAfterFullscreen = DeviceOrientation.values,
     this.playbackSpeedButtonDecoration = const BoxDecoration(
       color: Color.fromRGBO(0, 0, 0, 0.5),
       borderRadius: BorderRadius.all(

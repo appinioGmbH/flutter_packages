@@ -39,6 +39,7 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
                   customVideoPlayerController:
                       widget.customVideoPlayerController,
                   updateVideoState: widget.updateVideoState,
+                  visible: _controlsVisible,
                 ),
                 if (widget.customVideoPlayerController.customVideoPlayerSettings
                     .playbackSpeedButtonAvailable)

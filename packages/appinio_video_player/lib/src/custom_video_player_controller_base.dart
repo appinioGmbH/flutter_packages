@@ -90,12 +90,10 @@ abstract class CustomVideoPlayerControllerBase {
   Future<void> _exitFullscreen() async {
     await SystemChrome.setEnabledSystemUIMode(
         customVideoPlayerSettings.systemUIModeAfterFullscreen);
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]); //TODO: dont lock orientation
+    await SystemChrome.setPreferredOrientations(customVideoPlayerSettings
+        .deviceOrientationsAfterFullscreen); // reset device orientation values
     _isFullscreen = false;
-    Navigator.of(context).pop(this);
+    Navigator.of(context).pop();
   }
 
   void _setOrientationForVideo() {
@@ -126,16 +124,46 @@ abstract class CustomVideoPlayerControllerBase {
     }
   }
 
+  VideoPlayerController? _getNextVideoPlayerSource() {
+    if (additionalVideoSources == null) {
+      return null;
+    }
+    if (additionalVideoSources!.isEmpty) {
+      return null;
+    }
+
+    final int currentVideoSourceIndex =
+        additionalVideoSources!.entries.toList().indexWhere(
+              (MapEntry<String, VideoPlayerController> entry) =>
+                  entry.value == videoPlayerController,
+            );
+
+    if (currentVideoSourceIndex ==
+        additionalVideoSources!.entries.toList().length - 1) {
+      return additionalVideoSources!.entries.toList()[0].value;
+    } else {
+      return additionalVideoSources!.entries
+          .toList()[currentVideoSourceIndex + 1]
+          .value;
+    }
+  }
+
   Future<void> _switchVideoSource(String sourcePath) async {
     Duration _playedDuration = videoPlayerController.value.position;
     videoPlayerController.pause();
-    videoPlayerController = additionalVideoSources!.entries.toList()[1].value;
-    await videoPlayerController.initialize();
-    _initialize(); // add listeners to new video controller
-    _setOrientationForVideo(); // if video changed completely
-    await videoPlayerController.seekTo(_playedDuration);
-    await videoPlayerController.play();
-    updateViewAfterFullscreen?.call();
+    videoPlayerController.removeListener(_videoListeners);
+    VideoPlayerController? nextSource = _getNextVideoPlayerSource();
+    if (nextSource != null) {
+      videoPlayerController = nextSource;
+      await videoPlayerController.initialize();
+      _initialize(); // add listeners to new video controller
+      if (isFullscreen) {
+        _setOrientationForVideo(); // if video changed completely
+      }
+      await videoPlayerController.seekTo(_playedDuration);
+      await videoPlayerController.play();
+      updateViewAfterFullscreen?.call();
+    }
   }
 
   /// Listeners
