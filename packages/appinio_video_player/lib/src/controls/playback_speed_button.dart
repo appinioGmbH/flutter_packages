@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:appinio_video_player/appinio_video_player.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 
 class PlaybackSpeedButton extends StatefulWidget {
   final bool visible;

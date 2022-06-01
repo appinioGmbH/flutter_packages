@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 
-import 'package:appinio_video_player/appinio_video_player.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 
 class CustomVideoPlayerFullscreenButton extends StatelessWidget {
   final CustomVideoPlayerController customVideoPlayerController;
   final bool? isFullscreen;
+  final Function updateView;
   const CustomVideoPlayerFullscreenButton({
     Key? key,
     required this.customVideoPlayerController,
+    required this.updateView,
     this.isFullscreen,
   }) : super(key: key);
 
@@ -15,11 +17,13 @@ class CustomVideoPlayerFullscreenButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () {
+      onTap: () async {
         if (customVideoPlayerController.isFullscreen) {
           customVideoPlayerController.setFullscreen(false);
         } else {
-          customVideoPlayerController.setFullscreen(true);
+          await customVideoPlayerController.setFullscreen(
+            true,
+          );
         }
       },
       child: customVideoPlayerController.isFullscreen

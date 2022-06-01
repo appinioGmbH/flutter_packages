@@ -8,14 +8,21 @@ import 'package:flutter/services.dart';
 
 class CustomVideoPlayerController {
   final BuildContext context;
-  final VideoPlayerController videoPlayerController;
+  VideoPlayerController videoPlayerController;
   final CustomVideoPlayerSettings customVideoPlayerSettings;
+  final Map<String, VideoPlayerController>? additionalVideoSources;
+  Function? updateView;
 
   CustomVideoPlayerController({
     required this.context,
     required this.videoPlayerController,
     this.customVideoPlayerSettings = const CustomVideoPlayerSettings(),
+    this.additionalVideoSources,
   }) {
+    initialize();
+  }
+
+  void initialize() {
     videoPlayerController.addListener(_videoListeners);
   }
 
@@ -29,6 +36,8 @@ class CustomVideoPlayerController {
       ValueNotifier(Duration.zero);
   ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
 
+  //TODO: make notifier for playback speed
+
   Timer? _timer;
 
   Future<void> setFullscreen(
@@ -40,6 +49,7 @@ class CustomVideoPlayerController {
     }
     if (fullscreen) {
       await _enterFullscreen();
+      updateView?.call();
     } else {
       await _exitFullscreen();
     }
@@ -68,10 +78,10 @@ class CustomVideoPlayerController {
       },
     );
     _isFullscreen = true;
-    Navigator.of(context).push(route);
     _setOrientationForVideo(videoPlayerController);
     SystemChrome.setEnabledSystemUIMode(
         customVideoPlayerSettings.systemUIModeInsideFullscreen);
+    await Navigator.of(context).push(route);
   }
 
   Future<void> _exitFullscreen() async {

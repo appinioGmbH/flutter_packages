@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:appinio_video_player/appinio_video_player.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
+
 import 'package:appinio_video_player/src/controls/progress_bar_indicator.dart';
 import 'package:appinio_video_player/src/controls/seeker.dart';
+import 'package:video_player/video_player.dart';
 
 class CustomVideoPlayerProgressBar extends StatefulWidget {
   final CustomVideoPlayerController customVideoPlayerController;

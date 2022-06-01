@@ -1,13 +1,16 @@
-import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:appinio_video_player/src/controls/control_bar.dart';
 import 'package:appinio_video_player/src/controls/playback_speed_button.dart';
+import 'package:appinio_video_player/src/controls/video_source_button.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:flutter/material.dart';
 
 class AllControlsOverlay extends StatefulWidget {
   final CustomVideoPlayerController customVideoPlayerController;
+  final Function updateView;
   const AllControlsOverlay({
     Key? key,
     required this.customVideoPlayerController,
+    required this.updateView,
   }) : super(key: key);
 
   @override
@@ -28,17 +31,30 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (widget.customVideoPlayerController.customVideoPlayerSettings
-                .playbackSpeedButtonAvailable)
-              PlaybackSpeedButton(
-                customVideoPlayerController: widget.customVideoPlayerController,
-                visible: _controlsVisible,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                VideoSourceButton(
+                  customVideoPlayerController:
+                      widget.customVideoPlayerController,
+                  updateView: widget.updateView,
+                ),
+                if (widget.customVideoPlayerController.customVideoPlayerSettings
+                    .playbackSpeedButtonAvailable)
+                  PlaybackSpeedButton(
+                    customVideoPlayerController:
+                        widget.customVideoPlayerController,
+                    visible: _controlsVisible,
+                  ),
+              ],
+            ),
             if (widget.customVideoPlayerController.customVideoPlayerSettings
                 .controlBarAvailable)
               CustomVideoPlayerControlBar(
                 visible: _controlsVisible,
                 customVideoPlayerController: widget.customVideoPlayerController,
+                onLeaveFullScreen: widget.updateView,
               ),
           ],
         ),

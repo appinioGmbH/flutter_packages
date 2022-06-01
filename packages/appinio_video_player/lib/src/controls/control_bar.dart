@@ -1,4 +1,5 @@
-import 'package:appinio_video_player/appinio_video_player.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
+
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
 import 'package:appinio_video_player/src/controls/progress_bar.dart';
@@ -8,10 +9,12 @@ import 'package:flutter/material.dart';
 class CustomVideoPlayerControlBar extends StatelessWidget {
   final bool visible;
   final CustomVideoPlayerController customVideoPlayerController;
+  final Function onLeaveFullScreen;
   const CustomVideoPlayerControlBar({
     Key? key,
     required this.visible,
     required this.customVideoPlayerController,
+    required this.onLeaveFullScreen,
   }) : super(key: key);
 
   @override
@@ -83,6 +86,7 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
                 .customVideoPlayerSettings.showFullscreenButton)
               CustomVideoPlayerFullscreenButton(
                 customVideoPlayerController: customVideoPlayerController,
+                updateView: onLeaveFullScreen,
               )
           ],
         ),
