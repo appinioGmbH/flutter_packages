@@ -22,7 +22,8 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
   void initState() {
     super.initState();
     if (!widget.isFullscreen) {
-      widget.customVideoPlayerController.updateView = _updateView;
+      widget.customVideoPlayerController.updateViewAfterFullscreen =
+          _updateVideoState;
     }
   }
 
@@ -53,7 +54,7 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
             ),
             AllControlsOverlay(
               customVideoPlayerController: widget.customVideoPlayerController,
-              updateView: _updateView,
+              updateVideoState: _updateVideoState,
             ),
           ],
         ),
@@ -63,7 +64,7 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
     }
   }
 
-  void _updateView() {
+  void _updateVideoState() {
     if (mounted) {
       setState(() {});
     }

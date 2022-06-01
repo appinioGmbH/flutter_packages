@@ -12,7 +12,7 @@ class FullscreenVideoPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: try on android and see what happens to fullscreen
+    //TODO: try on android and see what happens to leave fullscreen on back button pressed
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(

@@ -16,7 +16,11 @@ class CustomVideoPlayerPlayPauseButton extends StatelessWidget {
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () async {
-              await customVideoPlayerController.playPause();
+              if (isPlaying) {
+                await customVideoPlayerController.videoPlayerController.pause();
+              } else {
+                await customVideoPlayerController.videoPlayerController.play();
+              }
             },
             child: isPlaying
                 ? customVideoPlayerController

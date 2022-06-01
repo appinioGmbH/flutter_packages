@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 class CustomVideoPlayerControlBar extends StatelessWidget {
   final bool visible;
   final CustomVideoPlayerController customVideoPlayerController;
-  final Function onLeaveFullScreen;
+  final Function updateVideoState;
   const CustomVideoPlayerControlBar({
     Key? key,
     required this.visible,
     required this.customVideoPlayerController,
-    required this.onLeaveFullScreen,
+    required this.updateVideoState,
   }) : super(key: key);
 
   @override
@@ -86,7 +86,6 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
                 .customVideoPlayerSettings.showFullscreenButton)
               CustomVideoPlayerFullscreenButton(
                 customVideoPlayerController: customVideoPlayerController,
-                updateView: onLeaveFullScreen,
               )
           ],
         ),

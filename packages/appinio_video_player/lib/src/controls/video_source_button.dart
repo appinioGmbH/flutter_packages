@@ -5,11 +5,11 @@ import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 
 class VideoSourceButton extends StatefulWidget {
   final CustomVideoPlayerController customVideoPlayerController;
-  final Function updateView;
+  final Function updateVideoState;
   const VideoSourceButton({
     Key? key,
     required this.customVideoPlayerController,
-    required this.updateView,
+    required this.updateVideoState,
   }) : super(key: key);
 
   @override
@@ -35,7 +35,7 @@ class _VideoSourceButtonState extends State<VideoSourceButton> {
     await widget.customVideoPlayerController.videoPlayerController
         .seekTo(_playedDuration);
     await widget.customVideoPlayerController.videoPlayerController.play();
-    widget.updateView();
+    widget.updateVideoState();
   }
 
   @override
@@ -79,11 +79,13 @@ class _VideoSourceButtonState extends State<VideoSourceButton> {
     }
   }
 
-  _openChangeQualityDialog() {
+  _openChangeQualityDialog() async {
     // showDialog(
     //     context: context, builder: (context) => ChangeVideoQualityDialog());
-    _switchVideoSource(
-        'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4');
+    await widget.customVideoPlayerController.switchVideoSource("dsaf");
+    widget.updateVideoState();
+    // _switchVideoSource(
+    //     'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4');
   }
 }
 
@@ -102,7 +104,7 @@ class ChangeVideoQualityDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "Change video quality",
               style: TextStyle(
                 color: Colors.white,

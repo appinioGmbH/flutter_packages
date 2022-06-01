@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class AllControlsOverlay extends StatefulWidget {
   final CustomVideoPlayerController customVideoPlayerController;
-  final Function updateView;
+  final Function updateVideoState;
   const AllControlsOverlay({
     Key? key,
     required this.customVideoPlayerController,
-    required this.updateView,
+    required this.updateVideoState,
   }) : super(key: key);
 
   @override
@@ -38,7 +38,7 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
                 VideoSourceButton(
                   customVideoPlayerController:
                       widget.customVideoPlayerController,
-                  updateView: widget.updateView,
+                  updateVideoState: widget.updateVideoState,
                 ),
                 if (widget.customVideoPlayerController.customVideoPlayerSettings
                     .playbackSpeedButtonAvailable)
@@ -54,7 +54,7 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
               CustomVideoPlayerControlBar(
                 visible: _controlsVisible,
                 customVideoPlayerController: widget.customVideoPlayerController,
-                onLeaveFullScreen: widget.updateView,
+                updateVideoState: widget.updateVideoState,
               ),
           ],
         ),

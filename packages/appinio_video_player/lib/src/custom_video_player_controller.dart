@@ -11,7 +11,7 @@ class CustomVideoPlayerController {
   VideoPlayerController videoPlayerController;
   final CustomVideoPlayerSettings customVideoPlayerSettings;
   final Map<String, VideoPlayerController>? additionalVideoSources;
-  Function? updateView;
+  Function? updateViewAfterFullscreen;
 
   CustomVideoPlayerController({
     required this.context,
@@ -49,19 +49,9 @@ class CustomVideoPlayerController {
     }
     if (fullscreen) {
       await _enterFullscreen();
-      updateView?.call();
+      updateViewAfterFullscreen?.call();
     } else {
       await _exitFullscreen();
-    }
-  }
-
-  Future<void> playPause() async {
-    if (_isPlayingNotifier.value) {
-      await videoPlayerController.pause();
-      _isPlayingNotifier.value = false;
-    } else {
-      await videoPlayerController.play();
-      _isPlayingNotifier.value = true;
     }
   }
 
@@ -78,7 +68,7 @@ class CustomVideoPlayerController {
       },
     );
     _isFullscreen = true;
-    _setOrientationForVideo(videoPlayerController);
+    _setOrientationForVideo();
     SystemChrome.setEnabledSystemUIMode(
         customVideoPlayerSettings.systemUIModeInsideFullscreen);
     await Navigator.of(context).push(route);
@@ -90,12 +80,12 @@ class CustomVideoPlayerController {
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
-    ]);
+    ]); //TODO: dont lock orientation
     _isFullscreen = false;
     Navigator.of(context).pop(this);
   }
 
-  void _setOrientationForVideo(VideoPlayerController videoPlayerController) {
+  void _setOrientationForVideo() {
     final double videoWidth = videoPlayerController.value.size.width;
     final double videoHeight = videoPlayerController.value.size.height;
     final bool isLandscapeVideo = videoWidth > videoHeight;
@@ -122,6 +112,20 @@ class CustomVideoPlayerController {
       SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     }
   }
+
+  Future<void> switchVideoSource(String sourcePath) async {
+    Duration _playedDuration = videoPlayerController.value.position;
+    videoPlayerController.dispose();
+    videoPlayerController = additionalVideoSources!.entries.toList()[1].value;
+    await videoPlayerController.initialize();
+    initialize(); // add listeners to new video controller
+    _setOrientationForVideo(); // if video changed completely
+    await videoPlayerController.seekTo(_playedDuration);
+    await videoPlayerController.play();
+    updateViewAfterFullscreen?.call();
+  }
+
+  /// Listeners
 
   void _videoListeners() {
     _videoProgressListener();

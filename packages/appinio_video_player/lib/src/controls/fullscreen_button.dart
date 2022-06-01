@@ -5,11 +5,9 @@ import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 class CustomVideoPlayerFullscreenButton extends StatelessWidget {
   final CustomVideoPlayerController customVideoPlayerController;
   final bool? isFullscreen;
-  final Function updateView;
   const CustomVideoPlayerFullscreenButton({
     Key? key,
     required this.customVideoPlayerController,
-    required this.updateView,
     this.isFullscreen,
   }) : super(key: key);
 
