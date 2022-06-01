@@ -1,7 +1,7 @@
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:flutter/material.dart';
 
-class PlaybackSpeedButton extends StatefulWidget {
+class PlaybackSpeedButton extends StatelessWidget {
   final bool visible;
   final CustomVideoPlayerController customVideoPlayerController;
 
@@ -12,17 +12,9 @@ class PlaybackSpeedButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<PlaybackSpeedButton> createState() => _PlaybackSpeedButtonState();
-}
-
-class _PlaybackSpeedButtonState extends State<PlaybackSpeedButton> {
-  late double _currentPlaybackSpeed = widget
-      .customVideoPlayerController.videoPlayerController.value.playbackSpeed;
-
-  @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: widget.visible,
+      visible: visible,
       maintainAnimation: true,
       maintainState: true,
       child: Align(
@@ -30,14 +22,20 @@ class _PlaybackSpeedButtonState extends State<PlaybackSpeedButton> {
         child: GestureDetector(
           onTap: () => _changePlaybackSpeed(),
           child: Container(
-            padding: widget.customVideoPlayerController
+            padding: customVideoPlayerController
                 .customVideoPlayerSettings.playbackButtonPadding,
-            decoration: widget.customVideoPlayerController
+            decoration: customVideoPlayerController
                 .customVideoPlayerSettings.playbackSpeedButtonDecoration,
-            child: Text(
-              "${_currentPlaybackSpeed}x",
-              style: widget.customVideoPlayerController
-                  .customVideoPlayerSettings.playbackButtonTextStyle,
+            child: ValueListenableBuilder<double>(
+              valueListenable:
+                  customVideoPlayerController.playbackSpeedNotifier,
+              builder: (context, playbackSpeed, _) {
+                return Text(
+                  "${playbackSpeed}x",
+                  style: customVideoPlayerController
+                      .customVideoPlayerSettings.playbackButtonTextStyle,
+                );
+              },
             ),
           ),
         ),
@@ -47,16 +45,11 @@ class _PlaybackSpeedButtonState extends State<PlaybackSpeedButton> {
 
   void _changePlaybackSpeed() {
     // limiting the speed because it is not supported more by iOS
-    if (_currentPlaybackSpeed < 2.0) {
-      widget.customVideoPlayerController.videoPlayerController
-          .setPlaybackSpeed(_currentPlaybackSpeed + 0.5);
+    if (customVideoPlayerController.playbackSpeedNotifier.value < 2.0) {
+      customVideoPlayerController.videoPlayerController.setPlaybackSpeed(
+          customVideoPlayerController.playbackSpeedNotifier.value + 0.5);
     } else {
-      widget.customVideoPlayerController.videoPlayerController
-          .setPlaybackSpeed(1);
+      customVideoPlayerController.videoPlayerController.setPlaybackSpeed(1);
     }
-    setState(() {
-      _currentPlaybackSpeed = widget.customVideoPlayerController
-          .videoPlayerController.value.playbackSpeed;
-    });
   }
 }

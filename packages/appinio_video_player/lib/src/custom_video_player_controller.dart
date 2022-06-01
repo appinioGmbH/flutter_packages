@@ -17,7 +17,7 @@ class CustomVideoPlayerController extends CustomVideoPlayerControllerBase {
           customVideoPlayerSettings: customVideoPlayerSettings,
           additionalVideoSources: additionalVideoSources,
         ) {
-    customVideoPlayerControllerNew = this;
+    customVideoPlayerController = this;
   }
 
   /// T

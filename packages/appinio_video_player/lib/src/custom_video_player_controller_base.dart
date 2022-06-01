@@ -34,25 +34,23 @@ abstract class CustomVideoPlayerControllerBase {
     _initialize();
   }
 
-  late CustomVideoPlayerController customVideoPlayerControllerNew;
+  late CustomVideoPlayerController customVideoPlayerController;
+
+  bool _isFullscreen = false;
+  Timer? _timer;
+  final ValueNotifier<Duration> _videoProgressNotifier =
+      ValueNotifier(Duration.zero);
+  final ValueNotifier<double> _playbackSpeedNotifier = ValueNotifier(1.0);
+  final ValueNotifier<bool> _isPlayingNotifier = ValueNotifier(false);
+
+  bool get isFullscreen => _isFullscreen;
+  ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
+  ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
+  ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
 
   void _initialize() {
     videoPlayerController.addListener(_videoListeners);
   }
-
-  final ValueNotifier<bool> _isPlayingNotifier = ValueNotifier(false);
-  ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
-
-  bool _isFullscreen = false;
-  bool get isFullscreen => _isFullscreen;
-
-  final ValueNotifier<Duration> _videoProgressNotifier =
-      ValueNotifier(Duration.zero);
-  ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
-
-  //TODO: make notifier for playback speed
-
-  Timer? _timer;
 
   Future<void> _setFullscreen(
     bool fullscreen,
@@ -76,7 +74,7 @@ abstract class CustomVideoPlayerControllerBase {
           animation: animation,
           builder: (BuildContext context, Widget? child) {
             return FullscreenVideoPlayer(
-              customVideoPlayerController: customVideoPlayerControllerNew,
+              customVideoPlayerController: customVideoPlayerController,
             );
           },
         );
@@ -141,11 +139,11 @@ abstract class CustomVideoPlayerControllerBase {
   }
 
   /// Listeners
-
   void _videoListeners() {
     _videoProgressListener();
     _fullscreenFunctionalityListener();
     _playPauseListener();
+    _playbackSpeedListener();
   }
 
   /// used to make progress more fluid
@@ -197,6 +195,10 @@ abstract class CustomVideoPlayerControllerBase {
     }
   }
 
+  void _playbackSpeedListener() {
+    _playbackSpeedNotifier.value = videoPlayerController.value.playbackSpeed;
+  }
+
   /// call dispose on the dispose method in your parent widget to be sure that every values is disposed
   void _dispose() {
     videoPlayerController.removeListener(_videoListeners);
@@ -205,5 +207,15 @@ abstract class CustomVideoPlayerControllerBase {
 
     _isPlayingNotifier.dispose();
     _videoProgressNotifier.dispose();
+    _playbackSpeedNotifier.dispose();
+    customVideoPlayerController.videoPlayerController.dispose();
+    if (customVideoPlayerController.additionalVideoSources != null) {
+      if (customVideoPlayerController.additionalVideoSources!.isNotEmpty) {
+        for (MapEntry<String, VideoPlayerController> videoSource
+            in customVideoPlayerController.additionalVideoSources!.entries) {
+          videoSource.value.dispose();
+        }
+      }
+    }
   }
 }
