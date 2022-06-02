@@ -12,15 +12,20 @@ class FullscreenVideoPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: try on android and see what happens to leave fullscreen on back button pressed
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        alignment: Alignment.center,
-        color: Colors.black,
-        child: EmbeddedVideoPlayer(
-          customVideoPlayerController: customVideoPlayerController,
-          isFullscreen: true,
+    return WillPopScope(
+      onWillPop: () async {
+        customVideoPlayerController.setFullscreen(false);
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          alignment: Alignment.center,
+          color: Colors.black,
+          child: EmbeddedVideoPlayer(
+            customVideoPlayerController: customVideoPlayerController,
+            isFullscreen: true,
+          ),
         ),
       ),
     );
