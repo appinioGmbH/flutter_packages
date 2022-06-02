@@ -58,53 +58,53 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final CustomVideoPlayerSettings _customVideoPlayerSettings =
       const CustomVideoPlayerSettings(
-    //TODO: play around with these parameters
+          //TODO: play around with these parameters
 
-    // controlBarAvailable: false,
-    // playbackSpeedButtonAvailable: false,
-    // controlBarMargin: const EdgeInsets.all(10),
-    // controlBarPadding: const EdgeInsets.all(0),
-    // showPlayButton: true,
-    // playButton: const Icon(
-    //   Icons.play_circle,
-    //   color: Colors.white,
-    // ),
-    // pauseButton: const Icon(
-    //   Icons.pause_circle,
-    //   color: Colors.white,
-    // ),
-    // enterFullscreenButton: const Icon(
-    //   Icons.fullscreen,
-    //   color: Colors.white,
-    // ),
-    // exitFullscreenButton: const Icon(
-    //   Icons.fullscreen_exit,
-    //   color: Colors.white,
-    // ),
-    // controlBarDecoration: BoxDecoration(
-    //   borderRadius: BorderRadius.circular(50),
-    //   color: Colors.blue,
-    // ),
-    // showFullscreenButton: false,
-    // showDurationPlayed: false,
-    // showDurationRemaining: false,
-    // enterFullscreenOnStart: true,
-    // exitFullscreenOnEnd: true,
-    // durationRemainingTextStyle: const TextStyle(color: Colors.red),
-    // durationPlayedTextStyle: const TextStyle(color: Colors.green),
-    // systemUIModeAfterFullscreen: SystemUiMode.leanBack,
-    // systemUIModeInsideFullscreen: SystemUiMode.edgeToEdge,
-    customVideoPlayerProgressBarSettings: CustomVideoPlayerProgressBarSettings(
-      reachableProgressBarPadding: EdgeInsets.all(10),
-      progressBarHeight: 10,
-      progressBarBorderRadius: 30,
-      bufferedColor: Colors.red,
-      progressColor: Colors.green,
-      backgroundColor: Colors.purple,
-      allowScrubbing: false,
-      // showProgressBar: false,
-    ),
-  );
+          // controlBarAvailable: false,
+          // playbackSpeedButtonAvailable: false,
+          // controlBarMargin: const EdgeInsets.all(10),
+          // controlBarPadding: const EdgeInsets.all(0),
+          // showPlayButton: true,
+          // playButton: const Icon(
+          //   Icons.play_circle,
+          //   color: Colors.white,
+          // ),
+          // pauseButton: const Icon(
+          //   Icons.pause_circle,
+          //   color: Colors.white,
+          // ),
+          // enterFullscreenButton: const Icon(
+          //   Icons.fullscreen,
+          //   color: Colors.white,
+          // ),
+          // exitFullscreenButton: const Icon(
+          //   Icons.fullscreen_exit,
+          //   color: Colors.white,
+          // ),
+          // controlBarDecoration: BoxDecoration(
+          //   borderRadius: BorderRadius.circular(50),
+          //   color: Colors.blue,
+          // ),
+          // showFullscreenButton: false,
+          // showDurationPlayed: false,
+          // showDurationRemaining: false,
+          // enterFullscreenOnStart: true,
+          // exitFullscreenOnEnd: true,
+          // durationRemainingTextStyle: const TextStyle(color: Colors.red),
+          // durationPlayedTextStyle: const TextStyle(color: Colors.green),
+          // systemUIModeAfterFullscreen: SystemUiMode.leanBack,
+          // systemUIModeInsideFullscreen: SystemUiMode.edgeToEdge,
+          // customVideoPlayerProgressBarSettings: CustomVideoPlayerProgressBarSettings(
+          //   reachableProgressBarPadding: EdgeInsets.all(10),
+          //   progressBarHeight: 10,
+          //   progressBarBorderRadius: 30,
+          //   bufferedColor: Colors.red,
+          //   progressColor: Colors.green,
+          //   backgroundColor: Colors.purple,
+          //   allowScrubbing: false,
+          //   showProgressBar: false,
+          // ),
+          );
 
   @override
   void initState() {
