@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:appinio_video_player/src/fullscreen_video_player.dart';
@@ -13,7 +14,7 @@ import 'package:appinio_video_player/src/models/custom_video_player_settings.dar
 extension ProtectedCustomVideoPlayerController
     on CustomVideoPlayerControllerBase {
   Future<void> Function(bool) get setFullscreenMethod => _setFullscreen;
-  Function(String) get switchVideoSource => _switchVideoSource;
+  Future<void> Function(String) get switchVideoSource => _switchVideoSource;
   Function get disposeMethod => _dispose;
 }
 
@@ -31,7 +32,7 @@ abstract class CustomVideoPlayerControllerBase {
     this.customVideoPlayerSettings = const CustomVideoPlayerSettings(),
     this.additionalVideoSources,
   }) {
-    _initialize();
+    videoPlayerController.addListener(_videoListeners);
   }
 
   late CustomVideoPlayerController customVideoPlayerController;
@@ -47,10 +48,6 @@ abstract class CustomVideoPlayerControllerBase {
   ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
   ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
   ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
-
-  void _initialize() {
-    videoPlayerController.addListener(_videoListeners);
-  }
 
   Future<void> _setFullscreen(
     bool fullscreen,
@@ -88,6 +85,11 @@ abstract class CustomVideoPlayerControllerBase {
   }
 
   Future<void> _exitFullscreen() async {
+    //first reset to portrait
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     await SystemChrome.setEnabledSystemUIMode(
         customVideoPlayerSettings.systemUIModeAfterFullscreen);
     await SystemChrome.setPreferredOrientations(customVideoPlayerSettings
@@ -124,44 +126,32 @@ abstract class CustomVideoPlayerControllerBase {
     }
   }
 
-  VideoPlayerController? _getNextVideoPlayerSource() {
-    if (additionalVideoSources == null) {
-      return null;
-    }
-    if (additionalVideoSources!.isEmpty) {
-      return null;
-    }
-
-    final int currentVideoSourceIndex =
-        additionalVideoSources!.entries.toList().indexWhere(
-              (MapEntry<String, VideoPlayerController> entry) =>
-                  entry.value == videoPlayerController,
-            );
-
-    if (currentVideoSourceIndex ==
-        additionalVideoSources!.entries.toList().length - 1) {
-      return additionalVideoSources!.entries.toList()[0].value;
-    } else {
-      return additionalVideoSources!.entries
-          .toList()[currentVideoSourceIndex + 1]
-          .value;
-    }
-  }
-
-  Future<void> _switchVideoSource(String sourcePath) async {
+  Future<void> _switchVideoSource(String selectedSource) async {
     Duration _playedDuration = videoPlayerController.value.position;
+    double _playbackSpeed = videoPlayerController.value.playbackSpeed;
+    bool _wasPlaying = videoPlayerController.value.isPlaying;
     videoPlayerController.pause();
     videoPlayerController.removeListener(_videoListeners);
-    VideoPlayerController? nextSource = _getNextVideoPlayerSource();
-    if (nextSource != null) {
-      videoPlayerController = nextSource;
+    VideoPlayerController? newSource = additionalVideoSources![selectedSource];
+
+    if (newSource != null) {
+      videoPlayerController = newSource;
       await videoPlayerController.initialize();
-      _initialize(); // add listeners to new video controller
+      videoPlayerController.addListener(
+          _videoListeners); // add listeners to new video controller
       if (isFullscreen) {
         _setOrientationForVideo(); // if video changed completely
       }
       await videoPlayerController.seekTo(_playedDuration);
-      await videoPlayerController.play();
+      if (kIsWeb || Platform.isAndroid) {
+        await videoPlayerController.setPlaybackSpeed(_playbackSpeed);
+      } else {
+        await videoPlayerController.setPlaybackSpeed(
+            1); // resetting to 1 because its not working on iOS. open issue on github
+      }
+      if (_wasPlaying) {
+        await videoPlayerController.play();
+      }
       updateViewAfterFullscreen?.call();
     }
   }

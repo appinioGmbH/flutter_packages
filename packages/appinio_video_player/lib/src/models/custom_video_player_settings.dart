@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
+import 'package:appinio_video_player/src/models/custom_video_player_popup_settings.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_progress_bar_settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -71,18 +73,27 @@ class CustomVideoPlayerSettings {
   /// If set to false the duration remaining will not be displayed.
   final bool showDurationRemaining;
 
+  /// If the settings button should be shown or not.
+  final bool settingsButtonAvailable;
+
+  /// Padding for the settings button.
+  final EdgeInsets settingsButtonPadding;
+
+  /// TextStyle for the playback speed.
+  final TextStyle playbackButtonTextStyle;
+
+  /// Decoration of the settings button.
+  final BoxDecoration settingsButtonDecoration;
+
+  /// The icon of the settings button.
+  final Icon settingsButtonIcon;
+
   /// The settings for the progress bar in the middle of the control bar.
   final CustomVideoPlayerProgressBarSettings
       customVideoPlayerProgressBarSettings;
 
-  /// Decoration for the playback speed button.
-  final BoxDecoration playbackSpeedButtonDecoration;
-
-  /// Padding for the playback speed button.
-  final EdgeInsets playbackButtonPadding;
-
-  /// TextStyle for the playback speed.
-  final TextStyle playbackButtonTextStyle;
+  /// UI settings for the video settings popup.
+  final CustomVideoPlayerPopupSettings customVideoPlayerPopupSettings;
 
   const CustomVideoPlayerSettings({
     this.customAspectRatio,
@@ -120,18 +131,26 @@ class CustomVideoPlayerSettings {
     this.systemUIModeAfterFullscreen = SystemUiMode.edgeToEdge,
     this.systemUIModeInsideFullscreen = SystemUiMode.leanBack,
     this.deviceOrientationsAfterFullscreen = DeviceOrientation.values,
-    this.playbackSpeedButtonDecoration = const BoxDecoration(
+    this.settingsButtonDecoration = const BoxDecoration(
       color: Color.fromRGBO(0, 0, 0, 0.5),
       borderRadius: BorderRadius.all(
         Radius.circular(10),
       ),
     ),
+    this.settingsButtonAvailable = true,
+    this.settingsButtonIcon = const Icon(
+      CupertinoIcons.settings,
+      color: Colors.white,
+      size: 18,
+    ),
     this.playbackSpeedButtonAvailable = true,
-    this.playbackButtonPadding = const EdgeInsets.all(8),
+    this.settingsButtonPadding = const EdgeInsets.all(8),
     this.playbackButtonTextStyle = const TextStyle(
       color: Colors.white,
       fontSize: 14,
       fontFeatures: [FontFeature.tabularFigures()],
     ),
+    this.customVideoPlayerPopupSettings =
+        const CustomVideoPlayerPopupSettings(),
   });
 }

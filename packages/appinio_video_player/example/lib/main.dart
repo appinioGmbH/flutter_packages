@@ -89,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // durationPlayedTextStyle: const TextStyle(color: Colors.green),
     // systemUIModeAfterFullscreen: SystemUiMode.leanBack,
     // systemUIModeInsideFullscreen: SystemUiMode.edgeToEdge,
+    settingsButtonAvailable: false,
     customVideoPlayerProgressBarSettings: CustomVideoPlayerProgressBarSettings(
       reachableProgressBarPadding: EdgeInsets.all(10),
       progressBarHeight: 10,
