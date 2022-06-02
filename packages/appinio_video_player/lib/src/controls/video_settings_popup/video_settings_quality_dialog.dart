@@ -40,28 +40,32 @@ class VideoSettingsQualityDialog extends StatelessWidget {
               height: 8,
             ),
             Flexible(
-              child: ListView(
-                controller: ScrollController(),
-                shrinkWrap: true,
-                children: [
-                  for (MapEntry<String, VideoPlayerController> videoSource
-                      in customVideoPlayerController
-                          .additionalVideoSources!.entries)
-                    VideoSettingsDialogItem(
-                      title: videoSource.key,
-                      popupSettings: customVideoPlayerController
-                          .customVideoPlayerSettings
-                          .customVideoPlayerPopupSettings,
-                      onPressed: () => _changeVideoQuality(
-                        context: context,
-                        selectedSource: videoSource.key,
+              fit: FlexFit.loose,
+              child: Container(
+                color: Colors.amber,
+                child: ListView(
+                  controller: ScrollController(),
+                  shrinkWrap: true,
+                  children: [
+                    for (MapEntry<String, VideoPlayerController> videoSource
+                        in customVideoPlayerController
+                            .additionalVideoSources!.entries)
+                      VideoSettingsDialogItem(
+                        title: videoSource.key,
+                        popupSettings: customVideoPlayerController
+                            .customVideoPlayerSettings
+                            .customVideoPlayerPopupSettings,
+                        onPressed: () => _changeVideoQuality(
+                          context: context,
+                          selectedSource: videoSource.key,
+                        ),
+                        selected:
+                            _getCurrentVideoPlayerSource() == videoSource.key,
                       ),
-                      selected:
-                          _getCurrentVideoPlayerSource() == videoSource.key,
-                    ),
-                ],
+                  ],
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

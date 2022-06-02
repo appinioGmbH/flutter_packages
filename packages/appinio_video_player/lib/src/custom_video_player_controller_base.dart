@@ -15,6 +15,15 @@ extension ProtectedCustomVideoPlayerController
     on CustomVideoPlayerControllerBase {
   Future<void> Function(bool) get setFullscreenMethod => _setFullscreen;
   Future<void> Function(String) get switchVideoSource => _switchVideoSource;
+  ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
+  ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
+  ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
+  bool get isFullscreen => _isFullscreen;
+  set customVideoPlayerController(
+          CustomVideoPlayerController customVideoPlayerController) =>
+      _customVideoPlayerController = customVideoPlayerController;
+  set updateViewAfterFullscreen(Function updateViewAfterFullscreen) =>
+      _updateViewAfterFullscreen = updateViewAfterFullscreen;
   Function get disposeMethod => _dispose;
 }
 
@@ -24,7 +33,6 @@ abstract class CustomVideoPlayerControllerBase {
   VideoPlayerController videoPlayerController;
   final CustomVideoPlayerSettings customVideoPlayerSettings;
   final Map<String, VideoPlayerController>? additionalVideoSources;
-  Function? updateViewAfterFullscreen;
 
   CustomVideoPlayerControllerBase({
     required this.context,
@@ -35,7 +43,8 @@ abstract class CustomVideoPlayerControllerBase {
     videoPlayerController.addListener(_videoListeners);
   }
 
-  late CustomVideoPlayerController customVideoPlayerController;
+  late CustomVideoPlayerController _customVideoPlayerController;
+  Function? _updateViewAfterFullscreen;
 
   bool _isFullscreen = false;
   Timer? _timer;
@@ -44,10 +53,9 @@ abstract class CustomVideoPlayerControllerBase {
   final ValueNotifier<double> _playbackSpeedNotifier = ValueNotifier(1.0);
   final ValueNotifier<bool> _isPlayingNotifier = ValueNotifier(false);
 
-  bool get isFullscreen => _isFullscreen;
-  ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
-  ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
-  ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
+  // ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
+  // ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
+  // ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
 
   Future<void> _setFullscreen(
     bool fullscreen,
@@ -58,7 +66,7 @@ abstract class CustomVideoPlayerControllerBase {
     }
     if (fullscreen) {
       await _enterFullscreen();
-      updateViewAfterFullscreen?.call();
+      _updateViewAfterFullscreen?.call();
     } else {
       await _exitFullscreen();
     }
@@ -71,7 +79,7 @@ abstract class CustomVideoPlayerControllerBase {
           animation: animation,
           builder: (BuildContext context, Widget? child) {
             return FullscreenVideoPlayer(
-              customVideoPlayerController: customVideoPlayerController,
+              customVideoPlayerController: _customVideoPlayerController,
             );
           },
         );
@@ -127,14 +135,13 @@ abstract class CustomVideoPlayerControllerBase {
   }
 
   Future<void> _switchVideoSource(String selectedSource) async {
-    Duration _playedDuration = videoPlayerController.value.position;
-    double _playbackSpeed = videoPlayerController.value.playbackSpeed;
-    bool _wasPlaying = videoPlayerController.value.isPlaying;
-    videoPlayerController.pause();
-    videoPlayerController.removeListener(_videoListeners);
     VideoPlayerController? newSource = additionalVideoSources![selectedSource];
-
     if (newSource != null) {
+      Duration _playedDuration = videoPlayerController.value.position;
+      double _playbackSpeed = videoPlayerController.value.playbackSpeed;
+      bool _wasPlaying = videoPlayerController.value.isPlaying;
+      videoPlayerController.pause();
+      videoPlayerController.removeListener(_videoListeners);
       videoPlayerController = newSource;
       await videoPlayerController.initialize();
       videoPlayerController.addListener(
@@ -152,7 +159,7 @@ abstract class CustomVideoPlayerControllerBase {
       if (_wasPlaying) {
         await videoPlayerController.play();
       }
-      updateViewAfterFullscreen?.call();
+      _updateViewAfterFullscreen?.call();
     }
   }
 
@@ -226,11 +233,11 @@ abstract class CustomVideoPlayerControllerBase {
     _isPlayingNotifier.dispose();
     _videoProgressNotifier.dispose();
     _playbackSpeedNotifier.dispose();
-    customVideoPlayerController.videoPlayerController.dispose();
-    if (customVideoPlayerController.additionalVideoSources != null) {
-      if (customVideoPlayerController.additionalVideoSources!.isNotEmpty) {
+    _customVideoPlayerController.videoPlayerController.dispose();
+    if (_customVideoPlayerController.additionalVideoSources != null) {
+      if (_customVideoPlayerController.additionalVideoSources!.isNotEmpty) {
         for (MapEntry<String, VideoPlayerController> videoSource
-            in customVideoPlayerController.additionalVideoSources!.entries) {
+            in _customVideoPlayerController.additionalVideoSources!.entries) {
           videoSource.value.dispose();
         }
       }
