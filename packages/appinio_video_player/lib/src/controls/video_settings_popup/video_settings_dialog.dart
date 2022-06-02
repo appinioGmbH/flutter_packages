@@ -88,6 +88,7 @@ class VideoSettingsDialog extends StatelessWidget {
       builder: (BuildContext context) => isQuality
           ? VideoSettingsQualityDialog(
               customVideoPlayerController: customVideoPlayerController,
+              updateView: updateViewOnClose,
             )
           : VideoSettingsPlaybackSpeedDialog(
               customVideoPlayerController: customVideoPlayerController,

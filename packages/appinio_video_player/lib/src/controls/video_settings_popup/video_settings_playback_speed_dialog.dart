@@ -3,14 +3,21 @@ import 'package:appinio_video_player/src/custom_video_player_controller_base.dar
 import 'package:flutter/material.dart';
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 
-class VideoSettingsPlaybackSpeedDialog extends StatelessWidget {
+class VideoSettingsPlaybackSpeedDialog extends StatefulWidget {
   final CustomVideoPlayerController customVideoPlayerController;
   const VideoSettingsPlaybackSpeedDialog({
     Key? key,
     required this.customVideoPlayerController,
   }) : super(key: key);
 
-  static final List<double> playbackSpeeds = [
+  @override
+  State<VideoSettingsPlaybackSpeedDialog> createState() =>
+      _VideoSettingsPlaybackSpeedDialogState();
+}
+
+class _VideoSettingsPlaybackSpeedDialogState
+    extends State<VideoSettingsPlaybackSpeedDialog> {
+  final List<double> _playbackSpeeds = [
     0.25,
     0.5,
     0.75,
@@ -25,26 +32,33 @@ class VideoSettingsPlaybackSpeedDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: customVideoPlayerController.customVideoPlayerSettings
-                .customVideoPlayerPopupSettings.popupDecoration.borderRadius ??
+        borderRadius: widget
+                .customVideoPlayerController
+                .customVideoPlayerSettings
+                .customVideoPlayerPopupSettings
+                .popupDecoration
+                .borderRadius ??
             BorderRadius.zero,
       ),
       child: Container(
-        padding: customVideoPlayerController.customVideoPlayerSettings
+        padding: widget.customVideoPlayerController.customVideoPlayerSettings
             .customVideoPlayerPopupSettings.popupPadding,
-        width: customVideoPlayerController.customVideoPlayerSettings
+        width: widget.customVideoPlayerController.customVideoPlayerSettings
             .customVideoPlayerPopupSettings.popupWidth,
-        decoration: customVideoPlayerController.customVideoPlayerSettings
+        decoration: widget.customVideoPlayerController.customVideoPlayerSettings
             .customVideoPlayerPopupSettings.popupDecoration,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              customVideoPlayerController.customVideoPlayerSettings
+              widget.customVideoPlayerController.customVideoPlayerSettings
                   .customVideoPlayerPopupSettings.popupPlaybackSpeedTitle,
-              style: customVideoPlayerController.customVideoPlayerSettings
-                  .customVideoPlayerPopupSettings.popupTitleTextStyle,
+              style: widget
+                  .customVideoPlayerController
+                  .customVideoPlayerSettings
+                  .customVideoPlayerPopupSettings
+                  .popupTitleTextStyle,
             ),
             const SizedBox(
               height: 8,
@@ -54,17 +68,18 @@ class VideoSettingsPlaybackSpeedDialog extends StatelessWidget {
                 shrinkWrap: true,
                 controller: ScrollController(),
                 children: [
-                  for (double playbackSpeed in playbackSpeeds)
+                  for (double playbackSpeed in _playbackSpeeds)
                     VideoSettingsDialogItem(
                       title: playbackSpeed == 1.0
-                          ? "${playbackSpeed}x (${customVideoPlayerController.customVideoPlayerSettings.customVideoPlayerPopupSettings.defaultPlaybackspeedDescription})"
+                          ? "${playbackSpeed}x (${widget.customVideoPlayerController.customVideoPlayerSettings.customVideoPlayerPopupSettings.defaultPlaybackspeedDescription})"
                           : "${playbackSpeed}x",
-                      popupSettings: customVideoPlayerController
+                      popupSettings: widget
+                          .customVideoPlayerController
                           .customVideoPlayerSettings
                           .customVideoPlayerPopupSettings,
                       onPressed: () =>
                           _changeVideoPlayBackSpeed(context, playbackSpeed),
-                      selected: customVideoPlayerController
+                      selected: widget.customVideoPlayerController
                               .playbackSpeedNotifier.value ==
                           playbackSpeed,
                     ),
@@ -81,8 +96,10 @@ class VideoSettingsPlaybackSpeedDialog extends StatelessWidget {
     BuildContext context,
     double playbackSpeed,
   ) {
-    customVideoPlayerController.videoPlayerController
+    widget.customVideoPlayerController.videoPlayerController
         .setPlaybackSpeed(playbackSpeed);
-    Navigator.pop(context);
+    if (mounted) {
+      setState(() {});
+    }
   }
 }
