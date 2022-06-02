@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:appinio_video_player/src/fullscreen_video_player.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_popup_settings.dart';

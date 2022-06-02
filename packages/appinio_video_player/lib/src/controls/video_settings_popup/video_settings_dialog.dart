@@ -1,16 +1,17 @@
 import 'package:appinio_video_player/src/controls/video_settings_popup/video_settings_dialog_item.dart';
 import 'package:appinio_video_player/src/controls/video_settings_popup/video_settings_playback_speed_dialog.dart';
 import 'package:appinio_video_player/src/controls/video_settings_popup/video_settings_quality_dialog.dart';
-import 'package:appinio_video_player/src/models/custom_video_player_popup_settings.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appinio_video_player/appinio_video_player.dart';
 
 class VideoSettingsDialog extends StatelessWidget {
   final CustomVideoPlayerController customVideoPlayerController;
+  final Function updateViewOnClose;
   const VideoSettingsDialog({
     Key? key,
     required this.customVideoPlayerController,
+    required this.updateViewOnClose,
   }) : super(key: key);
 
   @override
@@ -80,9 +81,9 @@ class VideoSettingsDialog extends StatelessWidget {
   _openSubSettingsDialog({
     required BuildContext context,
     required bool isQuality,
-  }) {
-    Navigator.of(context).pop();
-    showDialog(
+  }) async {
+    Navigator.of(context).pop(); //close old popup
+    await showDialog(
       context: context,
       builder: (BuildContext context) => isQuality
           ? VideoSettingsQualityDialog(
@@ -92,5 +93,6 @@ class VideoSettingsDialog extends StatelessWidget {
               customVideoPlayerController: customVideoPlayerController,
             ),
     );
+    updateViewOnClose();
   }
 }
