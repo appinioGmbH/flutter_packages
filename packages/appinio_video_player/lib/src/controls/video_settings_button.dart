@@ -29,9 +29,11 @@ class VideoSettingsButton extends StatelessWidget {
   }
 
   Future<void> _openVideoSettingsDialog(BuildContext context) async {
-    await showDialog(
+    await showGeneralDialog(
       context: context,
-      builder: (context) => VideoSettingsDialog(
+      barrierDismissible: true,
+      barrierLabel: "custom_video_player_controls_barrier1",
+      pageBuilder: (context, _, __) => VideoSettingsDialog(
         customVideoPlayerController: customVideoPlayerController,
         updateViewOnClose: updateVideoState,
       ),

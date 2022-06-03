@@ -84,17 +84,20 @@ class VideoSettingsDialog extends StatelessWidget {
     required bool isQuality,
   }) async {
     Navigator.of(context).pop(); //close old popup
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) => isQuality
-          ? VideoSettingsQualityDialog(
-              customVideoPlayerController: customVideoPlayerController,
-              updateView: updateViewOnClose,
-            )
-          : VideoSettingsPlaybackSpeedDialog(
-              customVideoPlayerController: customVideoPlayerController,
-            ),
-    );
+    await showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel: "custom_video_player_controls_barrier2",
+        pageBuilder: (context, _, __) {
+          return isQuality
+              ? VideoSettingsQualityDialog(
+                  customVideoPlayerController: customVideoPlayerController,
+                  updateView: updateViewOnClose,
+                )
+              : VideoSettingsPlaybackSpeedDialog(
+                  customVideoPlayerController: customVideoPlayerController,
+                );
+        });
     updateViewOnClose();
   }
 }

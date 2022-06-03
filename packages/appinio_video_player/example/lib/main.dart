@@ -1,6 +1,5 @@
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,11 +12,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const CupertinoApp(
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
-        DefaultMaterialLocalizations.delegate,
-        DefaultWidgetsLocalizations.delegate,
-        DefaultCupertinoLocalizations.delegate,
-      ],
       theme: CupertinoThemeData(
         brightness: Brightness.light,
       ),
@@ -112,7 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _videoPlayerController = VideoPlayerController.network(
       video720,
     )..initialize().then((value) => setState(() {}));
-
     _videoPlayerController2 = VideoPlayerController.network(video240);
     _videoPlayerController3 = VideoPlayerController.network(video480);
     _customVideoPlayerController = CustomVideoPlayerController(

@@ -57,6 +57,7 @@ class _VideoSettingsQualityDialogState
             Flexible(
               child: ListView(
                 controller: ScrollController(),
+                padding: const EdgeInsets.all(0),
                 shrinkWrap: true,
                 children: [
                   for (MapEntry<String, VideoPlayerController> videoSource

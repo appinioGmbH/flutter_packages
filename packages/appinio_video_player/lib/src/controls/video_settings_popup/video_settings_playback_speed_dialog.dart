@@ -65,6 +65,7 @@ class _VideoSettingsPlaybackSpeedDialogState
             Flexible(
               child: ListView(
                 shrinkWrap: true,
+                padding: const EdgeInsets.all(0),
                 controller: ScrollController(),
                 children: [
                   for (double playbackSpeed in _playbackSpeeds)
