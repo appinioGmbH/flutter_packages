@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: CupertinoThemeData(
         brightness: Brightness.light,
       ),
-      title: 'Flutter Demo',
+      title: 'Appinio Video Player Demo',
       home: MyHomePage(title: 'Custom Video Player'),
     );
   }
@@ -133,25 +133,20 @@ class _MyHomePageState extends State<MyHomePage> {
         middle: Text(widget.title),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ListView(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              CustomVideoPlayer(
-                customVideoPlayerController: _customVideoPlayerController,
-              ),
-              CupertinoButton(
-                child: const Text("Play Fullscreen"),
-                onPressed: () {
-                  _customVideoPlayerController.setFullscreen(true);
-                  _customVideoPlayerController.videoPlayerController.play();
-                },
-              ),
-            ],
-          ),
+        child: ListView(
+          children: [
+            CustomVideoPlayer(
+              customVideoPlayerController: _customVideoPlayerController,
+            ),
+            CupertinoButton(
+              child: const Text("Play Fullscreen"),
+              onPressed: () {
+                // example on how to set fullscreen yourself
+                _customVideoPlayerController.setFullscreen(true);
+                _customVideoPlayerController.videoPlayerController.play();
+              },
+            ),
+          ],
         ),
       ),
     );

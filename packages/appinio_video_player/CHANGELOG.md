@@ -1,3 +1,10 @@
+## [1.1.0] - 2022.06.03
+
+- New video player controls
+  - Switch the video quality
+  - Change the playback speed
+  - Only play video once functionality
+
 ## [1.0.2] - 2022.04.21
 
 - Removed dependencies from other packages (provider, wakelock)

@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-const TextStyle defaultPopupTitleTextStyle = TextStyle(
-  color: Colors.blue,
-  fontSize: 20,
-);
-
 class CustomVideoPlayerPopupSettings {
   final String popupTitle;
   final String popupQualityTitle;
