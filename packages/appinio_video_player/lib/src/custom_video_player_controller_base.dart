@@ -10,6 +10,7 @@ import 'package:video_player/video_player.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_settings.dart';
 
 /// The extension on the Base class is able to call private methods in the Base class
+/// package can use these methods. outside package can use if included in subclass controller model
 extension ProtectedCustomVideoPlayerController
     on CustomVideoPlayerControllerBase {
   Future<void> Function(bool) get setFullscreenMethod => _setFullscreen;
@@ -17,6 +18,7 @@ extension ProtectedCustomVideoPlayerController
   ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
   ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
   ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
+  ValueNotifier<bool> get getPlayedOnceNotifier => _playedOnceNotifier;
   bool get isFullscreen => _isFullscreen;
   set customVideoPlayerController(
           CustomVideoPlayerController customVideoPlayerController) =>
@@ -51,10 +53,7 @@ abstract class CustomVideoPlayerControllerBase {
       ValueNotifier(Duration.zero);
   final ValueNotifier<double> _playbackSpeedNotifier = ValueNotifier(1.0);
   final ValueNotifier<bool> _isPlayingNotifier = ValueNotifier(false);
-
-  // ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
-  // ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
-  // ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
+  final ValueNotifier<bool> _playedOnceNotifier = ValueNotifier(false);
 
   Future<void> _setFullscreen(
     bool fullscreen,
@@ -164,14 +163,15 @@ abstract class CustomVideoPlayerControllerBase {
 
   /// Listeners
   void _videoListeners() {
-    _videoProgressListener();
+    _fluidVideoProgressListener();
     _fullscreenFunctionalityListener();
     _playPauseListener();
     _playbackSpeedListener();
+    _onVideoEndListener();
   }
 
   /// used to make progress more fluid
-  Future<void> _videoProgressListener() async {
+  Future<void> _fluidVideoProgressListener() async {
     if (videoPlayerController.value.isPlaying) {
       _timer ??= Timer.periodic(const Duration(milliseconds: 100),
           (Timer timer) async {
@@ -188,6 +188,16 @@ abstract class CustomVideoPlayerControllerBase {
           _videoProgressNotifier.value =
               (await videoPlayerController.position)!;
         }
+      }
+    }
+  }
+
+  /// save that the video is played once
+  void _onVideoEndListener() {
+    if (videoPlayerController.value.position > Duration.zero) {
+      if (videoPlayerController.value.duration ==
+          videoPlayerController.value.position) {
+        _playedOnceNotifier.value = true;
       }
     }
   }

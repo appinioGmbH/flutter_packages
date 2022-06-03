@@ -25,6 +25,8 @@ class CustomVideoPlayerController extends CustomVideoPlayerControllerBase {
     await setFullscreenMethod(fullscreen);
   }
 
+  ValueNotifier<bool> get playedOnceNotifier => getPlayedOnceNotifier;
+
   /// Disposes all created resources. Call it at your widgets dispose method when the `CustomVideoPlayer` is not used anymore.
   void dispose() {
     disposeMethod();

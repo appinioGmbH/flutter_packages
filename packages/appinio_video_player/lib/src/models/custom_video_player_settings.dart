@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
+import 'package:appinio_video_player/src/controls/video_settings_button.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_popup_settings.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_progress_bar_settings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,6 +36,9 @@ class CustomVideoPlayerSettings {
   /// Define the exit-fullscreen button appearance.
   final Widget exitFullscreenButton;
 
+  /// Define the settings button appearance.
+  final Widget settingsButton;
+
   /// The [SystemUiMode] after leaving the fullscreen mode. Defaults to [SystemUiMode.edgeToEdge].
   final SystemUiMode systemUIModeAfterFullscreen;
 
@@ -53,6 +56,8 @@ class CustomVideoPlayerSettings {
 
   /// If set the video will leave the fullscreen mode when its finished. Nothing happens if video wasn't in fullscreen before.
   final bool exitFullscreenOnEnd;
+
+  final bool playOnlyOnce;
 
   /// If set to false no play/pause button will not be displayed.
   final bool showPlayButton;
@@ -75,17 +80,8 @@ class CustomVideoPlayerSettings {
   /// If the settings button should be shown or not.
   final bool settingsButtonAvailable;
 
-  /// Padding for the settings button.
-  final EdgeInsets settingsButtonPadding;
-
   /// TextStyle for the playback speed.
   final TextStyle playbackButtonTextStyle;
-
-  /// Decoration of the settings button.
-  final BoxDecoration settingsButtonDecoration;
-
-  /// The icon of the settings button.
-  final Icon settingsButtonIcon;
 
   /// The settings for the progress bar in the middle of the control bar.
   final CustomVideoPlayerProgressBarSettings
@@ -100,6 +96,7 @@ class CustomVideoPlayerSettings {
     this.controlBarPadding = const EdgeInsets.all(5),
     this.playButton = const CustomVideoPlayerPlayButton(),
     this.pauseButton = const CustomVideoPlayerPauseButton(),
+    this.settingsButton = const CustomVideoPlayerSettingsButton(),
     this.enterFullscreenButton = const CustomVideoPlayerEnterFullscreenButton(),
     this.exitFullscreenButton = const CustomVideoPlayerExitFullscreenButton(),
     this.controlBarDecoration = const BoxDecoration(
@@ -126,24 +123,13 @@ class CustomVideoPlayerSettings {
     this.enterFullscreenOnStart = false,
     this.exitFullscreenOnEnd = false,
     this.showPlayButton = true,
+    this.playOnlyOnce = false,
     this.showFullscreenButton = !kIsWeb,
     this.systemUIModeAfterFullscreen = SystemUiMode.edgeToEdge,
     this.systemUIModeInsideFullscreen = SystemUiMode.leanBack,
     this.deviceOrientationsAfterFullscreen = DeviceOrientation.values,
-    this.settingsButtonDecoration = const BoxDecoration(
-      color: Color.fromRGBO(0, 0, 0, 0.5),
-      borderRadius: BorderRadius.all(
-        Radius.circular(10),
-      ),
-    ),
     this.settingsButtonAvailable = true,
-    this.settingsButtonIcon = const Icon(
-      CupertinoIcons.settings,
-      color: Colors.white,
-      size: 18,
-    ),
     this.playbackSpeedButtonAvailable = true,
-    this.settingsButtonPadding = const EdgeInsets.all(8),
     this.playbackButtonTextStyle = const TextStyle(
       color: Colors.white,
       fontSize: 14,

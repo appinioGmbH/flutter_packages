@@ -1,4 +1,5 @@
 import 'package:appinio_video_player/src/controls/video_settings_popup/video_settings_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 
@@ -21,19 +22,13 @@ class VideoSettingsButton extends StatelessWidget {
       maintainState: true,
       child: GestureDetector(
         onTap: () => _openVideoSettingsDialog(context),
-        child: Container(
-          padding: customVideoPlayerController
-              .customVideoPlayerSettings.settingsButtonPadding,
-          decoration: customVideoPlayerController
-              .customVideoPlayerSettings.settingsButtonDecoration,
-          child: customVideoPlayerController
-              .customVideoPlayerSettings.settingsButtonIcon,
-        ),
+        child: customVideoPlayerController
+            .customVideoPlayerSettings.settingsButton,
       ),
     );
   }
 
-  _openVideoSettingsDialog(BuildContext context) async {
+  Future<void> _openVideoSettingsDialog(BuildContext context) async {
     await showDialog(
       context: context,
       builder: (context) => VideoSettingsDialog(
@@ -42,5 +37,27 @@ class VideoSettingsButton extends StatelessWidget {
       ),
     );
     updateVideoState();
+  }
+}
+
+class CustomVideoPlayerSettingsButton extends StatelessWidget {
+  const CustomVideoPlayerSettingsButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: const BoxDecoration(
+        color: Color.fromRGBO(0, 0, 0, 0.5),
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: const Icon(
+        CupertinoIcons.settings,
+        color: Colors.white,
+        size: 18,
+      ),
+    );
   }
 }
