@@ -45,6 +45,9 @@ class CustomVideoPlayerSettings {
   /// The [SystemUiMode] when entering the fullscreen mode. Defaults to [SystemUiMode.leanBack].
   final SystemUiMode systemUIModeInsideFullscreen;
 
+  /// The system ui overlays after fullscreen mode. Especially useful if [systemUIModeAfterFullscreen] is set to [SystemUiMode.manual].
+  final List<SystemUiOverlay> systemUIOverlaysAfterFullscreen;
+
   /// The possible device orientations after leaving fullscreen. For example if the app was a portrait only app before then set the orientations to DeviceOrientation.portraitUp here again.
   final List<DeviceOrientation> deviceOrientationsAfterFullscreen;
 
@@ -136,6 +139,7 @@ class CustomVideoPlayerSettings {
     this.showFullscreenButton = !kIsWeb,
     this.systemUIModeAfterFullscreen = SystemUiMode.edgeToEdge,
     this.systemUIModeInsideFullscreen = SystemUiMode.leanBack,
+    this.systemUIOverlaysAfterFullscreen = SystemUiOverlay.values,
     this.deviceOrientationsAfterFullscreen = DeviceOrientation.values,
     this.settingsButtonAvailable = true,
     this.playbackSpeedButtonAvailable = true,
