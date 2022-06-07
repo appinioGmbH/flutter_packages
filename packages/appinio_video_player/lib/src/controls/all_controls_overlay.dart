@@ -23,6 +23,7 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
   @override
   void initState() {
     super.initState();
+    _fadeOutControls();
     widget.customVideoPlayerController.isPlayingNotifier
         .addListener(_listenToPlayStateChanges);
   }
@@ -104,9 +105,11 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
           widget.customVideoPlayerController.videoPlayerController.value
               .isPlaying) {
         if (_controlsVisible && _visibilityToggleCounter == 0) {
-          setState(() {
-            _controlsVisible = false;
-          });
+          if (mounted) {
+            setState(() {
+              _controlsVisible = false;
+            });
+          }
         }
       }
     });

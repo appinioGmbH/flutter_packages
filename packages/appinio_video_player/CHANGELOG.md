@@ -1,9 +1,11 @@
-## [1.1.0] - 2022.06.03
+## [1.1.0] - 2022.06.07
 
 - New video player controls
   - Switch the video quality
   - Change the playback speed
   - Only play video once functionality
+- Controls fade out
+- Fix for locked orientation after fullscreen
 
 ## [1.0.2] - 2022.04.21
 
