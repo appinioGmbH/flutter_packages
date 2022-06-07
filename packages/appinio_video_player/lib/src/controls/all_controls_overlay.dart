@@ -17,14 +17,22 @@ class AllControlsOverlay extends StatefulWidget {
 }
 
 class _AllControlsOverlayState extends State<AllControlsOverlay> {
+  bool _controlsVisible = true;
+  int _visibilityToggleCounter = 0;
+
   @override
   void initState() {
     super.initState();
-    _fadeOutControls();
+    widget.customVideoPlayerController.isPlayingNotifier
+        .addListener(_listenToPlayStateChanges);
   }
 
-  bool _controlsVisible = true;
-  int _visibilityToggleCounter = 0;
+  @override
+  void dispose() {
+    widget.customVideoPlayerController.isPlayingNotifier
+        .removeListener(_listenToPlayStateChanges);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +76,12 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
     );
   }
 
+  void _listenToPlayStateChanges() {
+    if (widget.customVideoPlayerController.isPlayingNotifier.value) {
+      _fadeOutControls();
+    }
+  }
+
   void _toggleControlsVisibility(BuildContext context) {
     setState(() {
       _controlsVisible = !_controlsVisible;
@@ -77,29 +91,18 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
     }
   }
 
-  bool _checkFadeOutAvailability() {
-    if (widget.customVideoPlayerController.customVideoPlayerSettings
-        .autoFadeOutControls) {
-      if (widget.customVideoPlayerController.customVideoPlayerSettings
-              .dontFadeOutControlsWhenPaused &&
-          !widget.customVideoPlayerController.videoPlayerController.value
-              .isPlaying) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return false;
-    }
-  }
-
   Future<void> _fadeOutControls() async {
     _visibilityToggleCounter++;
     await Future.delayed(
         widget.customVideoPlayerController.customVideoPlayerSettings
             .durationAfterControlsFadeOut, () {
       _visibilityToggleCounter--;
-      if (_checkFadeOutAvailability()) {
+
+      // only toggle visibility if the video is playing
+      if (widget.customVideoPlayerController.customVideoPlayerSettings
+              .autoFadeOutControls &&
+          widget.customVideoPlayerController.videoPlayerController.value
+              .isPlaying) {
         if (_controlsVisible && _visibilityToggleCounter == 0) {
           setState(() {
             _controlsVisible = false;

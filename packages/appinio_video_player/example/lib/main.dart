@@ -16,14 +16,13 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
       ),
       title: 'Appinio Video Player Demo',
-      home: MyHomePage(title: 'Custom Video Player'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -54,7 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
       const CustomVideoPlayerSettings(
           //TODO: play around with these parameters
 
-          // dontFadeOutControlsWhenPaused: true,
           // autoFadeOutControls: false,
           // controlBarAvailable: false,
           // playbackSpeedButtonAvailable: false,
@@ -131,8 +129,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(widget.title),
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text("Appinio Video Player"),
       ),
       child: SafeArea(
         child: ListView(
@@ -144,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text("Play Fullscreen"),
               onPressed: () {
                 // example on how to set fullscreen yourself
-                _customVideoPlayerController.setFullscreen(true);
+                // _customVideoPlayerController.setFullscreen(true);
                 _customVideoPlayerController.videoPlayerController.play();
               },
             ),

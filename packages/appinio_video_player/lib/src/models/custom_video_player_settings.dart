@@ -60,9 +60,6 @@ class CustomVideoPlayerSettings {
   /// If set the video can only be played once.
   final bool playOnlyOnce;
 
-  /// If set the video controls wont be faded out when the video is paused and the [durationAfterControlsFadeOut] has passed.
-  final bool dontFadeOutControlsWhenPaused;
-
   /// If set the video controls will be faded out after the [durationAfterControlsFadeOut] has passed.
   final bool autoFadeOutControls;
 
@@ -134,7 +131,6 @@ class CustomVideoPlayerSettings {
     this.exitFullscreenOnEnd = false,
     this.showPlayButton = true,
     this.playOnlyOnce = false,
-    this.dontFadeOutControlsWhenPaused = true,
     this.autoFadeOutControls = true,
     this.durationAfterControlsFadeOut = const Duration(seconds: 3),
     this.showFullscreenButton = !kIsWeb,
