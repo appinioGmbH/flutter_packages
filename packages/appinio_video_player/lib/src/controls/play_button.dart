@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 
 class CustomVideoPlayerPlayPauseButton extends StatelessWidget {
   final CustomVideoPlayerController customVideoPlayerController;
+  final Function fadeOutOnPlay;
   const CustomVideoPlayerPlayPauseButton({
     Key? key,
     required this.customVideoPlayerController,
+    required this.fadeOutOnPlay,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,7 @@ class CustomVideoPlayerPlayPauseButton extends StatelessWidget {
         return;
       } else {
         await customVideoPlayerController.videoPlayerController.play();
+        fadeOutOnPlay();
       }
     }
   }

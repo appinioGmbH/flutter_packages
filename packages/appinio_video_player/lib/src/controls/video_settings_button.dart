@@ -6,25 +6,18 @@ import 'package:flutter/material.dart';
 class VideoSettingsButton extends StatelessWidget {
   final CustomVideoPlayerController customVideoPlayerController;
   final Function updateVideoState;
-  final bool visible;
   const VideoSettingsButton({
     Key? key,
     required this.customVideoPlayerController,
     required this.updateVideoState,
-    required this.visible,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: visible,
-      maintainAnimation: true,
-      maintainState: true,
-      child: GestureDetector(
-        onTap: () => _openVideoSettingsDialog(context),
-        child: customVideoPlayerController
-            .customVideoPlayerSettings.settingsButton,
-      ),
+    return GestureDetector(
+      onTap: () => _openVideoSettingsDialog(context),
+      child:
+          customVideoPlayerController.customVideoPlayerSettings.settingsButton,
     );
   }
 

@@ -6,88 +6,84 @@ import 'package:appinio_video_player/src/controls/progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 
 class CustomVideoPlayerControlBar extends StatelessWidget {
-  final bool visible;
   final CustomVideoPlayerController customVideoPlayerController;
   final Function updateVideoState;
+  final Function fadeOutOnPlay;
   const CustomVideoPlayerControlBar({
     Key? key,
-    required this.visible,
     required this.customVideoPlayerController,
     required this.updateVideoState,
+    required this.fadeOutOnPlay,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: visible,
-      maintainAnimation: true,
-      maintainState: true,
-      child: Container(
-        alignment: Alignment.bottomCenter,
-        padding: customVideoPlayerController
-            .customVideoPlayerSettings.controlBarPadding,
-        decoration: customVideoPlayerController
-            .customVideoPlayerSettings.controlBarDecoration,
-        child: Row(
-          children: [
-            if (customVideoPlayerController
-                .customVideoPlayerSettings.showPlayButton)
-              CustomVideoPlayerPlayPauseButton(
-                customVideoPlayerController: customVideoPlayerController,
+    return Container(
+      alignment: Alignment.bottomCenter,
+      padding: customVideoPlayerController
+          .customVideoPlayerSettings.controlBarPadding,
+      decoration: customVideoPlayerController
+          .customVideoPlayerSettings.controlBarDecoration,
+      child: Row(
+        children: [
+          if (customVideoPlayerController
+              .customVideoPlayerSettings.showPlayButton)
+            CustomVideoPlayerPlayPauseButton(
+              customVideoPlayerController: customVideoPlayerController,
+              fadeOutOnPlay: fadeOutOnPlay,
+            ),
+          if (customVideoPlayerController
+              .customVideoPlayerSettings.showDurationPlayed)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 5.0,
+                right: 5.0,
               ),
-            if (customVideoPlayerController
-                .customVideoPlayerSettings.showDurationPlayed)
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 5.0,
-                  right: 5.0,
-                ),
-                child: ValueListenableBuilder<Duration>(
-                  valueListenable:
-                      customVideoPlayerController.videoProgressNotifier,
-                  builder: ((context, progress, child) {
-                    return Text(
-                      getDurationAsString(progress),
-                      style: customVideoPlayerController
-                          .customVideoPlayerSettings.durationPlayedTextStyle,
-                    );
-                  }),
-                ),
-              ),
-            Expanded(
-              child: CustomVideoPlayerProgressBar(
-                customVideoPlayerController: customVideoPlayerController,
+              child: ValueListenableBuilder<Duration>(
+                valueListenable:
+                    customVideoPlayerController.videoProgressNotifier,
+                builder: ((context, progress, child) {
+                  return Text(
+                    getDurationAsString(progress),
+                    style: customVideoPlayerController
+                        .customVideoPlayerSettings.durationPlayedTextStyle,
+                  );
+                }),
               ),
             ),
-            if (customVideoPlayerController
-                .customVideoPlayerSettings.showDurationRemaining)
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 5.0,
-                  right: 5.0,
-                ),
-                child: ValueListenableBuilder<Duration>(
-                  valueListenable:
-                      customVideoPlayerController.videoProgressNotifier,
-                  builder: ((context, progress, child) {
-                    return Text(
-                      "-" +
-                          getDurationAsString(customVideoPlayerController
-                                  .videoPlayerController.value.duration -
-                              progress),
-                      style: customVideoPlayerController
-                          .customVideoPlayerSettings.durationRemainingTextStyle,
-                    );
-                  }),
-                ),
+          Expanded(
+            child: CustomVideoPlayerProgressBar(
+              customVideoPlayerController: customVideoPlayerController,
+            ),
+          ),
+          if (customVideoPlayerController
+              .customVideoPlayerSettings.showDurationRemaining)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 5.0,
+                right: 5.0,
               ),
-            if (customVideoPlayerController
-                .customVideoPlayerSettings.showFullscreenButton)
-              CustomVideoPlayerFullscreenButton(
-                customVideoPlayerController: customVideoPlayerController,
-              )
-          ],
-        ),
+              child: ValueListenableBuilder<Duration>(
+                valueListenable:
+                    customVideoPlayerController.videoProgressNotifier,
+                builder: ((context, progress, child) {
+                  return Text(
+                    "-" +
+                        getDurationAsString(customVideoPlayerController
+                                .videoPlayerController.value.duration -
+                            progress),
+                    style: customVideoPlayerController
+                        .customVideoPlayerSettings.durationRemainingTextStyle,
+                  );
+                }),
+              ),
+            ),
+          if (customVideoPlayerController
+              .customVideoPlayerSettings.showFullscreenButton)
+            CustomVideoPlayerFullscreenButton(
+              customVideoPlayerController: customVideoPlayerController,
+            )
+        ],
       ),
     );
   }

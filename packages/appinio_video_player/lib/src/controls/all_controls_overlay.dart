@@ -17,7 +17,15 @@ class AllControlsOverlay extends StatefulWidget {
 }
 
 class _AllControlsOverlayState extends State<AllControlsOverlay> {
+  @override
+  void initState() {
+    super.initState();
+    _fadeOutControls();
+  }
+
   bool _controlsVisible = true;
+  int _visibilityToggleCounter = 0;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,28 +35,34 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
         padding: widget.customVideoPlayerController.customVideoPlayerSettings
             .controlsPadding,
         width: double.infinity,
-        child: Column(
-          children: [
-            if (widget.customVideoPlayerController.customVideoPlayerSettings
-                .settingsButtonAvailable)
-              Align(
-                alignment: Alignment.topLeft,
-                child: VideoSettingsButton(
-                  customVideoPlayerController:
-                      widget.customVideoPlayerController,
-                  updateVideoState: widget.updateVideoState,
-                  visible: _controlsVisible,
-                ),
-              ),
-            const Spacer(),
-            if (widget.customVideoPlayerController.customVideoPlayerSettings
-                .controlBarAvailable)
-              CustomVideoPlayerControlBar(
-                visible: _controlsVisible,
-                customVideoPlayerController: widget.customVideoPlayerController,
-                updateVideoState: widget.updateVideoState,
-              ),
-          ],
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          reverseDuration: const Duration(milliseconds: 300),
+          child: _controlsVisible
+              ? Column(
+                  children: [
+                    if (widget.customVideoPlayerController
+                        .customVideoPlayerSettings.settingsButtonAvailable)
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: VideoSettingsButton(
+                          customVideoPlayerController:
+                              widget.customVideoPlayerController,
+                          updateVideoState: widget.updateVideoState,
+                        ),
+                      ),
+                    const Spacer(),
+                    if (widget.customVideoPlayerController
+                        .customVideoPlayerSettings.controlBarAvailable)
+                      CustomVideoPlayerControlBar(
+                        customVideoPlayerController:
+                            widget.customVideoPlayerController,
+                        updateVideoState: widget.updateVideoState,
+                        fadeOutOnPlay: _fadeOutControls,
+                      ),
+                  ],
+                )
+              : null,
         ),
       ),
     );
@@ -57,6 +71,41 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
   void _toggleControlsVisibility(BuildContext context) {
     setState(() {
       _controlsVisible = !_controlsVisible;
+    });
+    if (_controlsVisible) {
+      _fadeOutControls();
+    }
+  }
+
+  bool _checkFadeOutAvailability() {
+    if (widget.customVideoPlayerController.customVideoPlayerSettings
+        .autoFadeOutControls) {
+      if (widget.customVideoPlayerController.customVideoPlayerSettings
+              .dontFadeOutControlsWhenPaused &&
+          !widget.customVideoPlayerController.videoPlayerController.value
+              .isPlaying) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> _fadeOutControls() async {
+    _visibilityToggleCounter++;
+    await Future.delayed(
+        widget.customVideoPlayerController.customVideoPlayerSettings
+            .durationAfterControlsFadeOut, () {
+      _visibilityToggleCounter--;
+      if (_checkFadeOutAvailability()) {
+        if (_controlsVisible && _visibilityToggleCounter == 0) {
+          setState(() {
+            _controlsVisible = false;
+          });
+        }
+      }
     });
   }
 }

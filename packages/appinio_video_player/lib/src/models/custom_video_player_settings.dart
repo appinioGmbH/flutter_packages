@@ -57,13 +57,23 @@ class CustomVideoPlayerSettings {
   /// If set the video will leave the fullscreen mode when its finished. Nothing happens if video wasn't in fullscreen before.
   final bool exitFullscreenOnEnd;
 
+  /// If set the video can only be played once.
   final bool playOnlyOnce;
+
+  /// If set the video controls wont be faded out when the video is paused and the [durationAfterControlsFadeOut] has passed.
+  final bool dontFadeOutControlsWhenPaused;
+
+  /// If set the video controls will be faded out after the [durationAfterControlsFadeOut] has passed.
+  final bool autoFadeOutControls;
 
   /// If set to false no play/pause button will not be displayed.
   final bool showPlayButton;
 
   /// If set to false no enter/exit fullscrenn button will not be displayed. Default it wont be displayed in web because there fullscreen doesnt work properly
   final bool showFullscreenButton;
+
+  /// The duration after which the controls will fade out. Recommended duration is >= 2 seconds.
+  final Duration durationAfterControlsFadeOut;
 
   /// The [TextStyle] of the played duration left from the progress bar.
   final TextStyle durationPlayedTextStyle;
@@ -124,6 +134,9 @@ class CustomVideoPlayerSettings {
     this.exitFullscreenOnEnd = false,
     this.showPlayButton = true,
     this.playOnlyOnce = false,
+    this.dontFadeOutControlsWhenPaused = true,
+    this.autoFadeOutControls = true,
+    this.durationAfterControlsFadeOut = const Duration(seconds: 3),
     this.showFullscreenButton = !kIsWeb,
     this.systemUIModeAfterFullscreen = SystemUiMode.edgeToEdge,
     this.systemUIModeInsideFullscreen = SystemUiMode.leanBack,

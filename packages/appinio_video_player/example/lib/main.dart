@@ -54,6 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
       const CustomVideoPlayerSettings(
           //TODO: play around with these parameters
 
+          // dontFadeOutControlsWhenPaused: true,
+          // autoFadeOutControls: false,
           // controlBarAvailable: false,
           // playbackSpeedButtonAvailable: false,
           // controlBarMargin: const EdgeInsets.all(10),
