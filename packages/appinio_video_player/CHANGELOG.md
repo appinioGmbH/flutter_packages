@@ -5,7 +5,7 @@
   - Change the playback speed
   - Only play video once functionality
 - Controls fade out
-- Fix for locked orientation after fullscreen
+- Bugfixes
 
 ## [1.0.2] - 2022.04.21
 
