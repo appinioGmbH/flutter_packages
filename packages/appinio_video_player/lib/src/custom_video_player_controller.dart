@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:appinio_video_player/src/fullscreen_video_player.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +137,7 @@ class CustomVideoPlayerController {
         _setOrientationForVideo(); // if video changed completely
       }
       await videoPlayerController.seekTo(_playedDuration);
-      if (kIsWeb || Platform.isAndroid) {
+      if (Theme.of(context).platform != TargetPlatform.iOS) {
         await videoPlayerController.setPlaybackSpeed(_playbackSpeed);
       } else {
         await videoPlayerController.setPlaybackSpeed(

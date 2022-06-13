@@ -88,9 +88,12 @@ class WidgetSize extends StatefulWidget {
 }
 
 class _WidgetSizeState extends State<WidgetSize> {
+  T? _ambiguate<T>(T? value) => value; // to support older flutter versions
+
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
+    _ambiguate(SchedulerBinding.instance)!
+        .addPostFrameCallback(postFrameCallback);
     return Container(
       key: widgetKey,
       child: widget.child,

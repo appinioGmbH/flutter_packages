@@ -1,4 +1,9 @@
-## [1.1.0] - 2022.06.07
+## [1.1.1] - 2022.06.13
+
+- adding back web support
+- support older flutter versions again
+
+## [1.1.0] - 2022.06.13
 
 - New video player controls
   - Switch the video quality
