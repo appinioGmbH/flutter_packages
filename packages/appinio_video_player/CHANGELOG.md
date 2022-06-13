@@ -1,9 +1,9 @@
-## [1.1.0] - 2022.06.07
+## [1.1.0] - 2022.06.13
 
 - New video player controls
   - Switch the video quality
   - Change the playback speed
-  - Only play video once functionality
+  - Play-video-only-once functionality
 - Controls fade out
 - Bugfixes
 
