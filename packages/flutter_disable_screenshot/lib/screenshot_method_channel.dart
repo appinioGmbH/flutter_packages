@@ -31,7 +31,7 @@ class MethodChannelScreenshot extends ScreenshotPlatform {
       return await _methodChannel
           .invokeMethod("disableScreenshots", {"disable": disable});
     } else {
-      // print('仅Android平台支持禁用屏幕截图');
+      // print('Disabling screenshots is only supported on Android');
     }
   }
 }

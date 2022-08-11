@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:screenshot/screenshot_method_channel.dart';
+import 'package:flutter_disable_screenshot/screenshot_method_channel.dart';
 
 void main() {
   MethodChannelScreenshot platform = MethodChannelScreenshot();
