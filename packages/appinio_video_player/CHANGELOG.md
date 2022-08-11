@@ -1,7 +1,7 @@
-## [1.1.1] - 2022.06.13
+## [1.1.1] - 2022.06.14
 
-- Adding back web support
-- Support older flutter versions again
+- Bringing back the web support
+- Support older flutter versions
 
 ## [1.1.0] - 2022.06.13
 
