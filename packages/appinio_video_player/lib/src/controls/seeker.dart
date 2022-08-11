@@ -1,17 +1,14 @@
-import 'package:appinio_video_player/src/video_values_provider.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 
 class CustomVideoPlayerSeeker extends StatefulWidget {
+  final Widget child;
+  final CustomVideoPlayerController customvVideoPlayerController;
   const CustomVideoPlayerSeeker({
     Key? key,
     required this.child,
-    required this.videoPlayerController,
+    required this.customvVideoPlayerController,
   }) : super(key: key);
-
-  final Widget child;
-  final VideoPlayerController videoPlayerController;
 
   @override
   _CustomVideoPlayerSeekerState createState() =>
@@ -27,27 +24,31 @@ class _CustomVideoPlayerSeekerState extends State<CustomVideoPlayerSeeker> {
       behavior: HitTestBehavior.opaque,
       child: widget.child,
       onHorizontalDragStart: (DragStartDetails details) {
-        if (!widget.videoPlayerController.value.isInitialized) {
+        if (!widget.customvVideoPlayerController.videoPlayerController.value
+            .isInitialized) {
           return;
         }
-        _videoPlaying = widget.videoPlayerController.value.isPlaying;
+        _videoPlaying = widget
+            .customvVideoPlayerController.videoPlayerController.value.isPlaying;
         if (_videoPlaying) {
-          widget.videoPlayerController.pause();
+          widget.customvVideoPlayerController.videoPlayerController.pause();
         }
       },
       onHorizontalDragUpdate: (DragUpdateDetails details) {
-        if (!widget.videoPlayerController.value.isInitialized) {
+        if (!widget.customvVideoPlayerController.videoPlayerController.value
+            .isInitialized) {
           return;
         }
         changeCurrentVideoPosition(details.globalPosition);
       },
       onHorizontalDragEnd: (DragEndDetails details) {
         if (_videoPlaying) {
-          widget.videoPlayerController.play();
+          widget.customvVideoPlayerController.videoPlayerController.play();
         }
       },
       onTapDown: (TapDownDetails details) {
-        if (!widget.videoPlayerController.value.isInitialized) {
+        if (!widget.customvVideoPlayerController.videoPlayerController.value
+            .isInitialized) {
           return;
         }
         changeCurrentVideoPosition(details.globalPosition);
@@ -59,10 +60,10 @@ class _CustomVideoPlayerSeekerState extends State<CustomVideoPlayerSeeker> {
     final RenderBox box = context.findRenderObject() as RenderBox;
     final Offset tapPos = box.globalToLocal(globalPosition);
     final double relative = tapPos.dx / box.size.width;
-    final Duration position =
-        widget.videoPlayerController.value.duration * relative;
-    widget.videoPlayerController.seekTo(position);
-    Provider.of<VideoValuesProvider>(context, listen: false).videoProgress =
-        position;
+    final Duration position = widget
+            .customvVideoPlayerController.videoPlayerController.value.duration *
+        relative;
+    widget.customvVideoPlayerController.videoPlayerController.seekTo(position);
+    widget.customvVideoPlayerController.videoProgressNotifier.value = position;
   }
 }

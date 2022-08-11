@@ -1,41 +1,31 @@
-import 'package:appinio_video_player/src/video_values_provider.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 
 class CustomVideoPlayerFullscreenButton extends StatelessWidget {
-  final VideoPlayerController? videoPlayerController;
+  final CustomVideoPlayerController customVideoPlayerController;
   final bool? isFullscreen;
-  final VoidCallback? onStart;
-  final VoidCallback? onPlayPause;
-  final VoidCallback? onEnd;
   const CustomVideoPlayerFullscreenButton({
     Key? key,
-    this.videoPlayerController,
+    required this.customVideoPlayerController,
     this.isFullscreen,
-    this.onStart,
-    this.onPlayPause,
-    this.onEnd,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    VideoValuesProvider videoValuesProvider =
-        Provider.of<VideoValuesProvider>(context, listen: false);
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () {
-        if (videoValuesProvider.customVideoPlayerController.isFullscreen) {
-          videoValuesProvider.customVideoPlayerController.setFullscreen(false);
+      onTap: () async {
+        if (customVideoPlayerController.isFullscreen) {
+          await customVideoPlayerController.setFullscreen(false);
         } else {
-          videoValuesProvider.customVideoPlayerController.setFullscreen(true);
+          await customVideoPlayerController.setFullscreen(true);
         }
       },
-      child: Provider.of<VideoValuesProvider>(context)
-              .customVideoPlayerController
-              .isFullscreen
-          ? videoValuesProvider.customVideoPlayerSettings.exitFullscreenButton
-          : videoValuesProvider.customVideoPlayerSettings.enterFullscreenButton,
+      child: customVideoPlayerController.isFullscreen
+          ? customVideoPlayerController
+              .customVideoPlayerSettings.exitFullscreenButton
+          : customVideoPlayerController
+              .customVideoPlayerSettings.enterFullscreenButton,
     );
   }
 }

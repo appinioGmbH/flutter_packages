@@ -1,16 +1,25 @@
+import 'dart:ui';
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
+import 'package:appinio_video_player/src/controls/video_settings_button.dart';
+import 'package:appinio_video_player/src/models/custom_video_player_popup_settings.dart';
+import 'package:appinio_video_player/src/models/custom_video_player_progress_bar_settings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'custom_video_player_progress_bar_settings.dart';
-
 class CustomVideoPlayerSettings {
+  /// Define a custom aspect ratio for the video.
+  final double? customAspectRatio;
+
   /// Set to false if no control bar should be available.
   final bool controlBarAvailable;
 
-  /// The margin of the control bar to the edges of the video player.
-  final EdgeInsets controlBarMargin;
+  /// Set to false if no playback speed adjustment button should be shown.
+  final bool playbackSpeedButtonAvailable;
+
+  // The padding between the controls and the edges of the video player
+  final EdgeInsets controlsPadding;
 
   /// The padding of the control bar from the edges to its contents.
   final EdgeInsets controlBarPadding;
@@ -27,11 +36,20 @@ class CustomVideoPlayerSettings {
   /// Define the exit-fullscreen button appearance.
   final Widget exitFullscreenButton;
 
+  /// Define the settings button appearance.
+  final Widget settingsButton;
+
   /// The [SystemUiMode] after leaving the fullscreen mode. Defaults to [SystemUiMode.edgeToEdge].
   final SystemUiMode systemUIModeAfterFullscreen;
 
   /// The [SystemUiMode] when entering the fullscreen mode. Defaults to [SystemUiMode.leanBack].
   final SystemUiMode systemUIModeInsideFullscreen;
+
+  /// The system ui overlays after fullscreen mode. Especially useful if [systemUIModeAfterFullscreen] is set to [SystemUiMode.manual].
+  final List<SystemUiOverlay> systemUIOverlaysAfterFullscreen;
+
+  /// The possible device orientations after leaving fullscreen. For example if the app was a portrait only app before then set the orientations to DeviceOrientation.portraitUp here again.
+  final List<DeviceOrientation> deviceOrientationsAfterFullscreen;
 
   /// The appearance of the control bar.
   final BoxDecoration controlBarDecoration;
@@ -42,14 +60,20 @@ class CustomVideoPlayerSettings {
   /// If set the video will leave the fullscreen mode when its finished. Nothing happens if video wasn't in fullscreen before.
   final bool exitFullscreenOnEnd;
 
-  /// If set the screen doesn't go to sleep when the video plays.
-  final bool enableWakeLockWhenPlaying;
+  /// If set the video can only be played once.
+  final bool playOnlyOnce;
+
+  /// If set the video controls will be faded out after the [durationAfterControlsFadeOut] has passed.
+  final bool autoFadeOutControls;
 
   /// If set to false no play/pause button will not be displayed.
   final bool showPlayButton;
 
-  /// If set to false no enter/exit fullscrenn button will not be displayed.
+  /// If set to false no enter/exit fullscrenn button will not be displayed. Default it wont be displayed in web because there fullscreen doesnt work properly
   final bool showFullscreenButton;
+
+  /// The duration after which the controls will fade out. Recommended duration is >= 2 seconds.
+  final Duration durationAfterControlsFadeOut;
 
   /// The [TextStyle] of the played duration left from the progress bar.
   final TextStyle durationPlayedTextStyle;
@@ -63,33 +87,43 @@ class CustomVideoPlayerSettings {
   /// If set to false the duration remaining will not be displayed.
   final bool showDurationRemaining;
 
+  /// If the settings button should be shown or not.
+  final bool settingsButtonAvailable;
+
+  /// TextStyle for the playback speed.
+  final TextStyle playbackButtonTextStyle;
+
   /// The settings for the progress bar in the middle of the control bar.
   final CustomVideoPlayerProgressBarSettings
       customVideoPlayerProgressBarSettings;
 
-  /// A callback to be executed when the video starts.
-  final VoidCallback? onStart;
+  /// UI settings for the video settings popup.
+  final CustomVideoPlayerPopupSettings customVideoPlayerPopupSettings;
 
-  /// A callback to be executed when the video ends.
-  final VoidCallback? onEnd;
-
-  CustomVideoPlayerSettings({
-    this.controlBarMargin = const EdgeInsets.all(5),
+  const CustomVideoPlayerSettings({
+    this.customAspectRatio,
+    this.controlsPadding = const EdgeInsets.all(5),
     this.controlBarPadding = const EdgeInsets.all(5),
     this.playButton = const CustomVideoPlayerPlayButton(),
     this.pauseButton = const CustomVideoPlayerPauseButton(),
+    this.settingsButton = const CustomVideoPlayerSettingsButton(),
     this.enterFullscreenButton = const CustomVideoPlayerEnterFullscreenButton(),
     this.exitFullscreenButton = const CustomVideoPlayerExitFullscreenButton(),
     this.controlBarDecoration = const BoxDecoration(
-        color: Color.fromRGBO(0, 0, 0, 0.5),
-        borderRadius: BorderRadius.all(Radius.circular(10))),
+      color: Color.fromRGBO(0, 0, 0, 0.5),
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+    ),
     this.durationPlayedTextStyle = const TextStyle(
       color: Colors.white,
       fontSize: 14,
+      fontFeatures: [FontFeature.tabularFigures()],
     ),
     this.durationRemainingTextStyle = const TextStyle(
       color: Colors.white,
       fontSize: 14,
+      fontFeatures: [FontFeature.tabularFigures()],
     ),
     this.customVideoPlayerProgressBarSettings =
         const CustomVideoPlayerProgressBarSettings(),
@@ -99,11 +133,22 @@ class CustomVideoPlayerSettings {
     this.enterFullscreenOnStart = false,
     this.exitFullscreenOnEnd = false,
     this.showPlayButton = true,
-    this.showFullscreenButton = true,
-    this.enableWakeLockWhenPlaying = true,
+    this.playOnlyOnce = false,
+    this.autoFadeOutControls = true,
+    this.durationAfterControlsFadeOut = const Duration(seconds: 3),
+    this.showFullscreenButton = !kIsWeb,
     this.systemUIModeAfterFullscreen = SystemUiMode.edgeToEdge,
     this.systemUIModeInsideFullscreen = SystemUiMode.leanBack,
-    this.onStart,
-    this.onEnd,
+    this.systemUIOverlaysAfterFullscreen = SystemUiOverlay.values,
+    this.deviceOrientationsAfterFullscreen = DeviceOrientation.values,
+    this.settingsButtonAvailable = true,
+    this.playbackSpeedButtonAvailable = true,
+    this.playbackButtonTextStyle = const TextStyle(
+      color: Colors.white,
+      fontSize: 14,
+      fontFeatures: [FontFeature.tabularFigures()],
+    ),
+    this.customVideoPlayerPopupSettings =
+        const CustomVideoPlayerPopupSettings(),
   });
 }

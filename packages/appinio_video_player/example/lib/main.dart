@@ -15,25 +15,24 @@ class MyApp extends StatelessWidget {
       theme: CupertinoThemeData(
         brightness: Brightness.light,
       ),
-      title: 'Flutter Demo',
-      home: MyHomePage(title: 'Custom Video Player'),
+      title: 'Appinio Video Player Demo',
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late VideoPlayerController videoPlayerController;
-  CustomVideoPlayerController customVideoPlayerController =
-      CustomVideoPlayerController();
-
+  late VideoPlayerController _videoPlayerController,
+      _videoPlayerController2,
+      _videoPlayerController3;
+  late CustomVideoPlayerController _customVideoPlayerController;
   String videoUrlLandscape =
       "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
   String videoUrlPortrait =
@@ -41,96 +40,113 @@ class _MyHomePageState extends State<MyHomePage> {
   String longVideo =
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
+  String video720 =
+      "https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_10mb.mp4";
+
+  String video480 =
+      "https://www.sample-videos.com/video123/mp4/480/big_buck_bunny_480p_10mb.mp4";
+
+  String video240 =
+      "https://www.sample-videos.com/video123/mp4/240/big_buck_bunny_240p_10mb.mp4";
+
+  final CustomVideoPlayerSettings _customVideoPlayerSettings =
+      const CustomVideoPlayerSettings(
+          //TODO: play around with these parameters
+
+          // autoFadeOutControls: false,
+          // controlBarAvailable: false,
+          // playbackSpeedButtonAvailable: false,
+          // controlBarMargin: const EdgeInsets.all(10),
+          // controlBarPadding: const EdgeInsets.all(0),
+          // showPlayButton: true,
+          // playButton: const Icon(
+          //   Icons.play_circle,
+          //   color: Colors.white,
+          // ),
+          // pauseButton: const Icon(
+          //   Icons.pause_circle,
+          //   color: Colors.white,
+          // ),
+          // enterFullscreenButton: const Icon(
+          //   Icons.fullscreen,
+          //   color: Colors.white,
+          // ),
+          // exitFullscreenButton: const Icon(
+          //   Icons.fullscreen_exit,
+          //   color: Colors.white,
+          // ),
+          // controlBarDecoration: BoxDecoration(
+          //   borderRadius: BorderRadius.circular(50),
+          //   color: Colors.blue,
+          // ),
+          // showFullscreenButton: false,
+          // showDurationPlayed: false,
+          // showDurationRemaining: false,
+          // enterFullscreenOnStart: true,
+          // exitFullscreenOnEnd: true,
+          // durationRemainingTextStyle: const TextStyle(color: Colors.red),
+          // durationPlayedTextStyle: const TextStyle(color: Colors.green),
+          // systemUIModeAfterFullscreen: SystemUiMode.leanBack,
+          // systemUIModeInsideFullscreen: SystemUiMode.edgeToEdge,
+          // customVideoPlayerProgressBarSettings: CustomVideoPlayerProgressBarSettings(
+          //   reachableProgressBarPadding: EdgeInsets.all(10),
+          //   progressBarHeight: 10,
+          //   progressBarBorderRadius: 30,
+          //   bufferedColor: Colors.red,
+          //   progressColor: Colors.green,
+          //   backgroundColor: Colors.purple,
+          //   allowScrubbing: false,
+          //   showProgressBar: false,
+          // ),
+          );
+
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.network(longVideo)
-      ..initialize();
+    _videoPlayerController = VideoPlayerController.network(
+      video720,
+    )..initialize().then((value) => setState(() {}));
+    _videoPlayerController2 = VideoPlayerController.network(video240);
+    _videoPlayerController3 = VideoPlayerController.network(video480);
+    _customVideoPlayerController = CustomVideoPlayerController(
+      context: context,
+      videoPlayerController: _videoPlayerController,
+      customVideoPlayerSettings: _customVideoPlayerSettings,
+      additionalVideoSources: {
+        "240p": _videoPlayerController2,
+        "480p": _videoPlayerController3,
+        "720p": _videoPlayerController,
+      },
+    );
   }
 
   @override
   void dispose() {
-    videoPlayerController.dispose();
-    customVideoPlayerController.dispose();
+    _customVideoPlayerController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(widget.title),
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text("Appinio Video Player"),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ListView(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              const Text("Customized Icons",
-                  style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
-              const SizedBox(
-                height: 20,
-              ),
-              CustomVideoPlayer(
-                customVideoPlayerController: customVideoPlayerController,
-                videoPlayerController: videoPlayerController,
-                customVideoPlayerSettings: CustomVideoPlayerSettings(
-                  //TODO: play around with these paramters
-
-                  // controlBarAvailable: true,
-                  // controlBarMargin:const EdgeInsets.all(10),
-                  // controlBarPadding: const EdgeInsets.all(0),
-                  // showPlayButton: true,
-                  // playButton: const Icon(
-                  //   Icons.play_circle,
-                  //   color: Colors.white,
-                  // ),
-                  // pauseButton: const Icon(
-                  //   Icons.pause_circle,
-                  //   color: Colors.white,
-                  // ),
-                  // enterFullscreenButton: const Icon(
-                  //   Icons.fullscreen,
-                  //   color: Colors.white,
-                  // ),
-                  // exitFullscreenButton: const Icon(
-                  //   Icons.fullscreen_exit,
-                  //   color: Colors.white,
-                  // ),
-                  // controlBarDecoration: BoxDecoration(
-                  //   borderRadius: BorderRadius.circular(50),
-                  //   color: Colors.blue,
-                  // ),
-                  // showFullscreenButton: false,
-                  // showDurationPlayed: false,
-                  // showDurationRemaining: false,
-                  // enterFullscreenOnStart: true,
-                  // exitFullscreenOnEnd: true,
-                  // durationRemainingTextStyle:
-                  //     const TextStyle(color: Colors.red),
-                  // durationPlayedTextStyle: const TextStyle(color: Colors.green),
-                  // systemUIModeAfterFullscreen: SystemUiMode.leanBack
-                  // systemUIModeInsideFullscreen: SystemUiMode.edgeToEdge,
-                  customVideoPlayerProgressBarSettings:
-                      const CustomVideoPlayerProgressBarSettings(
-                          // reachableProgressBarPadding: EdgeInsets.all(10),
-                          // progressBarHeight: 10,
-                          // progressBarBorderRadius: 30,
-                          // progressBarColors: CustomVideoPlayerProgressBarColors(
-                          //   bufferedColor: Colors.red,
-                          //   progressColor: Colors.green,
-                          //   backgroundColor: Colors.purple,
-                          // ),
-                          // allowScrubbing: false,
-                          // showProgressBar: false,
-                          ),
-                ),
-              ),
-            ],
-          ),
+        child: ListView(
+          children: [
+            CustomVideoPlayer(
+              customVideoPlayerController: _customVideoPlayerController,
+            ),
+            CupertinoButton(
+              child: const Text("Play Fullscreen"),
+              onPressed: () {
+                // example on how to set fullscreen yourself
+                // _customVideoPlayerController.setFullscreen(true);
+                _customVideoPlayerController.videoPlayerController.play();
+              },
+            ),
+          ],
         ),
       ),
     );

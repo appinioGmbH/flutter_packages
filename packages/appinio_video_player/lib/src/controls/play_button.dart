@@ -1,40 +1,44 @@
-import 'package:appinio_video_player/src/video_values_provider.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 
 class CustomVideoPlayerPlayPauseButton extends StatelessWidget {
+  final CustomVideoPlayerController customVideoPlayerController;
+  final Function fadeOutOnPlay;
   const CustomVideoPlayerPlayPauseButton({
     Key? key,
+    required this.customVideoPlayerController,
+    required this.fadeOutOnPlay,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Provider.of<VideoValuesProvider>(context)
-            .videoPlayerController
-            .value
-            .isPlaying
-        ? GestureDetector(
+    return ValueListenableBuilder<bool>(
+        valueListenable: customVideoPlayerController.isPlayingNotifier,
+        builder: (context, isPlaying, _) {
+          return GestureDetector(
             behavior: HitTestBehavior.translucent,
-            onTap: () async {
-              await Provider.of<VideoValuesProvider>(context, listen: false)
-                  .videoPlayerController
-                  .pause();
-            },
-            child: Provider.of<VideoValuesProvider>(context, listen: false)
-                .customVideoPlayerSettings
-                .pauseButton,
-          )
-        : GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () async {
-              await Provider.of<VideoValuesProvider>(context, listen: false)
-                  .videoPlayerController
-                  .play();
-            },
-            child: Provider.of<VideoValuesProvider>(context, listen: false)
-                .customVideoPlayerSettings
-                .playButton,
+            onTap: () => _playPause(isPlaying),
+            child: isPlaying
+                ? customVideoPlayerController
+                    .customVideoPlayerSettings.pauseButton
+                : customVideoPlayerController
+                    .customVideoPlayerSettings.playButton,
           );
+        });
+  }
+
+  Future<void> _playPause(bool isPlaying) async {
+    if (isPlaying) {
+      await customVideoPlayerController.videoPlayerController.pause();
+    } else {
+      if (customVideoPlayerController.customVideoPlayerSettings.playOnlyOnce &&
+          customVideoPlayerController.playedOnceNotifier.value) {
+        return;
+      } else {
+        await customVideoPlayerController.videoPlayerController.play();
+        fadeOutOnPlay();
+      }
+    }
   }
 }
 
