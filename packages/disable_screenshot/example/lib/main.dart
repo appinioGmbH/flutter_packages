@@ -2,31 +2,33 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:disable_screenshot/disable_screenshot.dart';
 
-import 'dart:math';
-
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: RootApp());
+    return const MaterialApp(home: RootApp());
   }
 }
 
 class RootApp extends StatefulWidget {
+  const RootApp({Key? key}) : super(key: key);
+
   @override
-  _RootAppState createState() => _RootAppState();
+  RootAppState createState() => RootAppState();
 }
 
-class _RootAppState extends State<RootApp> {
-  DisableScreenshot _plugin = DisableScreenshot();
+class RootAppState extends State<RootApp> {
+  final DisableScreenshot _plugin = DisableScreenshot();
   late StreamSubscription<void> _screenshotsSubscription;
   int _screenshotsCount = 0;
   bool _disableScreenshots = false;
@@ -49,7 +51,7 @@ class _RootAppState extends State<RootApp> {
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(height: 100),
+          const SizedBox(height: 100),
           Center(
             child: Text("counts：$_screenshotsCount"),
           ),
