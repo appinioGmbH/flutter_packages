@@ -413,16 +413,14 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         end: 0,
       ).animate(_animationController);
     });
-    (_left > widget.threshold ||
-            _left == 0 && widget.direction == AppinioSwiperDirection.right)
-        ? {
-            _swipedDirectionHorizontal = 1,
-            detectedDirection = AppinioSwiperDirection.right,
-          }
-        : {
-            _swipedDirectionHorizontal = -1,
-            detectedDirection = AppinioSwiperDirection.left,
-          };
+    if (_left > widget.threshold ||
+        _left == 0 && widget.direction == AppinioSwiperDirection.right) {
+      _swipedDirectionHorizontal = 1;
+      detectedDirection = AppinioSwiperDirection.right;
+    } else {
+      _swipedDirectionHorizontal = -1;
+      detectedDirection = AppinioSwiperDirection.left;
+    }
     (_top <= 0) ? _swipedDirectionVertical = 1 : _swipedDirectionVertical = -1;
     _horizontal = true;
   }
@@ -454,16 +452,14 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         end: 0,
       ).animate(_animationController);
     });
-    (_top > widget.threshold ||
-            _top == 0 && widget.direction == AppinioSwiperDirection.bottom)
-        ? {
-            _swipedDirectionVertical = -1,
-            detectedDirection = AppinioSwiperDirection.bottom,
-          }
-        : {
-            _swipedDirectionVertical = 1,
-            detectedDirection = AppinioSwiperDirection.top,
-          };
+    if (_top > widget.threshold ||
+        _top == 0 && widget.direction == AppinioSwiperDirection.bottom) {
+      _swipedDirectionVertical = -1;
+      detectedDirection = AppinioSwiperDirection.bottom;
+    } else {
+      _swipedDirectionVertical = 1;
+      detectedDirection = AppinioSwiperDirection.top;
+    }
     (_left >= 0)
         ? _swipedDirectionHorizontal = 1
         : _swipedDirectionHorizontal = -1;
