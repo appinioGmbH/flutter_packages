@@ -12,13 +12,23 @@ class CustomVideoPlayerSettings {
   /// Define a custom aspect ratio for the video.
   final double? customAspectRatio;
 
+  /// The widget that should be shown as long the video is not initialized.
+  final Widget? placeholderWidget;
+
   /// Set to false if no control bar should be available.
   final bool controlBarAvailable;
 
   /// Set to false if no playback speed adjustment button should be shown.
   final bool playbackSpeedButtonAvailable;
 
-  // The padding between the controls and the edges of the video player
+  /// The thumbnail widget of the video. Mostly that will be an image widget
+  final Widget? thumbnailWidget;
+
+  /// When this is true, the thumbnail will always be shown when the video is paused.
+  /// If set to false, the thumbnail will only be shown when the video is at the beginning.
+  final bool alwaysShowThumbnailOnVideoPaused;
+
+  /// The padding between the controls and the edges of the video player
   final EdgeInsets controlsPadding;
 
   /// The padding of the control bar from the edges to its contents.
@@ -102,6 +112,9 @@ class CustomVideoPlayerSettings {
 
   const CustomVideoPlayerSettings({
     this.customAspectRatio,
+    this.placeholderWidget,
+    this.thumbnailWidget,
+    this.alwaysShowThumbnailOnVideoPaused = false,
     this.controlsPadding = const EdgeInsets.all(5),
     this.controlBarPadding = const EdgeInsets.all(5),
     this.playButton = const CustomVideoPlayerPlayButton(),

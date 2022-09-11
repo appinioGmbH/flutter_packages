@@ -7,7 +7,9 @@ This package wraps the official video_player package by flutter and extends it w
 ## Top Features
 
 - Fullscreen Mode
+- Native controls and fullscreen for web apps
 - Change Video Quality
+- Thumbnail / Poster
 - Adjust Playback Speed
 - Fully Customizable Controls
 - Fluid Progress Bar

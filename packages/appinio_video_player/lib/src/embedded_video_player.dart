@@ -1,5 +1,6 @@
 import 'package:appinio_video_player/src/controls/all_controls_overlay.dart';
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
+import 'package:appinio_video_player/src/thumbnail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
@@ -33,10 +34,13 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
     if (widget.customVideoPlayerController.videoPlayerController.value
         .isInitialized) {
       return AspectRatio(
-        aspectRatio: widget.customVideoPlayerController
-                .customVideoPlayerSettings.customAspectRatio ??
-            widget.customVideoPlayerController.videoPlayerController.value
-                .aspectRatio,
+        aspectRatio: widget.isFullscreen
+            ? widget.customVideoPlayerController.videoPlayerController.value
+                .aspectRatio
+            : widget.customVideoPlayerController.customVideoPlayerSettings
+                    .customAspectRatio ??
+                widget.customVideoPlayerController.videoPlayerController.value
+                    .aspectRatio,
         child: Stack(
           children: [
             Container(
@@ -53,6 +57,9 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
                 ),
               ),
             ),
+            Thumbnail(
+              customVideoPlayerController: widget.customVideoPlayerController,
+            ),
             AllControlsOverlay(
               customVideoPlayerController: widget.customVideoPlayerController,
               updateVideoState: _updateVideoState,
@@ -61,7 +68,9 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
         ),
       );
     } else {
-      return const SizedBox();
+      return widget.customVideoPlayerController.customVideoPlayerSettings
+              .placeholderWidget ??
+          const SizedBox.shrink();
     }
   }
 

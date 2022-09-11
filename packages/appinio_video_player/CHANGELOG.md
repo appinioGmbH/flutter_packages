@@ -1,3 +1,12 @@
+## [1.2.0] - 2022.08.22
+
+- New: Native Web Video Player
+  - Native controls with accessability through controller
+  - Working native Fullscreen functionality
+  - Works on all browsers (also on Safari iOS)
+- Poster / Thumbnail options
+- Fix: No custom aspect ratio on fullscreen
+
 ## [1.1.1] - 2022.06.14
 
 - Bringing back the web support
