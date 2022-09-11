@@ -1,14 +1,19 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 
 import 'package:appinio_swiper/appinio_swiper.dart';
+import 'package:example/example_candidate_model.dart';
 import 'package:example/example_card.dart';
+import 'example_buttons.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,9 @@ class MyApp extends StatelessWidget {
 }
 
 class Example extends StatefulWidget {
-  const Example({Key? key}) : super(key: key);
+  const Example({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Example> createState() => _ExamplePageState();
@@ -29,19 +36,7 @@ class Example extends StatefulWidget {
 class _ExamplePageState extends State<Example> {
   final AppinioSwiperController controller = AppinioSwiperController();
 
-  List<ExampleCard> images = [];
-  List<String> text = [
-    'assets/humaaans_2.jpg',
-    'assets/humaaans_3.jpg',
-    'assets/humaaans_4.jpg',
-    'assets/humaaans_6.jpg',
-    'assets/humaaans_5.jpg',
-    'assets/humaaans_8.jpg',
-    'assets/humaaans_10.jpg',
-    'assets/humaaans_11.jpg',
-    'assets/humaaans_12.jpg',
-    'assets/humaaans_1.jpg',
-  ];
+  List<ExampleCard> cards = [];
 
   @override
   void initState() {
@@ -49,10 +44,19 @@ class _ExamplePageState extends State<Example> {
     super.initState();
   }
 
+  void _loadCards() {
+    for (ExampleCandidateModel candidate in candidates) {
+      cards.add(
+        ExampleCard(
+          candidate: candidate,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: const Color(0xFFE9EFF2),
       child: Column(
         children: [
           const SizedBox(
@@ -61,8 +65,10 @@ class _ExamplePageState extends State<Example> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.75,
             child: AppinioSwiper(
+              unlimitedUnswipe: true,
               controller: controller,
-              cards: images,
+              unswipe: _unswipe,
+              cards: cards,
               onSwipe: _swipe,
               padding: const EdgeInsets.only(
                 left: 25,
@@ -72,31 +78,37 @@ class _ExamplePageState extends State<Example> {
               ),
             ),
           ),
-          CupertinoButton(
-            child: const Text("swipe"),
-            color: const Color(0xFF053149),
-            onPressed: () => controller.swipe(),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          CupertinoButton(
-            child: const Text("unswipe"),
-            color: const Color(0xFF053149),
-            onPressed: () => controller.unswipe(),
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 80,
+              ),
+              swipeLeftButton(controller),
+              const SizedBox(
+                width: 20,
+              ),
+              swipeRightButton(controller),
+              const SizedBox(
+                width: 20,
+              ),
+              unswipeButton(controller),
+            ],
+          )
         ],
       ),
     );
   }
 
-  void _swipe(int index) {
-    //print("swipe");
+  void _swipe(int index, AppinioSwiperDirection direction) {
+    log("the card was swiped to the: " + direction.name);
   }
 
-  void _loadCards() {
-    for (String text in text) {
-      images.add(ExampleCard(image: text));
+  void _unswipe(bool unswiped) {
+    if (unswiped) {
+      log("SUCCESS: card was unswiped");
+    } else {
+      log("FAIL: no card left to unswipe");
     }
   }
 }

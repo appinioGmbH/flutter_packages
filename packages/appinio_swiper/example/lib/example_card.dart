@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'example_candidate_model.dart';
 
 class ExampleCard extends StatelessWidget {
-  final String image;
+  final ExampleCandidateModel candidate;
 
   const ExampleCard({
     Key? key,
-    required this.image,
+    required this.candidate,
   }) : super(key: key);
 
   @override
@@ -26,66 +29,65 @@ class ExampleCard extends StatelessWidget {
       alignment: Alignment.center,
       child: Column(
         children: [
-          const SizedBox(
-            height: 40,
-          ),
-          const Text(
-            "Do you like the picture?",
-            style: TextStyle(
-              fontSize: 20,
+          Flexible(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: candidate.color,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+              ),
             ),
           ),
-          const Spacer(),
-          SizedBox(
-            height: 300,
-            child: Image.asset(
-              image,
-              fit: BoxFit.fill,
+          Container(
+            padding: const EdgeInsets.all(15),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+              ),
             ),
-          ),
-          const Spacer(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xFF053149),
+            child: Row(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      candidate.name!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      candidate.job!,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      candidate.city!,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15,
+                      ),
+                    )
+                  ],
                 ),
-                child: const Text(
-                  "Yes",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: CupertinoColors.white,
-                  ),
-                ),
-                height: 50,
-                width: 300,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xFF053149),
-                ),
-                child: const Text(
-                  "No",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: CupertinoColors.white,
-                  ),
-                ),
-                height: 50,
-                width: 300,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 40,
+              ],
+            ),
           ),
         ],
       ),

@@ -1,3 +1,9 @@
+## [1.1.0] - 2022.09.11
+
+Features:
+* Detect the directi on (left, right, top, bottom) in which the card was swiped away.
+* Unswipe all cards.
+
 ## [1.0.3] - 2022.04.28
 
 * Trigger swipe through controller.
