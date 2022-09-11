@@ -17,7 +17,7 @@ enum CountDownTimerFormat {
 }
 
 class TimerCountdown extends StatefulWidget {
-  /// Choose between different `CountDownTimerFormat`s
+  /// Format for the timer coundtown, choose between different `CountDownTimerFormat`s
   final CountDownTimerFormat format;
 
   /// Defines the time when the timer is over.
@@ -35,7 +35,7 @@ class TimerCountdown extends StatefulWidget {
   /// `TextStyle` for the colons betwenn the time numbers.
   final TextStyle? colonsTextStyle;
 
-  /// `TextStyle`
+  /// `TextStyle` for the description
   final TextStyle? descriptionTextStyle;
 
   /// Days unit description.

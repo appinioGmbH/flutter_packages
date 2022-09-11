@@ -1,3 +1,7 @@
+## [1.0.4] - 2022.09.11
+
+* Updating dependencies & Readme file.
+
 ## [1.0.3] - 2021.12.09
 
 * Bug fix: Fixing late initialization
