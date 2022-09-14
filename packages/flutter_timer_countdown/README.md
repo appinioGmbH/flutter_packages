@@ -20,7 +20,7 @@ With the parameter ```spacerWidth``` you can now define the size of the space be
 
 ## Show Cases
 
-<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/timer_description.gif?raw=true" height="200" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/timer.gif?raw=true" height="200" />
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/timer_countdown/timer_description.gif?raw=true" height="200" /> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/timer_countdown/timer.gif?raw=true" height="200" />
 
 Show only the time units you want to...
 
@@ -30,7 +30,7 @@ Show only days, hours, minutes, seconds...
 
 <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/timer_countdown/days.png?raw=true" height="200"> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/timer_countdown/hours.png?raw=true" height="200"> 
 
-<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/timer_countdown/minutes.png?raw=true" height="200"> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/swiper/seconds.gif?raw=true" height="200" />
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/timer_countdown/minutes.png?raw=true" height="200"> <img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/timer_countdown/seconds.gif?raw=true" height="200" />
 
 
 ## Installation
