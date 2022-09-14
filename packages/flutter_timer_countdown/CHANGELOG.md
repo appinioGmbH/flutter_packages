@@ -1,3 +1,7 @@
+## [1.0.5] - 2022.09.14
+
+* Updating Readme file.
+ 
 ## [1.0.4] - 2022.09.11
 
 * Updating dependencies & Readme file.

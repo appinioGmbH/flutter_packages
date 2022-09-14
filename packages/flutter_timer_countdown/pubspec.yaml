@@ -1,6 +1,6 @@
 name: flutter_timer_countdown
 description: A simple timer for counting down a given time. Supports customizable appearance and different formats.
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/appinioGmbH/flutter_packages
 repository: https://github.com/appinioGmbH/flutter_packages/tree/main/packages/flutter_timer_countdown
 
