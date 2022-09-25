@@ -32,8 +32,7 @@ class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
   @override
   Future<void> disableScreenshots(bool disable) async {
     if (Platform.isAndroid) {
-      return await _methodChannel
-          .invokeMethod("disableScreenshots", {"disable": disable});
+      return await _methodChannel.invokeMethod("disableScreenshots", disable);
     } else {
       // print('Disabling screenshots is only supported on Android');
     }
