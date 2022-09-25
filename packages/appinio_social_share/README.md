@@ -218,7 +218,7 @@ shareToInstagramStory();
 
 ```
 
-## Messsenger features
+## Messenger features
 
 ### Working on both platform
 
@@ -270,7 +270,7 @@ shareToTiktok();
 
 ```
 
-## SMS Feature features 
+## SMS features 
 
 ### Working on both platform
 
@@ -359,7 +359,7 @@ class _MyAppState extends State<MyApp> {
 
 ```
 
-<br/>
+<br />
 
 
 | Method        | Parameters | Description
