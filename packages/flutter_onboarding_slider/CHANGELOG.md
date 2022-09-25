@@ -1,3 +1,7 @@
+## [1.0.8] - 2022.09.25
+
+* Updating Readme.
+ 
 ## [1.0.7] - 2021.12.09
 
 * Bug fix: resolving dependencies conflict.
