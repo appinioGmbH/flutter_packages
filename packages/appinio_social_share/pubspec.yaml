@@ -1,0 +1,28 @@
+name: appinio_social_share
+description: Supports sharing files to social media (Facebook, Instagram, Instagram Story, Messenger, Telegram, WhatsApp, Twitter, Tiktok, SMS, System, etc.). If you want to share text, file, image, text with image or text with files then this plugin is all you need.
+version: 0.1.0
+homepage: https://github.com/appinioGmbH/flutter_packages
+repository: https://github.com/appinioGmbH/flutter_packages/tree/main/packages/appinio_social_share
+
+environment:
+  sdk: ">=2.17.6 <3.0.0"
+  flutter: ">=2.5.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.appinio.socialshare.appinio_social_share
+        pluginClass: AppinioSocialSharePlugin
+      ios:
+        pluginClass: AppinioSocialSharePlugin
