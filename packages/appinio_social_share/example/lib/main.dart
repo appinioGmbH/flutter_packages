@@ -32,7 +32,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   shareToWhatsApp(String message, String filePath) async {
-    String response =
-        await appinioSocialShare.shareToWhatsapp(message, filePath: filePath);
+    await appinioSocialShare.shareToWhatsapp(message, filePath: filePath);
   }
 }
