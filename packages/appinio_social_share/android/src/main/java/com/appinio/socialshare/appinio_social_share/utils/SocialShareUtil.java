@@ -49,7 +49,9 @@ public class SocialShareUtil {
     private final String TIKTOK_PACKAGE = "com.zhiliaoapp.musically";
     private final String FACEBOOK_STORY_PACKAGE = "com.facebook.stories.ADD_TO_STORY";
     private final String FACEBOOK_PACKAGE = "com.facebook.katana";
+    private final String FACEBOOK_LITE_PACKAGE = "com.facebook.lite";
     private final String FACEBOOK_MESSENGER_PACKAGE = "com.facebook.orca";
+    private final String FACEBOOK_MESSENGER_LITE_PACKAGE = "com.facebook.mlite";
     private final String SMS_DEFAULT_APPLICATION = "sms_default_application";
 
 
@@ -80,7 +82,16 @@ public class SocialShareUtil {
 
 
     public String shareToMessenger(String text, Context activity) {
-        return shareTextToPackage(text, activity, FACEBOOK_MESSENGER_PACKAGE);
+        Map<String, Boolean> apps = getInstalledApps(activity);
+        String packageName;
+        if(apps.get("messenger")){
+            packageName = FACEBOOK_MESSENGER_PACKAGE;
+        }else if(apps.get("messenger-lite")){
+            packageName = FACEBOOK_MESSENGER_LITE_PACKAGE;
+        }else{
+            return ERROR_APP_NOT_AVAILABLE;
+        }
+        return shareTextToPackage(text, activity, packageName);
     }
 
 
@@ -198,14 +209,25 @@ public class SocialShareUtil {
 
     public String shareToFaceBookStory(String appId, String stickerImage, String backgroundImage, String backgroundTopColor, String backgroundBottomColor, String attributionURL, Context activity) {
         try {
-
+            Map<String, Boolean> apps = getInstalledApps(activity);
+            String packageName;
+            if(apps.get("facebook")){
+                packageName = FACEBOOK_PACKAGE;
+            }else if(apps.get("facebook-lite")){
+                packageName = FACEBOOK_LITE_PACKAGE;
+            }else{
+                return ERROR_APP_NOT_AVAILABLE;
+            }
             File file = new File(stickerImage);
             Uri stickerImageFile = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file);
 
-            File file1 = new File(backgroundImage);
-            Uri backgroundImageUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file1);
-
             Intent intent = new Intent(FACEBOOK_STORY_PACKAGE);
+            if(backgroundImage!=null){
+                File file1 = new File(backgroundImage);
+                Uri backgroundImageUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file1);
+                intent.setDataAndType(backgroundImageUri, "image/*");
+            }
+
             intent.setType("image/*");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -214,8 +236,7 @@ public class SocialShareUtil {
             intent.putExtra("content_url", attributionURL);
             intent.putExtra("top_background_color", backgroundTopColor);
             intent.putExtra("bottom_background_color", backgroundBottomColor);
-            intent.setDataAndType(backgroundImageUri, "image/*");
-            activity.grantUriPermission(FACEBOOK_PACKAGE, stickerImageFile, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            activity.grantUriPermission(packageName, stickerImageFile, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             activity.startActivity(intent);
             return SUCCESS;
         } catch (Exception e) {
@@ -277,7 +298,9 @@ public class SocialShareUtil {
         appsMap.put("whatsapp", WHATSAPP_PACKAGE);
         appsMap.put("telegram", TELEGRAM_PACKAGE);
         appsMap.put("messenger", FACEBOOK_MESSENGER_PACKAGE);
+        appsMap.put("messenger-lite", FACEBOOK_MESSENGER_LITE_PACKAGE);
         appsMap.put("facebook", FACEBOOK_PACKAGE);
+        appsMap.put("facebook-lite", FACEBOOK_LITE_PACKAGE);
         appsMap.put("instagram_stories", INSTAGRAM_PACKAGE);
         appsMap.put("twitter", TWITTER_PACKAGE);
         appsMap.put("tiktok", TIKTOK_PACKAGE);
@@ -291,7 +314,7 @@ public class SocialShareUtil {
         intent.setData(Uri.parse("sms:"));
         List<ResolveInfo> resolvedActivities = pm.queryIntentActivities(intent, 0);
         apps.put("message", !resolvedActivities.isEmpty());
-        String[] appNames = {"instagram", "facebook_stories", "whatsapp", "telegram", "messenger", "facebook", "instagram_stories", "twitter", "tiktok"};
+        String[] appNames = {"instagram", "facebook_stories", "whatsapp", "telegram", "messenger", "facebook","facebook-lite","messenger-lite", "instagram_stories", "twitter", "tiktok"};
 
         for (int i = 0; i < appNames.length; i++) {
             try {
