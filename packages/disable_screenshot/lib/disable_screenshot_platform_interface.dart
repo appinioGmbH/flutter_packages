@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'disable_screenshot_method_channel.dart';
@@ -33,5 +34,21 @@ abstract class DisableScreenshotPlatform extends PlatformInterface {
 
   Future<void> disableScreenshots(bool disable) {
     throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String?> captureScreenShot({
+    required GlobalKey screenshotWidgetKey,
+    String name = 'screenshot',
+  }) {
+    throw UnimplementedError('captureScreenShot() has not been implemented.');
+  }
+
+  Future<String?> captureScreenShotFromWidget(Widget widget,
+      {Duration delay = const Duration(milliseconds: 50),
+      double? pixelRatio,
+      BuildContext? context,
+      String? filename}) {
+    throw UnimplementedError(
+        'captureScreenShotFromWidget() has not been implemented.');
   }
 }

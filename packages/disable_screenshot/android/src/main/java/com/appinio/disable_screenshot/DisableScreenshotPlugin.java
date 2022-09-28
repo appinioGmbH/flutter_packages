@@ -50,7 +50,7 @@ public class DisableScreenshotPlugin implements FlutterPlugin, MethodCallHandler
 
   @Override
   public void onListen(Object arguments, EventChannel.EventSink events) {
-    this.eventSink = eventSink;
+    this.eventSink = events;
     handler = new Handler(Looper.getMainLooper());
     updateScreenRecordStatus();
     if(Build.VERSION.SDK_INT >=29){
