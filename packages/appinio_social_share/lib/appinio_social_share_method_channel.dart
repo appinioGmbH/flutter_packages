@@ -93,8 +93,8 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToInstagramStory(String stickerImage,
-      {String? backgroundImage,
+  Future<String> shareToInstagramStory({String? stickerImage,
+      String? backgroundImage,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) async {
@@ -109,8 +109,8 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToFacebookStory(String stickerImage, String appId,
-      {String? backgroundImage,
+  Future<String> shareToFacebookStory(String appId, {String? stickerImage,
+      String? backgroundImage,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) async {

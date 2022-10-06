@@ -37,26 +37,28 @@ class AppinioSocialShare {
         .shareToFacebook(hashtag, filePath);
   }
 
-  Future<String> shareToInstagramStory(String stickerImage,
-      {String? backgroundImage,
+  Future<String> shareToInstagramStory({String? stickerImage,
+      String? backgroundImage,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) {
     return AppinioSocialSharePlatform.instance.shareToInstagramStory(
-        stickerImage,
+        stickerImage:stickerImage,
         backgroundImage: backgroundImage,
         backgroundTopColor: backgroundTopColor,
         backgroundBottomColor: backgroundBottomColor,
         attributionURL: attributionURL);
   }
 
-  Future<String> shareToFacebookStory(String stickerImage, String appId,
-      {String? backgroundImage,
+  Future<String> shareToFacebookStory(String appId,
+      {String? stickerImage,
+      String? backgroundImage,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) {
     return AppinioSocialSharePlatform.instance.shareToFacebookStory(
-        stickerImage, appId,
+        appId,
+        stickerImage:stickerImage,
         backgroundImage: backgroundImage,
         backgroundTopColor: backgroundTopColor,
         backgroundBottomColor: backgroundBottomColor,

@@ -99,7 +99,7 @@ After created your own file provider and define your own path paste them into th
 ```xml
 
 <provider android:name="androidx.core.content.FileProvider" 
-        android:authorities="${applicationId}.[your_custom_fileProvider_path]"
+        android:authorities="${applicationId}.provider"
     android:exported="false" android:grantUriPermissions="true">
     <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/[your_custom_fileProvider_file_name]" />
 </provider>
