@@ -15,8 +15,8 @@ A new Flutter project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'FBSDKCoreKit', '11.1.0'
-  s.dependency 'FBSDKShareKit', '11.1.0'
+  s.dependency 'FBSDKCoreKit', '14.1.0'
+  s.dependency 'FBSDKShareKit', '14.1.0'
   s.dependency 'TwitterKit', '3.4.2'
   s.dependency 'TikTokOpenSDK', '5.0.0'
   s.platform = :ios, '9.0'
