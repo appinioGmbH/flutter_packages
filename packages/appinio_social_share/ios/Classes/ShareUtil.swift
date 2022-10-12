@@ -95,12 +95,12 @@ public class ShareUtil{
         let message = args[self.argMessage] as? String
         let imagePath = args[self.argImagePath] as? String
         
-        let photo = SharePhoto(image: UIImage.init(contentsOfFile: imagePath!)!, userGenerated: true)
+        let photo = SharePhoto(image: UIImage.init(contentsOfFile: imagePath!)!, isUserGenerated: true)
         let content = SharePhotoContent()
         content.photos = [photo]
         content.hashtag = Hashtag(message!)
         let dialog = ShareDialog(
-            fromViewController: UIApplication.shared.windows.first!.rootViewController,
+            viewController: UIApplication.shared.windows.first!.rootViewController,
             content: content,
             delegate: delegate
         )
