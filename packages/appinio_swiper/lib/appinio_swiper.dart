@@ -547,7 +547,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
 //for null safety
 void emptyFunction() {}
-void emptyFunctionIndex(int index) {}
+void emptyFunctionIndex(int index, AppinioSwiperDirection direction) {}
 void emptyFunctionBool(bool unswiped) {}
 
 //to call the swipe or unswipe function from outside of the appinio swiper
