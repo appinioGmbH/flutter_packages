@@ -2,7 +2,6 @@ import Photos
 import FBSDKCoreKit
 import FBSDKShareKit
 import Social
-import TikTokOpenSDK
 
 public class ShareUtil{
     
@@ -44,22 +43,11 @@ public class ShareUtil{
     }
     
     public func shareToSystem(args : [String: Any?],result: @escaping FlutterResult) {
-        let title = args[argTitle] as? String
-        let text = args[argMessage] as? String
-        let filePath = args[argImagePath] as? String
-        var items : [Any] = []
-        if #available(iOS 13, *){
-            items.append(MyActivityItemSource(title: title!, text: text!.components(separatedBy:"\n")[0], filePath: filePath!))
-        }else{
-            print("two")
-            items.append(URL(string: text!) as Any)
-            if (!(filePath == nil)) {
-                items.append(URL(fileURLWithPath: filePath!))
-            }
-        }
-        let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        UIApplication.topViewController()?.present(activityViewController, animated: true, completion: nil)
-        result(SUCCESS)
+                       let text = args[argMessage] as? String
+                       let filePath = args[argImagePath] as? String
+                       let activityViewController = UIActivityViewController(activityItems: [text!,URL(fileURLWithPath: filePath!)], applicationActivities: nil)
+                       UIApplication.topViewController()?.present(activityViewController, animated: true, completion: nil)
+                       result(SUCCESS)
     }
     
     
@@ -95,12 +83,12 @@ public class ShareUtil{
         let message = args[self.argMessage] as? String
         let imagePath = args[self.argImagePath] as? String
         
-        let photo = SharePhoto(image: UIImage.init(contentsOfFile: imagePath!)!, userGenerated: true)
+        let photo = SharePhoto(image: UIImage.init(contentsOfFile: imagePath!)!, isUserGenerated: true)
         let content = SharePhotoContent()
         content.photos = [photo]
         content.hashtag = Hashtag(message!)
         let dialog = ShareDialog(
-            fromViewController: UIApplication.shared.windows.first!.rootViewController,
+            viewController: UIApplication.shared.windows.first!.rootViewController,
             content: content,
             delegate: delegate
         )

@@ -17,6 +17,7 @@ import androidx.core.content.FileProvider;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.share.Sharer;
 import com.facebook.share.internal.ShareFeedContent;
 import com.facebook.share.model.ShareHashtag;
@@ -177,6 +178,7 @@ public class SocialShareUtil {
 
 
     public void shareToFacebook(String imagePath, String text, Activity activity, MethodChannel.Result result) {
+        FacebookSdk.sdkInitialize(activity.getApplicationContext());
         callbackManager = callbackManager == null ? CallbackManager.Factory.create() : callbackManager;
         ShareDialog shareDialog = new ShareDialog(activity);
         shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
