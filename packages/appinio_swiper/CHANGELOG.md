@@ -1,3 +1,8 @@
+## [1.1.1] - 2022.10.13
+
+Fixes:
+* NoSuchMethodError When onSwipe method is not provided.
+
 ## [1.1.0] - 2022.09.11
 
 Features:
