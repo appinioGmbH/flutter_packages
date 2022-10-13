@@ -49,7 +49,7 @@ public class ShareUtil{
         let filePath = args[argImagePath] as? String
         var items : [Any] = []
         if #available(iOS 13, *){
-            items.append(MyActivityItemSource(title: title!, text: text!.components(separatedBy:"\n")[0], filePath: filePath!))
+            items.append(MyActivityItemSource(title: title!, text: text!.components(separatedBy:"\n")[0], filePath: filePath))
         }else{
             print("two")
             items.append(URL(string: text!) as Any)
