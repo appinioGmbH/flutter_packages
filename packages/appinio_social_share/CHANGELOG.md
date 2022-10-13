@@ -1,3 +1,7 @@
+## [0.1.3] - 2022.10.13
+
+* Improvements: updating FB SDK.
+ 
 ## [0.1.2] - 2022.10.06
 
 * Improvements: allowing to share background image to facebook story without having to share a sticker image.
