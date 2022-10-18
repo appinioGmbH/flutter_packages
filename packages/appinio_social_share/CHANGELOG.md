@@ -1,3 +1,7 @@
+## [0.1.4] - 2022.10.18
+
+* Improvements: removing unnecessary twitter SDK.
+ 
 ## [0.1.3] - 2022.10.13
 
 * Improvements: updating FB SDK.
