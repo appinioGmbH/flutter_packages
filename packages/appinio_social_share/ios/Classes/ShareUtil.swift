@@ -275,13 +275,19 @@ public class ShareUtil{
             
      
             if (UIApplication.shared.canOpenURL(instagramURL)) {
-                let backgroundImage =  UIImage.init(contentsOfFile: imagePath!)
-                let stickerImage =  UIImage.init(contentsOfFile: imagePathSticker!)
+                var backgroundImage: UIImage?;
+                if(!(imagePath==nil)){
+                    backgroundImage =  UIImage.init(contentsOfFile: imagePath!)
+                }
+                var stickerImage: UIImage?;
+                if(!(imagePathSticker==nil)){
+                    stickerImage =  UIImage.init(contentsOfFile: imagePathSticker!)
+                }
                 let pasteboardItems = [
                     [
                         "com.instagram.sharedSticker.attributionURL": attributionURL ?? "",
-                        "com.instagram.sharedSticker.stickerImage":stickerImage,
-                        "com.instagram.sharedSticker.backgroundImage":backgroundImage,
+                        "com.instagram.sharedSticker.stickerImage": stickerImage ?? "",
+                        "com.instagram.sharedSticker.backgroundImage": backgroundImage ?? "",
                         "com.instagram.sharedSticker.backgroundTopColor": backgroundTopColor ?? "",
                         "com.instagram.sharedSticker.backgroundBottomColor": backgroundBottomColor ?? "",
                     ]

@@ -17,7 +17,6 @@ A new Flutter project.
   s.dependency 'Flutter'
   s.dependency 'FBSDKCoreKit', '14.1.0'
   s.dependency 'FBSDKShareKit', '14.1.0'
-  s.dependency 'TwitterKit', '3.4.2'
   s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.
