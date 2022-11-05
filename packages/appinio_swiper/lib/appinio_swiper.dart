@@ -30,6 +30,12 @@ class AppinioSwiper extends StatefulWidget {
   /// set to true if the user can unswipe as many cards as possible
   final bool unlimitedUnswipe;
 
+  /// set to true if the user can swipe left and right
+  final bool horizontalSwipeEnabled;
+
+  /// set to true if the user can swipe up and down
+  final bool verticalSwipeEnabled;
+
   /// function that gets called with the new index and detected swipe direction when the user swiped or swipe is triggered by controller
   final Function onSwipe;
 
@@ -56,6 +62,8 @@ class AppinioSwiper extends StatefulWidget {
     this.isDisabled = false,
     this.allowUnswipe = true,
     this.unlimitedUnswipe = false,
+    this.horizontalSwipeEnabled = true,
+    this.verticalSwipeEnabled = true,
     this.onTapDisabled = emptyFunction,
     this.onSwipe = emptyFunctionIndex,
     this.onEnd = emptyFunction,
@@ -108,7 +116,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
     if (widget.controller != null) {
       widget.controller!
-        //swipe widget from the outside
+      //swipe widget from the outside
         ..addListener(() {
           if (widget.controller!.state == AppinioSwiperState.swipe) {
             if (widget.cards!.isNotEmpty) {
@@ -132,7 +140,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             }
           }
         })
-        //swipe widget left from the outside
+      //swipe widget left from the outside
         ..addListener(() {
           if (widget.controller!.state == AppinioSwiperState.swipeLeft) {
             if (widget.cards!.isNotEmpty) {
@@ -142,7 +150,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             }
           }
         })
-        //swipe widget right from the outside
+      //swipe widget right from the outside
         ..addListener(() {
           if (widget.controller!.state == AppinioSwiperState.swipeRight) {
             if (widget.cards!.isNotEmpty) {
@@ -152,7 +160,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             }
           }
         })
-        //unswipe widget from the outside
+      //unswipe widget from the outside
         ..addListener(() {
           if (widget.controller!.state == AppinioSwiperState.unswipe) {
             if (widget.allowUnswipe) {
@@ -272,11 +280,11 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                     ...widget.cards!
                         .asMap()
                         .map((index, _) {
-                          return MapEntry(
-                            index,
-                            _item(constraints, index),
-                          );
-                        })
+                      return MapEntry(
+                        index,
+                        _item(constraints, index),
+                      );
+                    })
                         .values
                         .toList(),
                   ]);
@@ -335,8 +343,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         onPanUpdate: (tapInfo) {
           if (!widget.isDisabled) {
             setState(() {
-              _left += tapInfo.delta.dx;
-              _top += tapInfo.delta.dy;
+              _left += widget.horizontalSwipeEnabled ? tapInfo.delta.dx : 0;
+              _top += widget.verticalSwipeEnabled ? tapInfo.delta.dy : 0;
               _total = _left + _top;
               _calculateAngle();
               _calculateScale();
@@ -366,7 +374,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   void _calculateScale() {
     if (_scale <= 1.0 && _scale >= 0.9) {
       _scale =
-          (_total > 0) ? 0.9 + (_total / 5000) : 0.9 + -1 * (_total / 5000);
+      (_total > 0) ? 0.9 + (_total / 5000) : 0.9 + -1 * (_total / 5000);
     }
   }
 
@@ -394,11 +402,11 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         begin: _left,
         end: (_left == 0)
             ? (widget.direction == AppinioSwiperDirection.right)
-                ? MediaQuery.of(context).size.width
-                : -MediaQuery.of(context).size.width
+            ? MediaQuery.of(context).size.width
+            : -MediaQuery.of(context).size.width
             : (_left > widget.threshold)
-                ? MediaQuery.of(context).size.width
-                : -MediaQuery.of(context).size.width,
+            ? MediaQuery.of(context).size.width
+            : -MediaQuery.of(context).size.width,
       ).animate(_animationController);
       _topAnimation = Tween<double>(
         begin: _top,
@@ -437,11 +445,11 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         begin: _top,
         end: (_top == 0)
             ? (widget.direction == AppinioSwiperDirection.bottom)
-                ? MediaQuery.of(context).size.height
-                : -MediaQuery.of(context).size.height
+            ? MediaQuery.of(context).size.height
+            : -MediaQuery.of(context).size.height
             : (_top > widget.threshold)
-                ? MediaQuery.of(context).size.height
-                : -MediaQuery.of(context).size.height,
+            ? MediaQuery.of(context).size.height
+            : -MediaQuery.of(context).size.height,
       ).animate(_animationController);
       _scaleAnimation = Tween<double>(
         begin: _scale,
