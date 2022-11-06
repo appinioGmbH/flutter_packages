@@ -102,8 +102,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   bool _vertical = false;
   bool _horizontal = false;
   bool _isUnswiping = false;
-  int _swipedDirectionVertical = 0; //-1 left, 1 right
-  int _swipedDirectionHorizontal = 0; //-1 bottom, 1 top
+  int _swipedDirectionVertical = 0; //-1 bottom, 1 top
+  int _swipedDirectionHorizontal = 0; //-1 left, 1 right
 
   AppinioUnswipeCard? _lastCard;
   // ignore: prefer_final_fields
