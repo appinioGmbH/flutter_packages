@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -5,7 +7,8 @@ import 'appinio_social_share_platform_interface.dart';
 
 /// An implementation of [AppinioSocialSharePlatform] that uses method channels.
 class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
-  final String instagram = "instagram";
+  final String instagramDirect = "instagram_direct";
+  final String instagramFeed = "instagram_post";
   final String instagramStories = "instagram_stories";
   final String facebook = "facebook";
   final String messenger = "messenger";
@@ -13,7 +16,8 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   final String whatsapp = "whatsapp";
   final String twitter = "twitter";
   final String sms = "sms";
-  final String tiktok = "tiktok";
+  final String tiktokStatus = "tiktok_status";
+  final String tiktokPost = "tiktok_post";
   final String systemShare = "system_share";
   final String copyToClipboard = "copy_to_clipboard";
   final String telegram = "telegram";
@@ -29,9 +33,18 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToTiktok(String filePath) async {
+  Future<String> shareToTiktokStatus(String filePath) async {
+    if (Platform.isIOS) return "Not implemented for iOS";
     return ((await methodChannel.invokeMethod<String>(
-            tiktok, {"imagePath": filePath, "message": ""})) ??
+            tiktokStatus, {"imagePath": filePath, "message": ""})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToTiktokPost(String videoFile) async {
+    if (Platform.isAndroid) return "Not implemented for android";
+    return ((await methodChannel
+            .invokeMethod<String>(tiktokPost, {"videoFile": videoFile})) ??
         "");
   }
 
@@ -79,9 +92,16 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToInstagram(String message) async {
+  Future<String> shareToInstagramDirect(String message) async {
     return ((await methodChannel
-            .invokeMethod<String>(instagram, {"message": message})) ??
+            .invokeMethod<String>(instagramDirect, {"message": message})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToInstagramFeed(String filePath) async {
+    return ((await methodChannel.invokeMethod<String>(
+            instagramFeed, {"imagePath": filePath, "message": ""})) ??
         "");
   }
 
@@ -96,12 +116,15 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   Future<String> shareToInstagramStory(
       {String? stickerImage,
       String? backgroundImage,
+      String? backgroundVideo,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) async {
     return ((await methodChannel.invokeMethod<String>(instagramStories, {
           "stickerImage": stickerImage,
-          "backgroundImage": backgroundImage,
+          "backgroundImage":
+              backgroundImage ?? (Platform.isAndroid ? backgroundVideo : null),
+          "videoFile": backgroundVideo,
           "backgroundTopColor": backgroundTopColor,
           "backgroundBottomColor": backgroundBottomColor,
           "attributionURL": attributionURL
@@ -113,12 +136,15 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   Future<String> shareToFacebookStory(String appId,
       {String? stickerImage,
       String? backgroundImage,
+      String? backgroundVideo,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) async {
     return ((await methodChannel.invokeMethod<String>(facebookStories, {
           "stickerImage": stickerImage,
-          "backgroundImage": backgroundImage,
+          "backgroundImage":
+              backgroundImage ?? (Platform.isAndroid ? backgroundVideo : null),
+          "videoFile": backgroundVideo,
           "backgroundTopColor": backgroundTopColor,
           "backgroundBottomColor": backgroundBottomColor,
           "attributionURL": attributionURL,

@@ -2,6 +2,10 @@ import Photos
 import FBSDKCoreKit
 import FBSDKShareKit
 import Social
+import TikTokOpenSDK
+import MobileCoreServices
+
+
 
 public class ShareUtil{
     
@@ -9,7 +13,8 @@ public class ShareUtil{
     public let ERROR_APP_NOT_AVAILABLE: String = "ERROR_APP_NOT_AVAILABLE"
     public let ERROR_FEATURE_NOT_AVAILABLE_FOR_THIS_VERSON: String = "ERROR_FEATURE_NOT_AVAILABLE_FOR_THIS_VERSON"
     public let ERROR: String = "ERROR"
-    
+    public let NOT_IMPLEMENTED: String = "NOT_IMPLEMENTED"
+
     let argAttributionURL: String  = "attributionURL";
     let argImagePath: String  = "imagePath";
     let argbackgroundImage: String  = "backgroundImage";
@@ -19,10 +24,13 @@ public class ShareUtil{
     let argAppId: String  = "appId";
     let argBackgroundTopColor: String  = "backgroundTopColor";
     let argBackgroundBottomColor: String  = "backgroundBottomColor";
-    
+    let argImages: String  = "images";
+    let argVideoFile: String  = "videoFile";
+
+
     
     public func getInstalledApps(result: @escaping FlutterResult){
-        let apps = [["instagram","instagram"],["facebook-stories","facebook_stories"],["whatsapp","whatsapp"],["tg","telegram"],["fb-messenger","messenger"],["instagram-stories","instagram_stories"],["twitter","twitter"],["sms","message"]]
+        let apps = [["instagram","instagram"],["facebook-stories","facebook_stories"],["whatsapp","whatsapp"],["tg","telegram"],["fb-messenger","messenger"],["tiktok","tiktok"],["instagram-stories","instagram_stories"],["twitter","twitter"],["sms","message"]]
         var output:[String: Bool] = [:]
         for app in apps {
             if(UIApplication.shared.canOpenURL(URL(string:(app[0])+"://")!)){
@@ -37,11 +45,239 @@ public class ShareUtil{
         }
         result(output)
     }
-    
+
     public func canOpenUrl(appName:String) -> Bool{
          return UIApplication.shared.canOpenURL(URL(string:appName+"://")!)
     }
-    
+
+
+
+    public func shareToInstagramFeed(args : [String: Any?],result: @escaping FlutterResult) {
+        let filePath = args[argImagePath] as? String
+        if(!isImage(filePath: filePath!)) {
+            return shareVideoToInstagramFeed(args: args, result:result)
+        } else{
+            return shareImageToInstagramFeed(args: args, result:result)
+        }
+    }
+
+    func isImage(filePath:String)->Bool{
+        let ext = NSURL(fileURLWithPath: filePath).pathExtension
+        let uti = UTTypeCreatePreferredIdentifierForTag(
+            kUTTagClassFilenameExtension,
+            ext! as CFString,
+            nil)
+        if UTTypeConformsTo((uti?.takeRetainedValue())!, kUTTypeImage) {
+            return true
+        }
+        return false
+    }
+
+
+
+    public func shareToTiktok(args : [String: Any?],result: @escaping FlutterResult){
+        let images = args[argImages] as? [String]
+        let videoFile = args[argVideoFile] as? String
+
+
+        let request = TikTokOpenSDKShareRequest()
+
+        request.mediaType = images == nil ? TikTokOpenSDKShareMediaType.video : TikTokOpenSDKShareMediaType.image
+        var mediaLocalIdentifiers: [String] = []
+
+
+        if(videoFile==nil){
+            mediaLocalIdentifiers.append(contentsOf: images!)
+        }else{
+            mediaLocalIdentifiers.append(videoFile!)
+        }
+
+              request.localIdentifiers = mediaLocalIdentifiers
+              DispatchQueue.main.async {
+                let a = request.send(completionBlock: { response in
+                  print("Response from TikTok")
+                  print(response.errCode.rawValue)
+                  print(response.shareState.rawValue)
+                })
+              }
+        result(SUCCESS)
+    }
+
+
+    func shareVideoToInstagramFeed(args : [String: Any?],result: @escaping FlutterResult) {
+        let videoFile = args[argImagePath] as? String
+        let backgroundVideoUrl = URL(fileURLWithPath: videoFile!)
+        let videoData = try? Data(contentsOf: backgroundVideoUrl) as NSData
+
+        getLibraryPermissionIfNecessary { granted in
+
+            guard granted else {
+                result(self.ERROR)
+                return
+            }
+        }
+
+        PHPhotoLibrary.shared().performChanges({
+
+            let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+            let filePath = "\(documentsPath)/\(Date().description).mp4"
+
+            videoData!.write(toFile: filePath, atomically: true)
+            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: filePath))
+        },
+        completionHandler: { success, error in
+
+            if success {
+
+                let fetchOptions = PHFetchOptions()
+
+                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
+                let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions)
+
+                if let lastAsset = fetchResult.firstObject {
+
+                    let localIdentifier = lastAsset.localIdentifier
+                    let urlFeed = "instagram://library?LocalIdentifier=" + localIdentifier
+
+                    guard
+                        let url = URL(string: urlFeed)
+                    else {
+
+                        result(self.ERROR_APP_NOT_AVAILABLE)
+                        return
+                    }
+                    DispatchQueue.main.async {
+
+                        if UIApplication.shared.canOpenURL(url) {
+
+                            if #available(iOS 10.0, *) {
+
+                                UIApplication.shared.open(url, options: [:], completionHandler: { (success) in
+                                    result(self.SUCCESS)
+                                })
+                            }
+                            else {
+
+                                UIApplication.shared.openURL(url)
+                                result(self.SUCCESS)
+                            }
+                        }
+                        else {
+
+                            result(self.ERROR)
+                        }
+                    }
+                }
+            }
+            else if let error = error {
+
+                print(error.localizedDescription)
+            }
+            else {
+
+                result(self.ERROR)
+            }
+        })
+    }
+
+    func shareImageToInstagramFeed(args : [String: Any?],result: @escaping FlutterResult) {
+            let videoFile = args[argImagePath] as? String
+            let backgroundVideoUrl = URL(fileURLWithPath: videoFile!)
+            let videoData = try? Data(contentsOf: backgroundVideoUrl) as NSData
+
+            getLibraryPermissionIfNecessary { granted in
+
+                guard granted else {
+                    result(self.ERROR)
+                    return
+                }
+            }
+
+
+            PHPhotoLibrary.shared().performChanges({
+
+                let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+                let filePath:String
+                     filePath = "\(documentsPath)/\(Date().description).jpeg"
+
+
+                videoData!.write(toFile: filePath, atomically: true)
+                    PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(fileURLWithPath: filePath))
+
+            },
+            completionHandler: { success, error in
+
+                if success {
+
+                    let fetchOptions = PHFetchOptions()
+
+                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+                    let type:PHAssetMediaType;
+                        type = PHAssetMediaType.image
+
+
+                    let fetchResult = PHAsset.fetchAssets(with: type, options: fetchOptions)
+
+                    if let lastAsset = fetchResult.firstObject {
+
+                        let localIdentifier = lastAsset.localIdentifier
+                        let urlFeed = "instagram://library?LocalIdentifier=" + localIdentifier
+
+                        guard
+                            let url = URL(string: urlFeed)
+                        else {
+
+                            result(self.ERROR_APP_NOT_AVAILABLE)
+                            return
+                        }
+                        DispatchQueue.main.async {
+
+                            if UIApplication.shared.canOpenURL(url) {
+
+                                if #available(iOS 10.0, *) {
+
+                                    UIApplication.shared.open(url, options: [:], completionHandler: { (success) in
+                                        result(self.SUCCESS)
+                                    })
+                                }
+                                else {
+
+                                    UIApplication.shared.openURL(url)
+                                    result(self.SUCCESS)
+                                }
+                            }
+                            else {
+
+                                result(self.ERROR)
+                            }
+                        }
+                    }
+                }
+                else if let error = error {
+
+                    print(error.localizedDescription)
+                }
+                else {
+
+                    result(self.ERROR)
+                }
+            })
+        }
+
+    func getLibraryPermissionIfNecessary(completionHandler: @escaping  (Bool) -> Void) {
+
+        guard PHPhotoLibrary.authorizationStatus() != .authorized else {
+            completionHandler(true)
+            return
+        }
+
+        PHPhotoLibrary.requestAuthorization { status in
+            completionHandler(status == .authorized)
+        }
+    }
+
+
     public func shareToSystem(args : [String: Any?],result: @escaping FlutterResult) {
                        let text = args[argMessage] as? String
                        let filePath = args[argImagePath] as? String
@@ -131,7 +367,9 @@ public class ShareUtil{
         }
     }
     
-    public func shareToInstagram(args : [String: Any?],result: @escaping FlutterResult){
+
+
+    public func shareToInstagramDirect(args : [String: Any?],result: @escaping FlutterResult){
         if #available(iOS 10, *){
             let message = args[self.argMessage] as? String
             let urlString = "instagram://sharesheet?text=\(message!)"
@@ -174,7 +412,6 @@ public class ShareUtil{
     
     public func shareToSms(args : [String: Any?],result: @escaping FlutterResult){
         let message = args[self.argMessage] as? String
-        print("message : "+message!)
         if #available(iOS 10, *){
             let urlString = "sms:?&body=\(message!)"
             if(!canOpenUrl(appName: "sms")){
@@ -189,8 +426,9 @@ public class ShareUtil{
     
     public func shareToFacebookStory(args : [String: Any?],result: @escaping FlutterResult) {
         let appId = args[self.argAppId] as? String
-        let photoBackgroundAssetPath = args[self.argbackgroundImage] as? String
-        let stickerAssetPath = args[self.argstickerImage] as? String
+        let imagePath = args[self.argbackgroundImage] as? String
+        let argVideoFile = args[self.argVideoFile] as? String
+        let imagePathSticker = args[self.argstickerImage] as? String
         let backgroundTopColor = [args[self.argBackgroundTopColor] as? String] as? [String?]
         let backgroundBottomColor =  [args[self.argBackgroundBottomColor] as? String] as? [String?]
         let attributionURL =  args[self.argAttributionURL] as? String
@@ -203,22 +441,26 @@ public class ShareUtil{
         
         
         if (UIApplication.shared.canOpenURL(facebookURL)) {
-            var stickerImages: [NSData] = [NSData]()
-            var backgroundImages: [NSData] = [NSData]()
-            
-            let photoAsset = UIImage.init(contentsOfFile: stickerAssetPath!)
-            let stickerImage = photoAsset!.pngData()! as NSData
-            stickerImages.append(stickerImage)
-            
-            let photoAsset1 = UIImage.init(contentsOfFile: photoBackgroundAssetPath!)
-            let backgroundImage = photoAsset1!.pngData()! as NSData
-            backgroundImages.append(backgroundImage)
-            
+            var backgroundImage: UIImage?;
+            if(!(imagePath==nil)){
+                backgroundImage =  UIImage.init(contentsOfFile: imagePath!)
+            }
+            var stickerImage: UIImage?;
+            if(!(imagePathSticker==nil)){
+                stickerImage =  UIImage.init(contentsOfFile: imagePathSticker!)
+            }
+            var backgroundVideoData:Any?;
+            if(!(argVideoFile==nil)){
+                let backgroundVideoUrl = URL(fileURLWithPath: argVideoFile!)
+                backgroundVideoData = try? Data(contentsOf: backgroundVideoUrl)
+            }
+
                 let pasteboardItems = [
                     [
-                        "com.facebook.sharedSticker.attributionURL": attributionURL,
-                        "com.facebook.sharedSticker.stickerImage": stickerImages,
-                        "com.facebook.sharedSticker.backgroundImage": backgroundImages,
+                        "com.facebook.sharedSticker.attributionURL": [attributionURL ?? ""],
+                        "com.facebook.sharedSticker.stickerImage": stickerImage ?? "",
+                        "com.facebook.sharedSticker.backgroundVideo": backgroundVideoData ?? "",
+                        "com.facebook.sharedSticker.backgroundImage": backgroundImage ?? "",
                         "com.facebook.sharedSticker.backgroundTopColor": backgroundTopColor ?? [String](),
                         "com.facebook.sharedSticker.backgroundBottomColor": (backgroundBottomColor ?? [String]()) as Any,
                         "com.facebook.sharedSticker.appID": appId as Any,
@@ -262,6 +504,7 @@ public class ShareUtil{
     func shareToInstagramStory(args : [String: Any?],result: @escaping FlutterResult) {
         if #available(iOS 10.0, *){
             let imagePath = args[self.argbackgroundImage] as? String
+            let argVideoFile = args[self.argVideoFile] as? String
             let imagePathSticker = args[self.argstickerImage] as? String
             let backgroundTopColor = args[self.argBackgroundTopColor] as? String
             let backgroundBottomColor =  args[self.argBackgroundBottomColor] as? String
@@ -283,10 +526,16 @@ public class ShareUtil{
                 if(!(imagePathSticker==nil)){
                     stickerImage =  UIImage.init(contentsOfFile: imagePathSticker!)
                 }
+                var backgroundVideoData:Any?;
+                if(!(argVideoFile==nil)){
+                    let backgroundVideoUrl = URL(fileURLWithPath: argVideoFile!)
+                    backgroundVideoData = try? Data(contentsOf: backgroundVideoUrl)
+                }
                 let pasteboardItems = [
                     [
                         "com.instagram.sharedSticker.attributionURL": attributionURL ?? "",
                         "com.instagram.sharedSticker.stickerImage": stickerImage ?? "",
+                        "com.instagram.sharedSticker.backgroundVideo": backgroundVideoData ?? "",
                         "com.instagram.sharedSticker.backgroundImage": backgroundImage ?? "",
                         "com.instagram.sharedSticker.backgroundTopColor": backgroundTopColor ?? "",
                         "com.instagram.sharedSticker.backgroundBottomColor": backgroundBottomColor ?? "",

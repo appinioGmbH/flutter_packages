@@ -37,7 +37,11 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String> shareToInstagram(String message) {
+  Future<String> shareToInstagramDirect(String message) {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToInstagramFeed(String filePath) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
@@ -46,7 +50,12 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   }
 
   ///This function only works for android
-  Future<String> shareToTiktok(String filePath) {
+  Future<String> shareToTiktokStatus(String filePath) {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  ///This function only works for iOS
+  Future<String> shareToTiktokPost(String videoFile) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
@@ -66,6 +75,7 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   Future<String> shareToInstagramStory(
       {String? stickerImage,
       String? backgroundImage,
+      String? backgroundVideo,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) {
@@ -75,6 +85,7 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   Future<String> shareToFacebookStory(String appId,
       {String? stickerImage,
       String? backgroundImage,
+      String? backgroundVideo,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) {
