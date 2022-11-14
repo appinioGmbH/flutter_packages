@@ -151,6 +151,7 @@ class Example extends StatelessWidget {
 | isDisabled       | false                                              | Set to `true` if swiping should be disabled, has no impact when triggered from the outside                                  |  false   |
 | onTapDisabled    | -                                                  | Function that get triggered when the swiper is disabled                                                                     |  false   |
 | onSwipe          | -                                                  | Called with the new index and detected swipe direction when the user swiped                                                 |  false   |
+| onDrag(left, top)          | -                                                  | Called every time the card is being dragged and contains the left and top parameters in the callback function                                                 |  false   |
 | onEnd            | -                                                  | Called when there is no Widget left to be swiped away                                                                       |  false   |
 | direction        | right                                              | Direction in which the card is swiped away when triggered from the outside                                                  |  false   |
 | allowUnswipe     | true                                               | Set to `false` if unswipe should be disabled away                                                                           |  false   |
