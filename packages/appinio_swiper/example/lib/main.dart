@@ -76,6 +76,7 @@ class _ExamplePageState extends State<Example> {
                 top: 50,
                 bottom: 40,
               ),
+              onDrag: (left, top) => log('left: $left, top: $top'),
             ),
           ),
           Row(
