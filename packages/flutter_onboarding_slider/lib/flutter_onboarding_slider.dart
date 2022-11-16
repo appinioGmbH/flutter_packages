@@ -16,6 +16,10 @@ class OnBoardingSlider extends StatefulWidget {
   /// Number of total pages.
   final int totalPage;
 
+
+  /// Button Corner Radius
+  final double buttonCornerRadius;
+
   /// NavigationBars color.
   final Color headerBackgroundColor;
 
@@ -96,6 +100,7 @@ class OnBoardingSlider extends StatefulWidget {
 
   OnBoardingSlider({
     required this.totalPage,
+    required this.buttonCornerRadius,
     required this.headerBackgroundColor,
     required this.background,
     required this.speed,
@@ -162,6 +167,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
                 buttonBackgroundColor: widget.finishButtonColor,
                 buttonText: widget.finishButtonText,
                 hasSkip: widget.hasSkip,
+          buttonCornerRadius: widget.buttonCornerRadius,
               )
             : SizedBox.shrink(),
         body: CupertinoPageScaffold(

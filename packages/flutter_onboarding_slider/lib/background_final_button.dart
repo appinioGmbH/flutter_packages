@@ -4,6 +4,7 @@ class BackgroundFinalButton extends StatelessWidget {
   final int currentPage;
   final PageController pageController;
   final int totalPage;
+  final double buttonCornerRadius;
   final bool addButton;
   final Function? onPageFinish;
   final Color? buttonBackgroundColor;
@@ -16,6 +17,7 @@ class BackgroundFinalButton extends StatelessWidget {
     required this.currentPage,
     required this.pageController,
     required this.totalPage,
+    required this.buttonCornerRadius,
     this.onPageFinish,
     this.buttonBackgroundColor,
     this.buttonText,
@@ -41,7 +43,7 @@ class BackgroundFinalButton extends StatelessWidget {
                     ? FloatingActionButton.extended(
                         shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(5.0))),
+                                BorderRadius.all(Radius.circular(buttonCornerRadius))),
                         onPressed: () => onPageFinish?.call(),
                         elevation: 0,
                         label: buttonText == null
@@ -64,7 +66,7 @@ class BackgroundFinalButton extends StatelessWidget {
                 width: MediaQuery.of(context).size.width - 30,
                 child: FloatingActionButton.extended(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                      borderRadius: BorderRadius.all(Radius.circular(buttonCornerRadius))),
                   onPressed: () => onPageFinish?.call(),
                   elevation: 0,
                   label: buttonText == null
