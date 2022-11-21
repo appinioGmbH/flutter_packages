@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
 import 'package:appinio_video_player/src/controls/video_settings_button.dart';
@@ -110,6 +111,9 @@ class CustomVideoPlayerSettings {
   /// UI settings for the video settings popup.
   final CustomVideoPlayerPopupSettings customVideoPlayerPopupSettings;
 
+  /// UI settings for the video to show muted volume button.
+  final bool showMuteButton;
+
   const CustomVideoPlayerSettings({
     this.customAspectRatio,
     this.placeholderWidget,
@@ -163,5 +167,6 @@ class CustomVideoPlayerSettings {
     ),
     this.customVideoPlayerPopupSettings =
         const CustomVideoPlayerPopupSettings(),
+    this.showMuteButton = false,
   });
 }

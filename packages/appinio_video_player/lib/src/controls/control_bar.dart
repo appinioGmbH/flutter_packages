@@ -1,14 +1,16 @@
-import 'package:appinio_video_player/src/custom_video_player_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:appinio_video_player/src/controls/custom_muted_button.dart';
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
 import 'package:appinio_video_player/src/controls/progress_bar.dart';
+import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CustomVideoPlayerControlBar extends StatelessWidget {
   final CustomVideoPlayerController customVideoPlayerController;
   final Function updateVideoState;
   final Function fadeOutOnPlay;
+
   const CustomVideoPlayerControlBar({
     Key? key,
     required this.customVideoPlayerController,
@@ -77,6 +79,11 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
                   );
                 }),
               ),
+            ),
+          if (customVideoPlayerController
+              .customVideoPlayerSettings.showMuteButton)
+            CustomMutedButton(
+              customVideoPlayerController: customVideoPlayerController,
             ),
           if (customVideoPlayerController
               .customVideoPlayerSettings.showFullscreenButton)
