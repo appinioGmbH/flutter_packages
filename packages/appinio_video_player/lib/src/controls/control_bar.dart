@@ -81,7 +81,7 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
               ),
             ),
           if (customVideoPlayerController
-              .customVideoPlayerSettings.showMuteButton)
+              .customVideoPlayerSettings.showMutedButton)
             CustomMutedButton(
               customVideoPlayerController: customVideoPlayerController,
             ),

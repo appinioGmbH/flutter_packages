@@ -11,10 +11,17 @@ import 'package:video_player/video_player.dart';
 /// only the package can use these methods and not the public beacuse of the hide keyword in the package exports
 extension ProtectedCustomVideoPlayerController on CustomVideoPlayerController {
   Future<void> Function(String) get switchVideoSource => _switchVideoSource;
+
   ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
+
   ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
+
   ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
+
   bool get isFullscreen => _isFullscreen;
+
+  bool get isMuted => _isMuted;
+
   set updateViewAfterFullscreen(Function updateViewAfterFullscreen) =>
       _updateViewAfterFullscreen = updateViewAfterFullscreen;
 }
@@ -59,6 +66,7 @@ class CustomVideoPlayerController {
   Function? _updateViewAfterFullscreen;
 
   bool _isFullscreen = false;
+  bool _isMuted = false;
   Timer? _timer;
   final ValueNotifier<Duration> _videoProgressNotifier =
       ValueNotifier(Duration.zero);
@@ -225,6 +233,16 @@ class CustomVideoPlayerController {
 
   void _playbackSpeedListener() {
     _playbackSpeedNotifier.value = videoPlayerController.value.playbackSpeed;
+  }
+
+  void setVolumeMutedUnMuted() {
+    if (videoPlayerController.value.volume == 0) {
+      videoPlayerController.setVolume(1.0);
+      _isMuted = false;
+    } else {
+      videoPlayerController.setVolume(0.0);
+      _isMuted = true;
+    }
   }
 
   /// call dispose on the dispose method in your parent widget to be sure that every values is disposed

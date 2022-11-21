@@ -13,34 +13,49 @@ class CustomMutedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
-      child: StatefulBuilder(
-        builder: (context, localState) {
-          return GestureDetector(
-            onTap: () {
-              localState(() {
-                isMuted = !isMuted;
-                if (isMuted) {
-                  customVideoPlayerController.videoPlayerController
-                      .setVolume(0.0);
-                } else {
-                  customVideoPlayerController.videoPlayerController
-                      .setVolume(1.0);
-                }
-              });
-            },
-            child: isMuted
-                ? const Icon(
-                    Icons.volume_off,
-                    color: Colors.white,
-                  )
-                : const Icon(
-                    Icons.volume_up,
-                    color: Colors.white,
-                  ),
-          );
+    return StatefulBuilder(builder: (context, localState) {
+      return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () async {
+          localState(() {
+            customVideoPlayerController.setVolumeMutedUnMuted();
+          });
         },
+        child: customVideoPlayerController.isMuted
+            ? customVideoPlayerController
+                .customVideoPlayerSettings.customMutedButton
+            : customVideoPlayerController
+                .customVideoPlayerSettings.customUnMutedButton,
+      );
+    });
+  }
+}
+
+class CustomVideoPlayerMutedButton extends StatelessWidget {
+  const CustomVideoPlayerMutedButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(0, 5, 5, 5),
+      child: Icon(
+        Icons.volume_off,
+        color: Colors.white,
+      ),
+    );
+  }
+}
+
+class CustomVideoPlayerUnMutedButton extends StatelessWidget {
+  const CustomVideoPlayerUnMutedButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(0, 5, 5, 5),
+      child: Icon(
+        Icons.volume_up,
+        color: Colors.white,
       ),
     );
   }
