@@ -16,6 +16,7 @@ We build this package because we wanted to:
 - NEW: add functions while un-/swiping, on end or when the swiper is disabled
 - NEW: detect the direction (left, right, top, bottom) in which the card was swiped away
 - NEW: unswipe all cards
+- NEW: enable or disable horizontal and vertical swiping
 
 ## ❗NEW  Features ❗
 
@@ -33,6 +34,11 @@ We've added the function ```unswipe``` that now gets returned with the boolean `
 
 ### Trigger swipe through controller
 You can now trigger the swipe with our ```AppinioSwiperController```. Just like the unswipe call, you can call the ```swipe``` trough the controller anywhere you want. Just make sure to pass the controller to the parameter ```controller``` from our ```AppinioSwiper```.
+
+
+### Toggle for horizontal and vertical swiping
+You can now use the `horizontalSwipeEnabled` and `verticalSwipeEnabled` to enable or disable swiping in the horizontal (left, right) and vertical (up, down) directions.
+
 
 ## Show Cases
 
@@ -142,6 +148,8 @@ class Example extends StatelessWidget {
 | allowUnswipe | true   |    Set to ```false``` if unswipe should be disabled away | false
 | unlimitedUnswipe | false   |    Set to ```true``` if the user can unswipe as many cards as possible | false
 | unswipe | -   |    Called with the boolean ```true``` when the last card gets unswiped and with the boolean ```false``` if there is no card to unswipe | false
+| horizontalSwipeEnabled      | true | Allow swiping in the left and right directions | false
+| verticalSwipeEnabled      | true | Allow swiping in the up and down directions | false
 
 #### Controller
 
