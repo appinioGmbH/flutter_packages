@@ -5,7 +5,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -19,16 +18,15 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.share.Sharer;
-import com.facebook.share.internal.ShareFeedContent;
 import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +62,12 @@ public class SocialShareUtil {
     }
 
 
-    public String shareToInstagram(String text, Context activity) {
+    public String shareToInstagramDirect(String text, Context activity) {
         return shareTextToPackage(text, activity, INSTAGRAM_PACKAGE);
+    }
+
+    public String shareToInstagramFeed(String imagePath, Context activity, String text) {
+        return shareFileAndTextToPackage(imagePath, text, activity, INSTAGRAM_PACKAGE);
     }
 
     public String shareToTikTok(String imagePath, Context activity, String text) {
@@ -75,7 +77,6 @@ public class SocialShareUtil {
     public String shareToTwitter(String imagePath, Context activity, String text) {
         return shareFileAndTextToPackage(imagePath, text, activity, TWITTER_PACKAGE);
     }
-
 
     public String shareToTelegram(String imagePath, Context activity, String text) {
         return shareFileAndTextToPackage(imagePath, text, activity, TELEGRAM_PACKAGE);
@@ -162,7 +163,7 @@ public class SocialShareUtil {
             if (backgroundImage != null) {
                 File file1 = new File(backgroundImage);
                 Uri backgroundImageUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file1);
-                shareIntent.setDataAndType(backgroundImageUri, "image/*");
+                shareIntent.setDataAndType(backgroundImageUri, getMimeTypeOfFile(backgroundImage));
                 activity.grantUriPermission("com.instagram.android", backgroundImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
             shareIntent.putExtra("content_url", attributionURL);
@@ -243,7 +244,7 @@ public class SocialShareUtil {
             if(backgroundImage!=null){
                 File file1 = new File(backgroundImage);
                 Uri backgroundImageUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file1);
-                intent.setDataAndType(backgroundImageUri, "image/*");
+                intent.setDataAndType(backgroundImageUri, getMimeTypeOfFile(backgroundImage));
                 activity.grantUriPermission(packageName, backgroundImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
             activity.startActivity(intent);
@@ -286,7 +287,7 @@ public class SocialShareUtil {
             shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
         }
 
-        shareIntent.setType(imagePath == null ? "text/*" : "image/*");
+        shareIntent.setType(imagePath == null ? "text/*" : getMimeTypeOfFile(imagePath));
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -334,6 +335,20 @@ public class SocialShareUtil {
             }
         }
         return apps;
+    }
+
+    private static String getMimeTypeOfFile(String pathName) {
+        try{
+            Path path = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                path = new File(pathName).toPath();
+                String mimeType = Files.probeContentType(path);
+                return mimeType;
+            }
+            return "*/*";
+        }catch (Exception e){
+            return "";
+        }
     }
 
 }

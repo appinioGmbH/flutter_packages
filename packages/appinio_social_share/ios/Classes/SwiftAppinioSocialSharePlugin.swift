@@ -8,18 +8,20 @@ import Photos
 
 public class SwiftAppinioSocialSharePlugin: NSObject, FlutterPlugin, SharingDelegate {
 
-    private let INSTAGRAM:String = "instagram";
+    private let INSTAGRAM_DIRECT:String = "instagram_direct";
     private let INSTAGRAM_STORIES:String = "instagram_stories";
+    private let INSTAGRAM_POST:String = "instagram_post";
     private let FACEBOOK:String = "facebook";
     private let FACEBOOK_STORIES = "facebook_stories";
     private let MESSENGER = "messenger";
     private let WHATSAPP:String = "whatsapp";
     private let TWITTER:String = "twitter";
     private let SMS:String = "sms";
-    private let TIKTOK:String = "tiktok";
     private let SYSTEM_SHARE:String = "system_share";
     private let COPY_TO_CLIPBOARD:String = "copy_to_clipboard";
     private let TELEGRAM:String = "telegram";
+    private let TIKTOK_POST:String = "tiktok_post";
+    private let TIKTOK_STATUS:String = "tiktok_status";
     private let INSTALLED_APPS:String = "installed_apps";
 
 
@@ -40,11 +42,20 @@ public class SwiftAppinioSocialSharePlugin: NSObject, FlutterPlugin, SharingDele
       let args = call.arguments as? [String: Any?]
 
       switch (call.method) {
+      case TIKTOK_STATUS:
+          result(shareUtil.NOT_IMPLEMENTED)
+          break
+      case TIKTOK_POST:
+          result(shareUtil.NOT_IMPLEMENTED)
+          break
       case INSTALLED_APPS:
           shareUtil.getInstalledApps(result: result)
           break
-      case INSTAGRAM:
-          shareUtil.shareToInstagram(args:args!,result: result)
+      case INSTAGRAM_DIRECT:
+          shareUtil.shareToInstagramDirect(args:args!,result: result)
+          break
+      case INSTAGRAM_POST:
+          shareUtil.shareToInstagramFeed(args:args!,result: result)
           break
       case INSTAGRAM_STORIES:
           shareUtil.shareToInstagramStory(args:args!,result:result)
@@ -60,7 +71,6 @@ public class SwiftAppinioSocialSharePlugin: NSObject, FlutterPlugin, SharingDele
           break
       case SMS:
           shareUtil.shareToSms(args: args!, result: result)
-      case TIKTOK:
           break
       case SYSTEM_SHARE:
           shareUtil.shareToSystem(args:args!,result: result)

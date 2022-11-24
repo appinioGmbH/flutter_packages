@@ -7,7 +7,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.appinio.socialshare.appinio_social_share.utils.SocialShareUtil;
-import com.facebook.FacebookSdk;
 
 import java.util.Map;
 
@@ -25,7 +24,8 @@ import io.flutter.plugin.common.MethodChannel.Result;
 public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
 
     private final String INSTALLED_APPS = "installed_apps";
-    private final String INSTAGRAM = "instagram";
+    private final String INSTAGRAM_DIRECT = "instagram_direct";
+    private final String INSTAGRAM_FEED = "instagram_post";
     private final String INSTAGRAM_STORIES = "instagram_stories";
     private final String FACEBOOK = "facebook";
     private final String MESSENGER = "messenger";
@@ -33,7 +33,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
     private final String WHATSAPP = "whatsapp";
     private final String TWITTER = "twitter";
     private final String SMS = "sms";
-    private final String TIKTOK = "tiktok";
+    private final String TIKTOK = "tiktok_status";
     private final String SYSTEM_SHARE = "system_share";
     private final String COPY_TO_CLIPBOARD = "copy_to_clipboard";
     private final String TELEGRAM = "telegram";
@@ -83,8 +83,10 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
                 Map<String, Boolean> response =  socialShareUtil.getInstalledApps(activeContext);
                 result.success(response);
                 return null;
-            case INSTAGRAM:
-                return socialShareUtil.shareToInstagram(message,activeContext);
+            case INSTAGRAM_DIRECT:
+                return socialShareUtil.shareToInstagramDirect(message,activeContext);
+            case INSTAGRAM_FEED:
+                return socialShareUtil.shareToInstagramFeed(imagePath, activeContext, message);
             case INSTAGRAM_STORIES:
                 return socialShareUtil.shareToInstagramStory(stickerImage, backgroundImage, backgroundTopColor, backgroundBottomColor, attributionURL, activeContext);
             case FACEBOOK_STORIES:

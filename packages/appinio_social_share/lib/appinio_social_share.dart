@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'appinio_social_share_platform_interface.dart';
 
 class AppinioSocialShare {
@@ -20,8 +22,16 @@ class AppinioSocialShare {
         .shareToTwitter(message, filePath: filePath);
   }
 
-  Future<String> shareToInstagram(String message) {
-    return AppinioSocialSharePlatform.instance.shareToInstagram(message);
+  Future<String> shareToInstagramDirect(String message) {
+    return AppinioSocialSharePlatform.instance.shareToInstagramDirect(message);
+  }
+
+  Future<String> shareToInstagramFeed(String imagePath) {
+    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(imagePath);
+  }
+
+  Future<String> shareToInstagramReels(String videoPath) {
+    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(videoPath);
   }
 
   Future<String> shareToMessenger(String message) {
@@ -40,12 +50,14 @@ class AppinioSocialShare {
   Future<String> shareToInstagramStory(
       {String? stickerImage,
       String? backgroundImage,
+      String? backgroundVideo,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) {
     return AppinioSocialSharePlatform.instance.shareToInstagramStory(
         stickerImage: stickerImage,
         backgroundImage: backgroundImage,
+        backgroundVideo: backgroundVideo,
         backgroundTopColor: backgroundTopColor,
         backgroundBottomColor: backgroundBottomColor,
         attributionURL: attributionURL);
@@ -54,19 +66,27 @@ class AppinioSocialShare {
   Future<String> shareToFacebookStory(String appId,
       {String? stickerImage,
       String? backgroundImage,
+      String? backgroundVideo,
       String? backgroundTopColor,
       String? backgroundBottomColor,
       String? attributionURL}) {
     return AppinioSocialSharePlatform.instance.shareToFacebookStory(appId,
         stickerImage: stickerImage,
         backgroundImage: backgroundImage,
+        backgroundVideo: backgroundVideo,
         backgroundTopColor: backgroundTopColor,
         backgroundBottomColor: backgroundBottomColor,
         attributionURL: attributionURL);
   }
 
-  Future<String> shareToTiktok(String filePath) {
-    return AppinioSocialSharePlatform.instance.shareToTiktok(filePath);
+  ///works only for android
+  Future<String> shareToTiktokStatus(String filePath) {
+    return AppinioSocialSharePlatform.instance.shareToTiktokStatus(filePath);
+  }
+
+  Future<String> shareToTiktokPost(String videoFile) {
+    if (Platform.isAndroid) return shareToTiktokStatus(videoFile);
+    return AppinioSocialSharePlatform.instance.shareToTiktokPost(videoFile);
   }
 
   Future<String> shareToSystem(String title, String message,

@@ -8,12 +8,15 @@
 - Facebook Post
 - Facebook Stories
 - Instagram Chat
+- Instgaram Feed
+- Instgaram Reel
 - Instagram Stories
 - Messenger
 - Telegram
 - WhatsApp
 - Twitter
-- Tiktok
+- Tiktok Status
+- Tiktok video
 - SMS
 - System ShareSheet
 - Copy to clipboard
@@ -194,126 +197,6 @@ FBSDKCoreKit.ApplicationDelegate.shared.application(
 )
 ```
 
-
-## Facebook features
-
-### Working on both platform
-
-```dart
-
-shareToFacebook();
-shareToFacebookStory();
-
-
-```
-
-## Instagram features
-
-### Working on both platform
-
-```dart
-
-shareToInstagram();
-shareToInstagramStory();
-
-```
-
-## Messenger features
-
-### Working on both platform
-
-```dart
-
-shareToMessenger();
-
-
-```
-
-## Telegram features
-
-### Working on both platform
-
-```dart
-
-shareToTelegram();
-
-
-```
-
-## WhatsApp features
-
-### Working on both platform
-
-```dart
-
-shareToWhatsApp();
-
-```
-
-## Twitter features
-
-### Working on both platform
-
-```dart
-
-shareToTwitter();
-
-```
-
-## Tiktok features : Only works for android currently
-
-### Working on both platform
-
-```dart
-
-shareToTiktok();
-
-```
-
-## SMS features 
-
-### Working on both platform
-
-```dart
-
-shareToSms();
-
-```
-
-
-
-## System share
-
-### Working on both platform
-
-```dart
-
-shareToSystem();
-
-```
-
-
-
-## Copy To ClipBoard
-
-### Working on both platform
-
-```dart
-
-copyToClipBoard();
-
-```
-
-## Installed Apps
-
-### Working on both platform
-
-```dart
-
-getInstalledApps();
-
-```
-
 <br />
 
 ## Usage
@@ -341,7 +224,8 @@ class _MyAppState extends State<MyApp> {
                   child: Text("ShareToWhatsapp"),
                   onPressed: () {
                     shareToWhatsApp("Message Text!!", file.getAbsolutePath());
-                  })
+                  },
+              ),
             ],
           ),
         )
@@ -362,21 +246,24 @@ class _MyAppState extends State<MyApp> {
 <br />
 
 
-| Method        | Parameters | Description
-| ------------- |:-------------|:-------------
-| getInstalledApps      |  -   | Get a Map of all the apps with a boolean value.
-| shareToWhatsapp      | String message, {String? filePath} | Share Image and text to Whatsapp. For Ios only text works.
-| shareToTelegram      | String message, {String? filePath} | Share Image and text to Telegram. For Ios only text works.
-| shareToTwitter      | String message, {String? filePath} | Share Image and text to Twitter. Works for both the platforms.
-| shareToInstagram      | String message | Share text message to Instagram. Works for both the platforms.
-| shareToMessenger      | String message | Share text message to Messenger. Works for both the platforms.
-| copyToClipBoard      | String message | To Copy text to clipboard. Works with both the platforms.
-| shareToFacebook      | String message, String filePath | Share text hashtag and image to Facebook. Works for both the platforms.
-| shareToInstagramStory      | String stickerImage,{String? backgroundImage, String? backgroundTopColor,String? backgroundBottomColor,String? attributionURL} | Share background image, movable sticker, background colors to Instagram Story.
-| shareToFacebookStory      |String stickerImage,String appId,{String? backgroundImage, String? backgroundTopColor, String? backgroundBottomColor, String? attributionURL} | Share background image, movable sticker, background colors to Facebook Story.
-| shareToTiktok      | String  filePath | Share background image, movable sticker, background colors to Tiktok Story. Works only for android
-| shareToSystem      | String title,String message, {String? filePath} | Open default System sheet, to share text and image.
-| shareToSMS      | String message, {String? filePath} | Share Image and text to default sms app. For Ios only text works.
+| Method        | iOS | Android | Parameters | Description
+|:-------------|:-------------:|:-------------:|:-------------|:-------------
+| getInstalledApps      |✔️| ✔️ |  -   | Get a Map of all the apps with a boolean value.
+| shareToWhatsapp      |✔️| ✔️ | String message, {String? filePath} | Share Image and text to Whatsapp. For Ios only text works.
+| shareToTelegram      |✔️| ✔️ | String message, {String? filePath} | Share Image and text to Telegram. For Ios only text works.
+| shareToInstagramDirect      |✔️| ✔️ | String message | Share text message to Instagram.
+| shareToInstagramFeed      |✔️| ✔️ | String imagePath | Share image to Instagram feed.
+| shareToInstagramReel      |✔️| ✔️ | String imagePath | Share video to Instagram Reel.
+| shareToInstagramStory      |✔️| ✔️ | String stickerImage,{String? backgroundImage,String? backgroundVideo,  String? backgroundTopColor,String? backgroundBottomColor,String? attributionURL} | Share background image, movable sticker, background colors to Instagram Story.
+| shareToFacebook      |✔️| ✔️ | String message, String filePath | Share text hashtag and image to Facebook.
+| shareToFacebookStory      |✔️| ✔️ |String stickerImage,String appId,{String? backgroundImage, String? backgroundVideo, String? backgroundTopColor, String? backgroundBottomColor, String? attributionURL} | Share background image, movable sticker, background colors to Facebook Story.
+| shareToMessenger      |✔️| ✔️ | String message | Share text message to Messenger.
+| shareToTiktokStatus      |❌ |  ✔️  | String  filePath | ShaShare image to Tiktok Story.
+| shareToTiktokPost      |❌ |  ✔️  | String  videoPath | Share video to tiktok.
+| shareToTwitter      |  ✔️   |  ✔️ | String message, {String? filePath} | Share Image and text to Twitter.
+| shareToSMS      |✔️| ✔️ | String message, {String? filePath} | Share Image and text to default sms app.
+| copyToClipBoard      |✔️| ✔️ | String message | To Copy text to clipboard.
+| shareToSystem      |✔️|  ✔️  | String title,String message, {String? filePath} | Open default System sheet, to share text and image.
 
 
 
