@@ -21,7 +21,7 @@ We build this package because we wanted to:
 
 ## Getting started
 
-Just wrap your image widget that should be zoomable with the `ZoomWidget` and pass an object for the `heroAnimationTag` parameter and you are good to go. (The Hero animation is there to provide you with a nice transition when entering and leaving the fullscreen by tapping your image)
+Just wrap your image widget that should be zoomable with the `WidgetZoom` and pass an object for the `heroAnimationTag` parameter and you are good to go. (The Hero animation is there to provide you with a nice transition when entering and leaving the fullscreen by tapping your image)
 
 ## Usage
 
