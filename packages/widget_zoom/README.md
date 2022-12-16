@@ -1,4 +1,4 @@
-The `WidgetZoom` widget enables you to zoom on your images.
+The `WidgetZoom` enables you to zoom on your images.
 
 Either zoom directly on the image with a pinch to zoom gesture or use a simple tap to open the image in fullscreen and zoom around there. You can either hit the close button or swipe down to dismiss the fullscreen again. Just as you know from other apps.
 
@@ -7,8 +7,11 @@ Either zoom directly on the image with a pinch to zoom gesture or use a simple t
 We build this package because we wanted to:
 
 - have a simple and easy way to use zoom on images for users
-- intergrate a lightweight package
+- integrate a lightweight package
 - create an easy usage experience for developers
+
+## Show Case
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/zoom.gif?raw=true" height="400">
 
 ## Features
 
