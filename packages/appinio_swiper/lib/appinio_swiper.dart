@@ -261,7 +261,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return Container(
+        return Padding(
           padding: widget.padding,
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -269,7 +269,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                   clipBehavior: Clip.none,
                   fit: StackFit.expand,
                   children: [
-                    ...widget.cards.asMap()
+                    ...widget.cards
+                        .asMap()
                         .map((index, _) {
                           return MapEntry(
                             index,
@@ -293,14 +294,11 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         child: Positioned(
           top: _difference,
           left: 0,
-          child: Container(
-            color: Colors.transparent,
-            child: Transform.scale(
-              scale: _scale,
-              child: Container(
-                constraints: constraints,
-                child: widget.cards[index],
-              ),
+          child: Transform.scale(
+            scale: _scale,
+            child: ConstrainedBox(
+              constraints: constraints,
+              child: widget.cards[index],
             ),
           ),
         ),
@@ -313,7 +311,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       child: GestureDetector(
         child: Transform.rotate(
           angle: _angle,
-          child: Container(
+          child: ConstrainedBox(
             constraints: constraints,
             child: widget.cards[index],
           ),
