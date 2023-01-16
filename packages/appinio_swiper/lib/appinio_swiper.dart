@@ -31,16 +31,16 @@ class AppinioSwiper extends StatefulWidget {
   final bool unlimitedUnswipe;
 
   /// function that gets called with the new index and detected swipe direction when the user swiped or swipe is triggered by controller
-  final Function onSwipe;
+  final AppinioSwiperOnSwipe? onSwipe;
 
   /// function that gets called when there is no widget left to be swiped away
-  final Function onEnd;
+  final AppinioSwiperOnEnd? onEnd;
 
   /// function that gets triggered when the swiper is disabled
-  final Function onTapDisabled;
+  final AppinioSwiperOnTapDisabled? onTapDisabled;
 
   /// function that gets called with the boolean true when the last card gets unswiped and with the boolean false when there is no card to unswipe
-  final Function unswipe;
+  final AppinioSwiperOnUnswipe? unswipe;
 
   /// direction in which the card gets swiped when triggered by controller, default set to right
   final AppinioSwiperDirection direction;
@@ -56,10 +56,10 @@ class AppinioSwiper extends StatefulWidget {
     this.isDisabled = false,
     this.allowUnswipe = true,
     this.unlimitedUnswipe = false,
-    this.onTapDisabled = emptyFunction,
-    this.onSwipe = emptyFunctionIndex,
-    this.onEnd = emptyFunction,
-    this.unswipe = emptyFunctionBool,
+    this.onTapDisabled,
+    this.onSwipe,
+    this.onEnd,
+    this.unswipe,
     this.direction = AppinioSwiperDirection.right,
   })  : assert(maxAngle >= 0 && maxAngle <= 360),
         assert(threshold >= 1 && threshold <= 100),
@@ -163,10 +163,10 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                   } else {
                     _unswipe(_lastCard!);
                   }
-                  widget.unswipe(true);
+                  widget.unswipe?.call(true);
                   _animationController.forward();
                 } else {
-                  widget.unswipe(false);
+                  widget.unswipe?.call(false);
                 }
               }
             }
@@ -227,8 +227,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             _horizontal = false;
             widget.cards.removeLast();
 
-            widget.onSwipe(widget.cards.length, detectedDirection);
-            if (widget.cards.isEmpty) widget.onEnd();
+            widget.onSwipe?.call(widget.cards.length, detectedDirection);
+            if (widget.cards.isEmpty) widget.onEnd?.call();
           } else if (_swipeType == AppinioSwiperSwipeType.unswipe) {
             if (widget.unlimitedUnswipe) {
               _lastCards.removeLast();
@@ -317,7 +317,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         ),
         onTap: () {
           if (widget.isDisabled) {
-            widget.onTapDisabled();
+            widget.onTapDisabled?.call();
           }
         },
         onPanStart: (tapInfo) {
@@ -541,10 +541,12 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   }
 }
 
-//for null safety
-void emptyFunction() {}
-void emptyFunctionIndex(int index, AppinioSwiperDirection direction) {}
-void emptyFunctionBool(bool unswiped) {}
+//for type safety
+typedef AppinioSwiperOnSwipe = void Function(
+    int index, AppinioSwiperDirection direction);
+typedef AppinioSwiperOnUnswipe = void Function(bool unswiped);
+typedef AppinioSwiperOnEnd = void Function();
+typedef AppinioSwiperOnTapDisabled = void Function();
 
 //to call the swipe or unswipe function from outside of the appinio swiper
 class AppinioSwiperController extends ChangeNotifier {
