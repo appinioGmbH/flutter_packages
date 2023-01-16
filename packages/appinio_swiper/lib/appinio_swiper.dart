@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class AppinioSwiper extends StatefulWidget {
   /// list of widgets for the swiper
-  final List<Widget?>? cards;
+  final List<Widget?> cards;
 
   /// controller to trigger unswipe action
   final AppinioSwiperController? controller;
@@ -111,7 +111,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         //swipe widget from the outside
         ..addListener(() {
           if (widget.controller!.state == AppinioSwiperState.swipe) {
-            if (widget.cards!.isNotEmpty) {
+            if (widget.cards.isNotEmpty) {
               switch (widget.direction) {
                 case AppinioSwiperDirection.right:
                   _swipeHorizontal(context);
@@ -135,7 +135,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         //swipe widget left from the outside
         ..addListener(() {
           if (widget.controller!.state == AppinioSwiperState.swipeLeft) {
-            if (widget.cards!.isNotEmpty) {
+            if (widget.cards.isNotEmpty) {
               _left = -1;
               _swipeHorizontal(context);
               _animationController.forward();
@@ -145,7 +145,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         //swipe widget right from the outside
         ..addListener(() {
           if (widget.controller!.state == AppinioSwiperState.swipeRight) {
-            if (widget.cards!.isNotEmpty) {
+            if (widget.cards.isNotEmpty) {
               _left = widget.threshold + 1;
               _swipeHorizontal(context);
               _animationController.forward();
@@ -206,7 +206,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             if (widget.unlimitedUnswipe) {
               _lastCards.add(
                 AppinioUnswipeCard(
-                  widget: widget.cards!.last!,
+                  widget: widget.cards.last!,
                   horizontal: _horizontal,
                   vertical: _vertical,
                   swipedDirectionHorizontal: _swipedDirectionHorizontal,
@@ -215,7 +215,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
               );
             } else {
               _lastCard = AppinioUnswipeCard(
-                widget: widget.cards!.last!,
+                widget: widget.cards.last!,
                 horizontal: _horizontal,
                 vertical: _vertical,
                 swipedDirectionHorizontal: _swipedDirectionHorizontal,
@@ -226,10 +226,10 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             _swipedDirectionVertical = 0;
             _vertical = false;
             _horizontal = false;
-            widget.cards!.removeLast();
+            widget.cards.removeLast();
 
-            widget.onSwipe(widget.cards!.length, detectedDirection);
-            if (widget.cards!.isEmpty) widget.onEnd();
+            widget.onSwipe(widget.cards.length, detectedDirection);
+            if (widget.cards.isEmpty) widget.onEnd();
           } else if (_swipeTyp == 2) {
             if (widget.unlimitedUnswipe) {
               _lastCards.removeLast();
@@ -269,8 +269,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                   clipBehavior: Clip.none,
                   fit: StackFit.expand,
                   children: [
-                    ...widget.cards!
-                        .asMap()
+                    ...widget.cards.asMap()
                         .map((index, _) {
                           return MapEntry(
                             index,
@@ -288,9 +287,9 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   }
 
   Widget _item(BoxConstraints constraints, int index) {
-    if (index != widget.cards!.length - 1) {
+    if (index != widget.cards.length - 1) {
       return Visibility(
-        visible: widget.cards!.length - index <= 2,
+        visible: widget.cards.length - index <= 2,
         child: Positioned(
           top: _difference,
           left: 0,
@@ -300,7 +299,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
               scale: _scale,
               child: Container(
                 constraints: constraints,
-                child: widget.cards![index],
+                child: widget.cards[index],
               ),
             ),
           ),
@@ -316,7 +315,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
           angle: _angle,
           child: Container(
             constraints: constraints,
-            child: widget.cards![index],
+            child: widget.cards[index],
           ),
         ),
         onTap: () {
@@ -492,7 +491,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   //unswipe the card: brings back the last card that was swiped away
   void _unswipe(AppinioUnswipeCard card) {
     _isUnswiping = true;
-    widget.cards!.add(card.widget);
+    widget.cards.add(card.widget);
     _swipeTyp = 2;
     //unSwipe horizontal
     if (card.horizontal == true) {
