@@ -269,16 +269,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                   clipBehavior: Clip.none,
                   fit: StackFit.expand,
                   children: [
-                    ...widget.cards!
-                        .asMap()
-                        .map((index, _) {
-                          return MapEntry(
-                            index,
-                            _item(constraints, index),
-                          );
-                        })
-                        .values
-                        .toList(),
+                    if (widget.cards!.length > 1) _backItem(constraints),
+                    if (widget.cards!.isNotEmpty) _frontItem(constraints),
                   ]);
             },
           ),
@@ -287,27 +279,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     );
   }
 
-  Widget _item(BoxConstraints constraints, int index) {
-    if (index != widget.cards!.length - 1) {
-      return Visibility(
-        visible: widget.cards!.length - index <= 2,
-        child: Positioned(
-          top: _difference,
-          left: 0,
-          child: Container(
-            color: Colors.transparent,
-            child: Transform.scale(
-              scale: _scale,
-              child: Container(
-                constraints: constraints,
-                child: widget.cards![index],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
+  Widget _frontItem(BoxConstraints constraints) {
     return Positioned(
       left: _left,
       top: _top,
@@ -316,7 +288,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
           angle: _angle,
           child: Container(
             constraints: constraints,
-            child: widget.cards![index],
+            child: widget.cards![widget.cards!.length - 1],
           ),
         ),
         onTap: () {
@@ -351,6 +323,23 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             _animationController.forward();
           }
         },
+      ),
+    );
+  }
+
+  Widget _backItem(BoxConstraints constraints) {
+    return Positioned(
+      top: _difference,
+      left: 0,
+      child: Container(
+        color: Colors.transparent,
+        child: Transform.scale(
+          scale: _scale,
+          child: Container(
+            constraints: constraints,
+            child: widget.cards![widget.cards!.length - 2],
+          ),
+        ),
       ),
     );
   }
