@@ -63,7 +63,7 @@ class OnBoardingSlider extends StatefulWidget {
   final Function()? skipFunction;
 
   final Function(int) changePage;
-
+  final bool showButtonBottom;
   final List<SlideOnBoarding> slides;
   final EdgeInsets paddingHeader;
   final EdgeInsets paddingContent;
@@ -99,6 +99,7 @@ class OnBoardingSlider extends StatefulWidget {
     this.iconButtonBottomSize = 20,
     this.heightButtonBottom = 40,
     this.widthButtonBottom = 130,
+    this.showButtonBottom = true,
     this.paddingHeader = EdgeInsets.zero,
     this.paddingButton = EdgeInsets.zero,
     this.paddingContent = EdgeInsets.zero,
@@ -172,6 +173,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
                           controllerColor: widget.controllerColor,
                         )
                       : SizedBox.shrink(),
+                if (widget.showButtonBottom)
                   Padding(
                     padding: widget.paddingButton,
                     child: BackgroundFinalButton(
