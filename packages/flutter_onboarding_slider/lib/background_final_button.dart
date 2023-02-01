@@ -4,78 +4,75 @@ class BackgroundFinalButton extends StatelessWidget {
   final int currentPage;
   final PageController pageController;
   final int totalPage;
-  final bool addButton;
-  final Function? onPageFinish;
-  final Color? buttonBackgroundColor;
+  final Function()? onPageFinish;
   final TextStyle buttonTextStyle;
-  final String? buttonText;
-  final bool hasSkip;
-  final Icon skipIcon;
-
+  final TextStyle buttonFinishTextStyle;
+  final String buttonText;
+  final String buttonFinishText;
+  final Color? buttonBackgroundColor;
+  final double? heightButtonBottom;
+  final double? widthButtonBottom;
+  final IconData? iconButtonBottom;
+  final IconData? iconButtonBottomFinish;
+  final Color? colorIconButtonBottom;
+  final double iconSize;
   BackgroundFinalButton({
     required this.currentPage,
     required this.pageController,
     required this.totalPage,
     this.onPageFinish,
     this.buttonBackgroundColor,
-    this.buttonText,
-    required this.buttonTextStyle,
-    required this.addButton,
-    required this.hasSkip,
-    required this.skipIcon,
+    required this.buttonText,
+    required this.buttonFinishText,
+    this.buttonTextStyle = const TextStyle(fontSize: 14),
+    this.buttonFinishTextStyle = const TextStyle(fontSize: 14),
+    this.heightButtonBottom,
+    this.widthButtonBottom,
+    this.iconSize = 20,
+    this.iconButtonBottom = Icons.navigate_next,
+    this.iconButtonBottomFinish = Icons.navigate_next,
+    this.colorIconButtonBottom = Colors.black,
   });
 
   @override
   Widget build(BuildContext context) {
-    return addButton
-        ? hasSkip
-            ? AnimatedContainer(
-                padding: currentPage == totalPage - 1
-                    ? EdgeInsets.symmetric(horizontal: 30)
-                    : EdgeInsets.all(0),
-                width: currentPage == totalPage - 1
-                    ? MediaQuery.of(context).size.width - 30
-                    : 60,
-                duration: Duration(milliseconds: 100),
-                child: currentPage == totalPage - 1
-                    ? FloatingActionButton.extended(
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0))),
-                        onPressed: () => onPageFinish?.call(),
-                        elevation: 0,
-                        label: buttonText == null
-                            ? SizedBox.shrink()
-                            : Text(
-                                buttonText!,
-                                style: buttonTextStyle,
-                              ),
-                        backgroundColor: buttonBackgroundColor,
-                      )
-                    : FloatingActionButton(
-                        onPressed: () => _goToNextPage(context),
-                        elevation: 0,
-                        child: skipIcon,
-                        backgroundColor: buttonBackgroundColor,
-                      ),
+    return AnimatedContainer(
+        width: (currentPage == totalPage - 1) ? MediaQuery.of(context).size.width - 30 : widthButtonBottom,
+        height: heightButtonBottom,
+        decoration: BoxDecoration(color: buttonBackgroundColor, borderRadius: BorderRadius.circular(30)),
+        duration: Duration(milliseconds: 200),
+        child: TextButton(
+          onPressed: (currentPage == totalPage - 1)
+              ? onPageFinish
+              : () {
+                  _goToNextPage(context);
+                },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                (currentPage == totalPage - 1) ? buttonFinishText : buttonText,
+                style: (currentPage == totalPage - 1) ? buttonFinishTextStyle : buttonTextStyle,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: Icon(
+                  (currentPage == totalPage - 1) ? iconButtonBottomFinish : iconButtonBottom,
+                  color: colorIconButtonBottom,
+                  size: iconSize,
+                ),
               )
-            : Container(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                width: MediaQuery.of(context).size.width - 30,
-                child: FloatingActionButton.extended(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  onPressed: () => onPageFinish?.call(),
-                  elevation: 0,
-                  label: buttonText == null
-                      ? SizedBox.shrink()
-                      : Text(
-                          buttonText!,
-                          style: buttonTextStyle,
-                        ),
-                  backgroundColor: buttonBackgroundColor,
-                ))
-        : SizedBox.shrink();
+            ],
+          ),
+          style: ButtonStyle(
+            padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
+              (Set<MaterialState> states) {
+                return EdgeInsets.symmetric(vertical: 6, horizontal: 16);
+              },
+            ),
+          ),
+        ));
   }
 
   /// Switch to Next Slide using the Floating Action Button.

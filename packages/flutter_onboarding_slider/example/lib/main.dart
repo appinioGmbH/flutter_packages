@@ -1,8 +1,9 @@
-import 'package:example/screens/login_page.dart';
-import 'package:example/screens/register_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
+
+import 'screens/login_page.dart';
+import 'screens/register_page.dart';
 
 void main() {
   runApp(MyApp());

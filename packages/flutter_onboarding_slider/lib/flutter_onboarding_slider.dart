@@ -4,86 +4,51 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/background_controller.dart';
 import 'package:flutter_onboarding_slider/background_final_button.dart';
-import 'package:flutter_onboarding_slider/onboarding_navigation_bar.dart';
+import 'package:flutter_onboarding_slider/header_onboaring_slider.dart';
 import 'package:flutter_onboarding_slider/page_offset_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'background.dart';
 import 'background_body.dart';
-export 'background.dart';
 
 class OnBoardingSlider extends StatefulWidget {
   /// Number of total pages.
   final int totalPage;
 
-  /// NavigationBars color.
-  final Color headerBackgroundColor;
-
-  /// List of Widgets to be shown in the backgrounds of the pages. For example a picture or some illustration.
-  final List<Widget> background;
-
-  /// The speed of the animation for the [background].
-  final double speed;
-
-  /// Background Color of whole screen apart from the NavigationBar.
-  final Color? pageBackgroundColor;
-
-  /// Background Gradient of whole screen apart from the NavigationBar.
-  final Gradient? pageBackgroundGradient;
-
   /// Callback to be executed when clicked on the [finishButton].
-  final Function? onFinish;
-
-  /// NavigationBar trailing widget when on last screen.
-  final Widget? trailing;
+  final Function()? onFinish;
 
   /// NavigationBar trailing widget when not on last screen.
-  final Widget? skipTextButton;
-
-  /// The main content ont the screen displayed above the [background].
-  final List<Widget> pageBodies;
-
-  /// Callback to be executed when clicked on the last pages bottom button.
-  final Function? trailingFunction;
+  final String skipTextButton;
 
   /// Color of the bottom button on the last page.
-  final Color? finishButtonColor;
+  final Color? customColorButton;
 
   /// Text inside last pages bottom button.
-  final String? finishButtonText;
+  final String finishButtonText;
+
+  /// Text inside last pages bottom button.
+  final String buttonBottomText;
 
   /// Text style for text inside last pages bottom button.
   final TextStyle finishButtonTextStyle;
 
+  /// Text style for text title.
+  final TextStyle titleStyle;
+
+  /// Text style for text title.
+  final TextStyle descriptionStyle;
+
   /// Color of the bottom page indicators.
   final Color? controllerColor;
 
-  /// Toggle bottom button.
-  final bool addButton;
+  /// Color of text title
+  final Color? customColorTitle;
+
+  /// Color of text description.
+  final Color? customColorDescription;
 
   /// Toggle bottom page controller visibilty.
   final bool addController;
-
-  /// Defines the vertical offset of the [background].
-  final double imageVerticalOffset;
-
-  /// Defines the horizontal offset of the [background].
-  final double imageHorizontalOffset;
-
-  /// leading widget in the navigationBar.
-  final Widget? leading;
-
-  /// middle widget in the navigationBar.
-  final Widget? middle;
-
-  /// Whether has the floating action button to skip and the finish button
-  final bool hasFloatingButton;
-
-  /// Whether has the skip button in the bottom;
-  final bool hasSkip;
-
-  /// icon on the skip button
-  final Icon skipIcon;
 
   /// is the indicator located on top of the screen
   final bool indicatorAbove;
@@ -91,43 +56,61 @@ class OnBoardingSlider extends StatefulWidget {
   /// distance of indicator from bottom
   final double indicatorPosition;
 
-  /// override the function for kip button in the navigator.
-  final Function? skipFunctionOverride;
+  /// distance of indicator from bottom
+  final double paddingBottom;
 
+  /// override the function for kip button in the navigator.
+  final Function()? skipFunction;
+
+  final Function(int) changePage;
+
+  final List<SlideOnBoarding> slides;
+  final EdgeInsets paddingHeader;
+  final EdgeInsets paddingContent;
+  final EdgeInsets paddingButton;
+  final EdgeInsets paddingImage;
+  final IconData? iconButtonBottomFinish;
+  final IconData? iconButtonBottom;
+  final double heightButtonBottom;
+  final double widthButtonBottom;
+  final double iconButtonBottomSize;
   OnBoardingSlider({
     required this.totalPage,
-    required this.headerBackgroundColor,
-    required this.background,
-    required this.speed,
-    required this.pageBodies,
+    required this.changePage,
+    required this.slides,
     this.onFinish,
-    this.trailingFunction,
-    this.trailing,
-    this.skipTextButton,
-    this.pageBackgroundColor,
-    this.pageBackgroundGradient,
-    this.finishButtonColor,
-    this.finishButtonText,
+    this.skipTextButton = '',
+    this.customColorButton,
+    this.finishButtonText = '',
+    this.buttonBottomText = '',
     this.controllerColor,
-    this.addController = true,
-    this.addButton = true,
-    this.imageVerticalOffset = 0,
-    this.imageHorizontalOffset = 0,
-    this.leading,
-    this.middle,
-    this.hasFloatingButton = true,
-    this.hasSkip = true,
+    this.customColorTitle,
+    this.customColorDescription,
+    this.addController = false,
+    this.paddingBottom = 35,
     this.finishButtonTextStyle = const TextStyle(
-      fontSize: 20,
-      color: Colors.white,
-    ),
-    this.skipIcon = const Icon(
-      Icons.arrow_forward,
-      color: Colors.white,
+      fontSize: 14,
     ),
     this.indicatorAbove = false,
     this.indicatorPosition = 90,
-    this.skipFunctionOverride,
+    this.skipFunction,
+    this.iconButtonBottomFinish,
+    this.iconButtonBottom,
+    this.iconButtonBottomSize = 20,
+    this.heightButtonBottom = 40,
+    this.widthButtonBottom = 130,
+    this.paddingHeader = EdgeInsets.zero,
+    this.paddingButton = EdgeInsets.zero,
+    this.paddingContent = EdgeInsets.zero,
+    this.paddingImage = EdgeInsets.zero,
+    this.titleStyle = const TextStyle(
+      fontWeight: FontWeight.w900,
+      fontSize: 28,
+    ),
+    this.descriptionStyle = const TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 15,
+    ),
   });
 
   @override
@@ -148,76 +131,87 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (BuildContext context) => PageOffsetNotifier(_pageController),
-      child: Scaffold(
-        backgroundColor: widget.pageBackgroundColor ?? null,
-        floatingActionButton: widget.hasFloatingButton
-            ? BackgroundFinalButton(
-                buttonTextStyle: widget.finishButtonTextStyle,
-                skipIcon: widget.skipIcon,
-                addButton: widget.addButton,
-                currentPage: _currentPage,
-                pageController: _pageController,
-                totalPage: widget.totalPage,
-                onPageFinish: widget.onFinish,
-                buttonBackgroundColor: widget.finishButtonColor,
-                buttonText: widget.finishButtonText,
-                hasSkip: widget.hasSkip,
-              )
-            : SizedBox.shrink(),
-        body: CupertinoPageScaffold(
-          navigationBar: OnBoardingNavigationBar(
-            skipFunctionOverride: widget.skipFunctionOverride,
-            leading: widget.leading,
-            middle: widget.middle,
-            totalPage: widget.totalPage,
-            currentPage: _currentPage,
-            onSkip: _onSkip,
-            headerBackgroundColor: widget.headerBackgroundColor,
-            onFinish: widget.trailingFunction,
-            finishButton: widget.trailing,
-            skipTextButton: widget.skipTextButton,
+      child: CupertinoPageScaffold(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            gradient: widget.slides[_currentPage].gradient ?? null,
+            color: widget.slides[_currentPage].background ?? null,
           ),
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              gradient: widget.pageBackgroundGradient ?? null,
-              color: widget.pageBackgroundColor ?? null,
-            ),
-            child: SafeArea(
-              child: Background(
-                imageHorizontalOffset: widget.imageHorizontalOffset,
-                imageVerticalOffset: widget.imageVerticalOffset,
-                background: widget.background,
-                speed: widget.speed,
-                totalPage: widget.totalPage,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: BackgroundBody(
-                          controller: _pageController,
-                          function: slide,
+          child: SafeArea(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: widget.paddingHeader,
+                    child: HeaderOnBoaringSlider(
+                      currentPage: _currentPage,
+                      slides: widget.slides,
+                      onSkip: widget.skipFunction,
+                      textButtonSkip: widget.skipTextButton,
+                      isLightMode: widget.slides[_currentPage].isLightMode,
+                    ),
+                  ),
+                  Expanded(
+                      child: Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: BackgroundBody(
+                      controller: _pageController,
+                      function: slide,
+                      totalPage: widget.totalPage,
+                      bodies: _getListContentPage(),
+                    ),
+                  )),
+                  widget.addController
+                      ? BackgroundController(
+                          indicatorPosition: widget.indicatorPosition,
+                          indicatorAbove: widget.indicatorAbove,
+                          currentPage: _currentPage,
                           totalPage: widget.totalPage,
-                          bodies: widget.pageBodies,
-                        ),
-                      ),
-                      widget.addController
-                          ? BackgroundController(
-                              indicatorPosition: widget.indicatorPosition,
-                              indicatorAbove: widget.indicatorAbove,
-                              currentPage: _currentPage,
-                              totalPage: widget.totalPage,
-                              controllerColor: widget.controllerColor,
-                            )
-                          : SizedBox.shrink(),
-                    ]),
-              ),
-            ),
+                          controllerColor: widget.controllerColor,
+                        )
+                      : SizedBox.shrink(),
+                  Padding(
+                    padding: widget.paddingButton,
+                    child: BackgroundFinalButton(
+                        totalPage: widget.totalPage,
+                        currentPage: _currentPage,
+                        pageController: _pageController,
+                        buttonText: widget.buttonBottomText,
+                        buttonFinishText: widget.finishButtonText,
+                        onPageFinish: widget.onFinish,
+                        colorIconButtonBottom: widget.slides[_currentPage].isLightMode ? Colors.white : Colors.black,
+                        iconButtonBottomFinish: widget.iconButtonBottomFinish,
+                        iconButtonBottom: widget.iconButtonBottom,
+                        iconSize: widget.iconButtonBottomSize,
+                        heightButtonBottom: widget.heightButtonBottom,
+                        widthButtonBottom: widget.widthButtonBottom,
+                        buttonBackgroundColor: _backgroundColorButton(),
+                        buttonFinishTextStyle: widget.finishButtonTextStyle
+                            .copyWith(color: widget.slides[_currentPage].isLightMode ? Colors.white : Colors.black),
+                        buttonTextStyle: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: widget.slides[_currentPage].isLightMode ? Colors.white : Colors.black)),
+                  ),
+                  SizedBox(
+                    height: widget.paddingBottom,
+                  )
+                ]),
           ),
         ),
       ),
     );
+  }
+
+  /// Background color button bottom
+  Color? _backgroundColorButton() {
+    if (widget.customColorButton != null) {
+      return widget.customColorButton;
+    } else {
+      return widget.slides[_currentPage].isLightMode ? Colors.black : Colors.white;
+    }
   }
 
   /// Slide to Next Page.
@@ -225,6 +219,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
     setState(() {
       _currentPage = page;
     });
+    widget.changePage(page);
   }
 
   /// Skip to last Slide.
@@ -234,4 +229,74 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
       _currentPage = widget.totalPage - 1;
     });
   }
+
+  /// Get list Content page
+  List<Widget> _getListContentPage() {
+    List<Widget> widgets = [];
+    return widget.slides.map((e) {
+      return SizedBox(
+        height: double.infinity,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: widget.paddingImage,
+                  child: Center(
+                    child: Image.asset(e.image),
+                  ),
+                )),
+            Expanded(
+              child: Padding(
+                padding: widget.paddingContent,
+                child: Column(
+                  children: [
+                    Text(
+                      e.title,
+                      style: widget.titleStyle.copyWith(
+                          color: widget.customColorTitle == null
+                              ? e.isLightMode
+                                  ? Colors.black
+                                  : Colors.white
+                              : widget.customColorTitle),
+                      textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text(
+                        e.description,
+                        style: widget.descriptionStyle.copyWith(
+                            color: widget.customColorDescription == null
+                                ? e.isLightMode
+                                    ? Color(0xff757575)
+                                    : Colors.white
+                                : widget.customColorDescription),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }).toList();
+  }
+}
+
+class SlideOnBoarding {
+  Color? background;
+  Gradient? gradient;
+  String image;
+  String title;
+  String description;
+  bool isLightMode;
+  SlideOnBoarding(
+      {this.background,
+      this.gradient,
+      required this.image,
+      required this.title,
+      required this.description,
+      this.isLightMode = false});
 }

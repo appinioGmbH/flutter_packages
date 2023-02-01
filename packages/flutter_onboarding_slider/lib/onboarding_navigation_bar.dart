@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class OnBoardingNavigationBar extends StatelessWidget
-    implements ObstructingPreferredSizeWidget {
+class OnBoardingNavigationBar extends StatelessWidget implements ObstructingPreferredSizeWidget {
   final int currentPage;
   final Function onSkip;
   final int totalPage;
@@ -71,7 +70,7 @@ class OnBoardingNavigationBar extends StatelessWidget
       border: Border(
         bottom: BorderSide(color: Colors.transparent),
       ),
-      backgroundColor: headerBackgroundColor,
+      backgroundColor: Colors.red,
     );
   }
 }
