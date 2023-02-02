@@ -1,5 +1,7 @@
 library flutter_onboarding_slider;
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/background_controller.dart';
@@ -62,6 +64,12 @@ class OnBoardingSlider extends StatefulWidget {
   /// override the function for kip button in the navigator.
   final Function()? skipFunction;
 
+  /// automatically switch slides after a period of time
+  final bool autoChangePage;
+
+  /// time per change slide
+  final int timePerChangePage;
+
   final Function(int) changePage;
   final bool showButtonBottom;
   final List<SlideOnBoarding> slides;
@@ -88,6 +96,7 @@ class OnBoardingSlider extends StatefulWidget {
     this.customColorDescription,
     this.addController = false,
     this.paddingBottom = 35,
+    this.autoChangePage = false,
     this.finishButtonTextStyle = const TextStyle(
       fontSize: 14,
     ),
@@ -104,6 +113,7 @@ class OnBoardingSlider extends StatefulWidget {
     this.paddingButton = EdgeInsets.zero,
     this.paddingContent = EdgeInsets.zero,
     this.paddingImage = EdgeInsets.zero,
+    this.timePerChangePage = 4,
     this.titleStyle = const TextStyle(
       fontWeight: FontWeight.w900,
       fontSize: 28,
@@ -126,6 +136,21 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
   @override
   void initState() {
     super.initState();
+    if (widget.autoChangePage) {
+      Timer.periodic(Duration(seconds: widget.timePerChangePage), (Timer timer) {
+        if (_currentPage < 2) {
+          _currentPage++;
+        } else {
+          _currentPage = 0;
+        }
+
+        _pageController.animateToPage(
+          _currentPage,
+          duration: Duration(milliseconds: 350),
+          curve: Curves.easeIn,
+        );
+      });
+    }
   }
 
   @override
@@ -173,30 +198,30 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
                           controllerColor: widget.controllerColor,
                         )
                       : SizedBox.shrink(),
-                if (widget.showButtonBottom)
-                  Padding(
-                    padding: widget.paddingButton,
-                    child: BackgroundFinalButton(
-                        totalPage: widget.totalPage,
-                        currentPage: _currentPage,
-                        pageController: _pageController,
-                        buttonText: widget.buttonBottomText,
-                        buttonFinishText: widget.finishButtonText,
-                        onPageFinish: widget.onFinish,
-                        colorIconButtonBottom: widget.slides[_currentPage].isLightMode ? Colors.white : Colors.black,
-                        iconButtonBottomFinish: widget.iconButtonBottomFinish,
-                        iconButtonBottom: widget.iconButtonBottom,
-                        iconSize: widget.iconButtonBottomSize,
-                        heightButtonBottom: widget.heightButtonBottom,
-                        widthButtonBottom: widget.widthButtonBottom,
-                        buttonBackgroundColor: _backgroundColorButton(),
-                        buttonFinishTextStyle: widget.finishButtonTextStyle
-                            .copyWith(color: widget.slides[_currentPage].isLightMode ? Colors.white : Colors.black),
-                        buttonTextStyle: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: widget.slides[_currentPage].isLightMode ? Colors.white : Colors.black)),
-                  ),
+                  if (widget.showButtonBottom)
+                    Padding(
+                      padding: widget.paddingButton,
+                      child: BackgroundFinalButton(
+                          totalPage: widget.totalPage,
+                          currentPage: _currentPage,
+                          pageController: _pageController,
+                          buttonText: widget.buttonBottomText,
+                          buttonFinishText: widget.finishButtonText,
+                          onPageFinish: widget.onFinish,
+                          colorIconButtonBottom: widget.slides[_currentPage].isLightMode ? Colors.white : Colors.black,
+                          iconButtonBottomFinish: widget.iconButtonBottomFinish,
+                          iconButtonBottom: widget.iconButtonBottom,
+                          iconSize: widget.iconButtonBottomSize,
+                          heightButtonBottom: widget.heightButtonBottom,
+                          widthButtonBottom: widget.widthButtonBottom,
+                          buttonBackgroundColor: _backgroundColorButton(),
+                          buttonFinishTextStyle: widget.finishButtonTextStyle
+                              .copyWith(color: widget.slides[_currentPage].isLightMode ? Colors.white : Colors.black),
+                          buttonTextStyle: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: widget.slides[_currentPage].isLightMode ? Colors.white : Colors.black)),
+                    ),
                   SizedBox(
                     height: widget.paddingBottom,
                   )
@@ -263,19 +288,21 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
                               : widget.customColorTitle),
                       textAlign: TextAlign.center,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: Text(
-                        e.description,
-                        style: widget.descriptionStyle.copyWith(
-                            color: widget.customColorDescription == null
-                                ? e.isLightMode
-                                    ? Color(0xff757575)
-                                    : Colors.white
-                                : widget.customColorDescription),
-                        textAlign: TextAlign.center,
-                      ),
-                    )
+                    e.description == ''
+                        ? e.customWidgetDescription
+                        : Padding(
+                            padding: EdgeInsets.only(top: 16),
+                            child: Text(
+                              e.description,
+                              style: widget.descriptionStyle.copyWith(
+                                  color: widget.customColorDescription == null
+                                      ? e.isLightMode
+                                          ? Color(0xff757575)
+                                          : Colors.white
+                                      : widget.customColorDescription),
+                              textAlign: TextAlign.center,
+                            ),
+                          )
                   ],
                 ),
               ),
@@ -293,12 +320,16 @@ class SlideOnBoarding {
   String image;
   String title;
   String description;
+
+  /// When the description is empty it will be displayed
+  Widget customWidgetDescription;
   bool isLightMode;
   SlideOnBoarding(
       {this.background,
       this.gradient,
       required this.image,
       required this.title,
-      required this.description,
+      this.description = '',
+      this.customWidgetDescription = const SizedBox.shrink(),
       this.isLightMode = false});
 }
