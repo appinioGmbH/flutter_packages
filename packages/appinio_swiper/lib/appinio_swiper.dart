@@ -30,6 +30,9 @@ class AppinioSwiper extends StatefulWidget {
   /// maximum angle the card reaches while swiping
   final double maxAngle;
 
+  /// set to true if verticalSwipe should be disabled, exception: triggered from the outside
+  final AppinioSwipeOptions swipeOptions;
+
   /// threshold from which the card is swiped away
   final int threshold;
 
@@ -71,6 +74,7 @@ class AppinioSwiper extends StatefulWidget {
     this.threshold = 50,
     this.isDisabled = false,
     this.loop = false,
+    this.swipeOptions = AppinioSwipeOptions.allDirections,
     this.allowUnswipe = true,
     this.unlimitedUnswipe = false,
     this.onTapDisabled,
@@ -170,6 +174,26 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             }
           }
         })
+      //swipe widget up from the outside
+        ..addListener(() {
+        if (widget.controller!.state == AppinioSwiperState.swipeUp) {
+          if (currentIndex < widget.cardsCount) {
+            _top = -1;
+            _swipeVertical(context);
+            _animationController.forward();
+          }
+        }
+      })
+      //swipe widget down from the outside
+        ..addListener(() {
+        if (widget.controller!.state == AppinioSwiperState.swipeDown) {
+          if (currentIndex < widget.cardsCount) {
+            _top =widget.threshold + 1;
+            _swipeVertical(context);
+            _animationController.forward();
+          }
+        }
+      })
       //unswipe widget from the outside
         ..addListener(() {
           if(!widget.unlimitedUnswipe && _unSwiped) return;
@@ -331,8 +355,19 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         onPanUpdate: (tapInfo) {
           if (!widget.isDisabled) {
             setState(() {
-              _left += tapInfo.delta.dx;
-              _top += tapInfo.delta.dy;
+              final swipeOption = widget.swipeOptions;
+              switch (swipeOption) {
+                case AppinioSwipeOptions.allDirections:
+                  _left += tapInfo.delta.dx;
+                  _top += tapInfo.delta.dy;
+                  break;
+                case AppinioSwipeOptions.horizontal:
+                  _left += tapInfo.delta.dx;
+                  break;
+                case AppinioSwipeOptions.vertical:
+                  _top += tapInfo.delta.dy;
+                  break;
+              }
               _total = _left + _top;
               _calculateAngle();
               _calculateScale();

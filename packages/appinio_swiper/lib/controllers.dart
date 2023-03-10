@@ -29,4 +29,19 @@ class AppinioSwiperController extends ChangeNotifier {
     state = AppinioSwiperState.unswipe;
     notifyListeners();
   }
+
+
+  //swipe the card to the top by changing the status of the controller
+  void swipeUp() {
+    state = AppinioSwiperState.swipeUp;
+    notifyListeners();
+  }
+
+
+  //swipe the card to the bottom by changing the status of the controller
+  void swipeDown() {
+    state = AppinioSwiperState.swipeDown;
+    notifyListeners();
+  }
+
 }
