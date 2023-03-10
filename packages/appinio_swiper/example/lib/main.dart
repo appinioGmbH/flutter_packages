@@ -35,25 +35,6 @@ class Example extends StatefulWidget {
 
 class _ExamplePageState extends State<Example> {
   final AppinioSwiperController controller = AppinioSwiperController();
-
-  List<ExampleCard> cards = [];
-
-  @override
-  void initState() {
-    _loadCards();
-    super.initState();
-  }
-
-  void _loadCards() {
-    for (ExampleCandidateModel candidate in candidates) {
-      cards.add(
-        ExampleCard(
-          candidate: candidate,
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -68,7 +49,6 @@ class _ExamplePageState extends State<Example> {
               unlimitedUnswipe: true,
               controller: controller,
               unswipe: _unswipe,
-              cards: cards,
               onSwipe: _swipe,
               padding: const EdgeInsets.only(
                 left: 25,
@@ -76,6 +56,11 @@ class _ExamplePageState extends State<Example> {
                 top: 50,
                 bottom: 40,
               ),
+              onEnd: _onEnd,
+              cardsCount: candidates.length,
+              cardsBuilder: (BuildContext context, int index) {
+                return ExampleCard(candidate: candidates[index]);
+              },
             ),
           ),
           Row(
@@ -110,5 +95,9 @@ class _ExamplePageState extends State<Example> {
     } else {
       log("FAIL: no card left to unswipe");
     }
+  }
+
+  void _onEnd() {
+    log("end reached!");
   }
 }
