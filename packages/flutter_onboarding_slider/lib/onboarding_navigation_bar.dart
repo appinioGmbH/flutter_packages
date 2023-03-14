@@ -46,7 +46,6 @@ class OnBoardingNavigationBar extends StatelessWidget
               ? SizedBox.shrink()
               : Container(
                   color: Colors.transparent,
-                  alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () => onFinish?.call(),
                     child: finishButton!,
@@ -56,7 +55,6 @@ class OnBoardingNavigationBar extends StatelessWidget
               ? SizedBox.shrink()
               : Container(
                   color: Colors.transparent,
-                  alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
                       if (skipFunctionOverride == null) {
