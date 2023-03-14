@@ -61,6 +61,10 @@ class OnBoardingSlider extends StatefulWidget {
   /// Toggle bottom button.
   final bool addButton;
 
+  /// Center [background].
+  /// Do not pass [imageHorizontalOffset] when you turn this flag to true otherwise that will get ignored
+  final bool centerBackground;
+
   /// Toggle bottom page controller visibilty.
   final bool addController;
 
@@ -68,6 +72,7 @@ class OnBoardingSlider extends StatefulWidget {
   final double imageVerticalOffset;
 
   /// Defines the horizontal offset of the [background].
+  /// Do not set [centerBackground] to true when you use this property otherwise this will get ignored
   final double imageHorizontalOffset;
 
   /// leading widget in the navigationBar.
@@ -110,6 +115,7 @@ class OnBoardingSlider extends StatefulWidget {
     this.finishButtonText,
     this.controllerColor,
     this.addController = true,
+    this.centerBackground = false,
     this.addButton = true,
     this.imageVerticalOffset = 0,
     this.imageHorizontalOffset = 0,
@@ -185,6 +191,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
             ),
             child: SafeArea(
               child: Background(
+                centerBackground:widget.centerBackground,
                 imageHorizontalOffset: widget.imageHorizontalOffset,
                 imageVerticalOffset: widget.imageVerticalOffset,
                 background: widget.background,

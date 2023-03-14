@@ -8,12 +8,14 @@ class BackgroundImage extends StatelessWidget {
   final double imageVerticalOffset;
   final double speed;
   final double imageHorizontalOffset;
+  final bool centerBackground;
 
   BackgroundImage({
     required this.id,
     required this.speed,
     required this.background,
     required this.imageVerticalOffset,
+    required this.centerBackground,
     required this.imageHorizontalOffset,
   });
 
@@ -27,7 +29,10 @@ class BackgroundImage extends StatelessWidget {
             left: MediaQuery.of(context).size.width * ((id - 1) * speed) -
                 speed * notifier.offset +
                 imageHorizontalOffset,
-            child: child!,
+            child: centerBackground? Container(
+              width: MediaQuery.of(context).size.width,
+              child: child!,
+            ): child!,
           ),
         ]);
       },
