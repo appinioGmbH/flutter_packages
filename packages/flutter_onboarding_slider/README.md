@@ -120,7 +120,7 @@ class OnBoarding extends StatelessWidget {
 | totalPage | - | Number of total pages | true |
 | speed | - | The speed of the animation for the [background] | true |
 | pageBodies | - | The main content ont the screen displayed above the [background] | true |
-| centreBackground | false | This flag is used to center the background. | false |
+| centerBackground | false | This flag is used to center the background. | false |
 
 <hr/>
 Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
