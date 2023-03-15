@@ -33,6 +33,9 @@ class AppinioSwiper extends StatefulWidget {
   /// function that gets called with the new index and detected swipe direction when the user swiped or swipe is triggered by controller
   final Function onSwipe;
 
+  /// function that gets called when swipe ended
+  final Function onDragEnd;
+
   /// function that gets called when there is no widget left to be swiped away
   final Function onEnd;
 
@@ -62,6 +65,7 @@ class AppinioSwiper extends StatefulWidget {
     this.onTapDisabled = emptyFunction,
     this.onSwipe = emptyFunctionIndex,
     this.onEnd = emptyFunction,
+    this.onDragEnd = emptyFunction,
     this.unswipe = emptyFunctionBool,
     this.direction = AppinioSwiperDirection.right,
     this.onDrag,
@@ -383,6 +387,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   }
 
   void _onEndAnimation() {
+    widget.onDragEnd();
+
     if (_left < -widget.threshold || _left > widget.threshold) {
       _swipeHorizontal(context);
     } else if (_top < -widget.threshold || _top > widget.threshold) {
