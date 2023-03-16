@@ -420,7 +420,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   }
 
   void _onEndAnimation() {
-    widget.onDragEnd?.call(_left, _top);
+    widget.onDragEnd?.call();
 
     if (_left < -widget.threshold || _left > widget.threshold) {
       _swipeHorizontal(context);
