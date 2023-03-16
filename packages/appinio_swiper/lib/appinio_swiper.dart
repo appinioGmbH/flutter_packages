@@ -68,6 +68,10 @@ class AppinioSwiper extends StatefulWidget {
   /// direction in which the card gets swiped when triggered by controller, default set to right
   final AppinioSwiperDirection direction;
 
+  /// widget that gets wrapped around the card that is currently swiped
+  final Function(Widget child)? foregroundItemWrapper;
+  final Function(Widget child)? backgroundItemWrapper;
+
   const AppinioSwiper({
     Key? key,
     required this.cardsBuilder,
@@ -89,6 +93,8 @@ class AppinioSwiper extends StatefulWidget {
     this.onSwipe,
     this.onEnd,
     this.unswipe,
+    this.foregroundItemWrapper,
+    this.backgroundItemWrapper,
   })  : assert(maxAngle >= 0 && maxAngle <= 360),
         assert(threshold >= 1 && threshold <= 100),
         assert(direction != AppinioSwiperDirection.none),
@@ -320,7 +326,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   }
 
   Widget _backgroundItem(BoxConstraints constraints) {
-    return Positioned(
+    final item = Positioned(
       top: _difference,
       left: 0,
       child: Container(
@@ -335,10 +341,14 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         ),
       ),
     );
+
+    return widget.backgroundItemWrapper != null
+        ? widget.backgroundItemWrapper!(item)
+        : item;
   }
 
   Widget _foregroundItem(BoxConstraints constraints) {
-    return Positioned(
+    final item = Positioned(
       left: _left,
       top: _top,
       child: GestureDetector(
@@ -396,6 +406,10 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         },
       ),
     );
+
+    return widget.foregroundItemWrapper != null
+        ? widget.foregroundItemWrapper!(item)
+        : item;
   }
 
   void _calculateAngle() {
