@@ -136,8 +136,8 @@ class _WidgetZoomState extends State<WidgetZoom>
         ),
       );
 
-      final OverlayState? overlay = Overlay.of(context);
-      overlay?.insert(_entry!);
+      final OverlayState overlay = Overlay.of(context);
+      overlay.insert(_entry!);
     }
   }
 

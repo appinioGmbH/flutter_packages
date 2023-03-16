@@ -1,3 +1,11 @@
+## [2.0.0] - 2023.03.16
+
+Features:
+* Breaking change - Replaced the list of cards with cardsBuilder.
+* Trigger swipe up & down through controller.
+* Restrict horizontal or vertical swipe.
+* Set looping for card swipe.
+ 
 ## [1.1.1] - 2022.10.13
 
 Fixes:
