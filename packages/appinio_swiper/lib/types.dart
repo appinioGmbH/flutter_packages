@@ -6,4 +6,3 @@ typedef CardsBuilder = Widget Function(BuildContext context, int index);
 typedef OnSwipe = void Function(int index, AppinioSwiperDirection direction);
 
 typedef OnUnSwipe = void Function(bool unswiped);
-
