@@ -1,3 +1,8 @@
+## [0.2.1] - 2023.03.13
+
+* Enhancements:
+  - updating FB SDK to 15.1.0
+  
 ## [0.2.0] - 2022.11.08
 
 * Features:
@@ -12,7 +17,7 @@
 ## [0.1.3] - 2022.10.13
 
 * Enhancements: 
-  - updating FB SDK.
+  - updating FB SDK to 14.1.0
  
 ## [0.1.2] - 2022.10.06
 
