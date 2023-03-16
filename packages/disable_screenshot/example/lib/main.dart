@@ -77,8 +77,6 @@ class RootAppState extends State<RootApp> {
   @override
   void dispose() {
     super.dispose();
-    if (_screenshotsSubscription != null) {
-      _screenshotsSubscription.cancel();
-    }
+    _screenshotsSubscription.cancel();
   }
 }
