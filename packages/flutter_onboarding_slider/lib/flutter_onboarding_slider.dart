@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'background.dart';
 import 'background_body.dart';
 export 'background.dart';
+export 'background_final_button.dart';
 
 class OnBoardingSlider extends StatefulWidget {
   /// Number of total pages.
@@ -46,8 +47,8 @@ class OnBoardingSlider extends StatefulWidget {
   /// Callback to be executed when clicked on the last pages bottom button.
   final Function? trailingFunction;
 
-  /// Color of the bottom button on the last page.
-  final Color? finishButtonColor;
+  /// Style of the bottom button on the last page.
+  final FinishButtonStyle? finishButtonStyle;
 
   /// Text inside last pages bottom button.
   final String? finishButtonText;
@@ -111,7 +112,7 @@ class OnBoardingSlider extends StatefulWidget {
     this.skipTextButton,
     this.pageBackgroundColor,
     this.pageBackgroundGradient,
-    this.finishButtonColor,
+    this.finishButtonStyle,
     this.finishButtonText,
     this.controllerColor,
     this.addController = true,
@@ -165,7 +166,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
                 pageController: _pageController,
                 totalPage: widget.totalPage,
                 onPageFinish: widget.onFinish,
-                buttonBackgroundColor: widget.finishButtonColor,
+                finishButtonStyle: widget.finishButtonStyle,
                 buttonText: widget.finishButtonText,
                 hasSkip: widget.hasSkip,
               )

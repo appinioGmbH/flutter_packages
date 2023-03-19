@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:example/screens/login_page.dart';
 import 'package:example/screens/register_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,7 +33,9 @@ class MyHome extends StatelessWidget {
           ),
         );
       },
-      finishButtonColor: kDarkBlueColor,
+      finishButtonStyle: FinishButtonStyle(
+        backgroundColor: kDarkBlueColor,
+      ),
       skipTextButton: Text(
         'Skip',
         style: TextStyle(
