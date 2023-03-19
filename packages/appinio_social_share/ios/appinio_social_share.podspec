@@ -16,8 +16,8 @@ A new Flutter project.
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
   s.dependency 'TikTokOpenSDK', '5.0.14'
-  s.dependency 'FBSDKCoreKit', '14.1.0'
-  s.dependency 'FBSDKShareKit', '14.1.0'
+  s.dependency 'FBSDKCoreKit', '15.1.0'
+  s.dependency 'FBSDKShareKit', '15.1.0'
   s.static_framework = true
 
   s.platform = :ios, '9.0'
