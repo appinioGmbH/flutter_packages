@@ -8,10 +8,12 @@ class Background extends StatelessWidget {
   final double speed;
   final double imageVerticalOffset;
   final double imageHorizontalOffset;
+  final bool centerBackground;
 
   Background({
     required this.imageVerticalOffset,
     required this.child,
+    required this.centerBackground,
     required this.totalPage,
     required this.background,
     required this.speed,
@@ -25,6 +27,7 @@ class Background extends StatelessWidget {
       children: [
         for (int i = 0; i < totalPage; i++)
           BackgroundImage(
+              centerBackground:centerBackground,
               imageHorizontalOffset: imageHorizontalOffset,
               imageVerticalOffset: imageVerticalOffset,
               id: totalPage - i,

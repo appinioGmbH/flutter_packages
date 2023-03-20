@@ -9,6 +9,8 @@ We build this package because we wanted to:
 - have parralex design of the background that allows background to slide at a different speed.
 - display with a bottom controller that indicates the current page.
 - trigger `skip` with a button on the top right with a final function.
+- NEW: you can use ```centerBackground``` property to center the background images. If you use this property ```imageHorizontalOffset``` property will get ignored. 
+- NEW: You can use ```finishButtonStyle``` property to customize the finish button according to your design.
 
 ## Show Cases
 
@@ -68,6 +70,9 @@ class OnBoarding extends StatelessWidget {
       home: OnBoardingSlider(
         headerBackgroundColor: Colors.white,
         finishButtonText: 'Register',
+        finishButtonStyle: FinishButtonStyle(
+          backgroundColor: Colors.black,
+        ),
         skipTextButton: Text('Skip'),
         trailing: Text('Login'),
         background: [
@@ -120,6 +125,8 @@ class OnBoarding extends StatelessWidget {
 | totalPage | - | Number of total pages | true |
 | speed | - | The speed of the animation for the [background] | true |
 | pageBodies | - | The main content ont the screen displayed above the [background] | true |
+| centerBackground | false | This flag is used to center the background. | false |
+| finishButtonStyle | - | This property is used to customize the finish button. | false |
 
 
 <hr/>

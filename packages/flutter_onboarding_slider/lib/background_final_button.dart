@@ -1,29 +1,69 @@
 import 'package:flutter/material.dart';
 
+class FinishButtonStyle {
+  late ShapeBorder? shape;
+
+  late double? elevation;
+  final double? focusElevation;
+  final double? hoverElevation;
+  final double? highlightElevation;
+  final double? disabledElevation;
+
+  final Color? foregroundColor;
+  final Color? backgroundColor;
+  final Color? focusColor;
+  final Color? hoverColor;
+  final Color? splashColor;
+
+  FinishButtonStyle({
+    this.shape,
+    this.elevation,
+    this.focusElevation,
+    this.hoverElevation,
+    this.highlightElevation,
+    this.disabledElevation,
+    this.foregroundColor,
+    this.backgroundColor,
+    this.focusColor,
+    this.hoverColor,
+    this.splashColor,
+  }) {
+    shape = shape ??
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(5.0),
+          ),
+        );
+    elevation = elevation ?? 0;
+  }
+}
+
 class BackgroundFinalButton extends StatelessWidget {
   final int currentPage;
   final PageController pageController;
   final int totalPage;
   final bool addButton;
   final Function? onPageFinish;
-  final Color? buttonBackgroundColor;
   final TextStyle buttonTextStyle;
   final String? buttonText;
   final bool hasSkip;
   final Icon skipIcon;
+  FinishButtonStyle? finishButtonStyle;
 
   BackgroundFinalButton({
     required this.currentPage,
     required this.pageController,
     required this.totalPage,
     this.onPageFinish,
-    this.buttonBackgroundColor,
     this.buttonText,
     required this.buttonTextStyle,
     required this.addButton,
     required this.hasSkip,
     required this.skipIcon,
-  });
+    this.finishButtonStyle,
+  }) {
+    finishButtonStyle = finishButtonStyle ?? FinishButtonStyle();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,41 +79,65 @@ class BackgroundFinalButton extends StatelessWidget {
                 duration: Duration(milliseconds: 100),
                 child: currentPage == totalPage - 1
                     ? FloatingActionButton.extended(
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0))),
+                        shape: finishButtonStyle?.shape,
+                        elevation: finishButtonStyle?.elevation,
+                        focusElevation: finishButtonStyle?.focusElevation,
+                        hoverElevation: finishButtonStyle?.hoverElevation,
+                        highlightElevation:
+                            finishButtonStyle?.highlightElevation,
+                        disabledElevation: finishButtonStyle?.disabledElevation,
+                        foregroundColor: finishButtonStyle?.foregroundColor,
+                        backgroundColor: finishButtonStyle?.backgroundColor,
+                        focusColor: finishButtonStyle?.focusColor,
+                        hoverColor: finishButtonStyle?.hoverColor,
+                        splashColor: finishButtonStyle?.splashColor,
                         onPressed: () => onPageFinish?.call(),
-                        elevation: 0,
                         label: buttonText == null
                             ? SizedBox.shrink()
                             : Text(
                                 buttonText!,
                                 style: buttonTextStyle,
                               ),
-                        backgroundColor: buttonBackgroundColor,
                       )
                     : FloatingActionButton(
+                        shape: finishButtonStyle?.shape,
+                        elevation: finishButtonStyle?.elevation,
+                        focusElevation: finishButtonStyle?.focusElevation,
+                        hoverElevation: finishButtonStyle?.hoverElevation,
+                        highlightElevation:
+                            finishButtonStyle?.highlightElevation,
+                        disabledElevation: finishButtonStyle?.disabledElevation,
+                        foregroundColor: finishButtonStyle?.foregroundColor,
+                        backgroundColor: finishButtonStyle?.backgroundColor,
+                        focusColor: finishButtonStyle?.focusColor,
+                        hoverColor: finishButtonStyle?.hoverColor,
+                        splashColor: finishButtonStyle?.splashColor,
                         onPressed: () => _goToNextPage(context),
-                        elevation: 0,
                         child: skipIcon,
-                        backgroundColor: buttonBackgroundColor,
                       ),
               )
             : Container(
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 width: MediaQuery.of(context).size.width - 30,
                 child: FloatingActionButton.extended(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  shape: finishButtonStyle?.shape,
+                  elevation: finishButtonStyle?.elevation,
+                  focusElevation: finishButtonStyle?.focusElevation,
+                  hoverElevation: finishButtonStyle?.hoverElevation,
+                  highlightElevation: finishButtonStyle?.highlightElevation,
+                  disabledElevation: finishButtonStyle?.disabledElevation,
+                  foregroundColor: finishButtonStyle?.foregroundColor,
+                  backgroundColor: finishButtonStyle?.backgroundColor,
+                  focusColor: finishButtonStyle?.focusColor,
+                  hoverColor: finishButtonStyle?.hoverColor,
+                  splashColor: finishButtonStyle?.splashColor,
                   onPressed: () => onPageFinish?.call(),
-                  elevation: 0,
                   label: buttonText == null
                       ? SizedBox.shrink()
                       : Text(
                           buttonText!,
                           style: buttonTextStyle,
                         ),
-                  backgroundColor: buttonBackgroundColor,
                 ))
         : SizedBox.shrink();
   }
