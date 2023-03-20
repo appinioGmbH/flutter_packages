@@ -27,7 +27,7 @@ class Background extends StatelessWidget {
       children: [
         for (int i = 0; i < totalPage; i++)
           BackgroundImage(
-              centerBackground:centerBackground,
+              centerBackground: centerBackground,
               imageHorizontalOffset: imageHorizontalOffset,
               imageVerticalOffset: imageVerticalOffset,
               id: totalPage - i,

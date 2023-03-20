@@ -28,11 +28,13 @@ class BackgroundImage extends StatelessWidget {
             top: imageVerticalOffset,
             left: MediaQuery.of(context).size.width * ((id - 1) * speed) -
                 speed * notifier.offset +
-                (centerBackground? 0 :imageHorizontalOffset),
-            child: centerBackground? Container(
-              width: MediaQuery.of(context).size.width,
-              child: child!,
-            ): child!,
+                (centerBackground ? 0 : imageHorizontalOffset),
+            child: centerBackground
+                ? Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: child!,
+                  )
+                : child!,
           ),
         ]);
       },

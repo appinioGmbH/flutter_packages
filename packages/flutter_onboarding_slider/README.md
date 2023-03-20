@@ -115,19 +115,19 @@ class OnBoarding extends StatelessWidget {
 #### Basic
 
 
-| Parameter        | Default           | Description  | Required  |
-| ------------- |:-------------|:-----|:-----:|
-| headerBackgroundColor | - | color of the background | false |
-| finishButtonText | - | Text inside last pages bottom button | false |
-| skipTextButton | - | NavigationBar trailing widget when not on last screen | false |
-| trailing | - | NavigationBar trailing widget when on last screen | false |
-| background | - | List of Widgets to be shown in the backgrounds of the pages. For example a picture or some illustration | true |
-| totalPage | - | Number of total pages | true |
-| speed | - | The speed of the animation for the [background] | true |
-| pageBodies | - | The main content ont the screen displayed above the [background] | true |
-| centerBackground | false | This flag is used to center the background. | false |
-| finishButtonStyle | - | This property is used to customize the finish button. | false |
+| Parameter             | Default | Description                                                                                             | Required |
+|-----------------------|:--------|:--------------------------------------------------------------------------------------------------------|:--------:|
+| headerBackgroundColor | -       | color of the background                                                                                 |  false   |
+| finishButtonText      | -       | Text inside last pages bottom button                                                                    |  false   |
+| skipTextButton        | -       | NavigationBar trailing widget when not on last screen                                                   |  false   |
+| trailing              | -       | NavigationBar trailing widget when on last screen                                                       |  false   |
+| background            | -       | List of Widgets to be shown in the backgrounds of the pages. For example a picture or some illustration |   true   |
+| totalPage             | -       | Number of total pages                                                                                   |   true   |
+| speed                 | -       | The speed of the animation for the [background]                                                         |   true   |
+| pageBodies            | -       | The main content ont the screen displayed above the [background]                                        |   true   |
+| centerBackground      | false   | This flag is used to center the background.                                                             |  false   |
+| finishButtonStyle     | -       | This property is used to customize the finish button.                                                   |  false   |
 
 
 <hr/>
-Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
+Made with ❤ by Flutter team at <a href="https://appinio.app">Appinio GmbH</a>

@@ -192,7 +192,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
             ),
             child: SafeArea(
               child: Background(
-                centerBackground:widget.centerBackground,
+                centerBackground: widget.centerBackground,
                 imageHorizontalOffset: widget.imageHorizontalOffset,
                 imageVerticalOffset: widget.imageVerticalOffset,
                 background: widget.background,

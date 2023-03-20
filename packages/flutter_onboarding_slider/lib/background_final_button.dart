@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FinishButtonStyle {
-  late ShapeBorder? shape;
+  final ShapeBorder? shape;
 
-  late double? elevation;
+  final double? elevation;
   final double? focusElevation;
   final double? hoverElevation;
   final double? highlightElevation;
@@ -15,9 +15,13 @@ class FinishButtonStyle {
   final Color? hoverColor;
   final Color? splashColor;
 
-  FinishButtonStyle({
-    this.shape,
-    this.elevation,
+  const FinishButtonStyle({
+    this.shape = const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(5.0),
+      ),
+    ),
+    this.elevation = 0,
     this.focusElevation,
     this.hoverElevation,
     this.highlightElevation,
@@ -27,15 +31,7 @@ class FinishButtonStyle {
     this.focusColor,
     this.hoverColor,
     this.splashColor,
-  }) {
-    shape = shape ??
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(5.0),
-          ),
-        );
-    elevation = elevation ?? 0;
-  }
+  });
 }
 
 class BackgroundFinalButton extends StatelessWidget {
@@ -48,7 +44,7 @@ class BackgroundFinalButton extends StatelessWidget {
   final String? buttonText;
   final bool hasSkip;
   final Icon skipIcon;
-  FinishButtonStyle? finishButtonStyle;
+  final FinishButtonStyle? finishButtonStyle;
 
   BackgroundFinalButton({
     required this.currentPage,
@@ -60,10 +56,8 @@ class BackgroundFinalButton extends StatelessWidget {
     required this.addButton,
     required this.hasSkip,
     required this.skipIcon,
-    this.finishButtonStyle,
-  }) {
-    finishButtonStyle = finishButtonStyle ?? FinishButtonStyle();
-  }
+    this.finishButtonStyle = const FinishButtonStyle(),
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    return const CupertinoApp(
       debugShowCheckedModeBanner: false,
       home: MyHome(),
     );
@@ -21,6 +23,8 @@ class MyApp extends StatelessWidget {
 class MyHome extends StatelessWidget {
   final Color kDarkBlueColor = const Color(0xFF053149);
 
+  const MyHome({super.key});
+
   @override
   Widget build(BuildContext context) {
     return OnBoardingSlider(
@@ -29,7 +33,7 @@ class MyHome extends StatelessWidget {
         Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => RegisterPage(),
+            builder: (context) => const RegisterPage(),
           ),
         );
       },
@@ -56,7 +60,7 @@ class MyHome extends StatelessWidget {
         Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => LoginPage(),
+            builder: (context) => const LoginPage(),
           ),
         );
       },
