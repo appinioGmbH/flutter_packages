@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHome extends StatelessWidget {
-  final Color kDarkBlueColor = Color(0xFF053149);
+  final Color kDarkBlueColor = const Color(0xFF053149);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,9 @@ class MyHome extends StatelessWidget {
           ),
         );
       },
-      finishButtonColor: kDarkBlueColor,
+      finishButtonStyle: FinishButtonStyle(
+        backgroundColor: kDarkBlueColor,
+      ),
       skipTextButton: Text(
         'Skip',
         style: TextStyle(
@@ -79,12 +81,14 @@ class MyHome extends StatelessWidget {
       speed: 1.8,
       pageBodies: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 40),
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 480,
               ),
               Text(
@@ -96,10 +100,10 @@ class MyHome extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 'to find the perfect looking Onboarding for your app?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -112,12 +116,14 @@ class MyHome extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 40),
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 480,
               ),
               Text(
@@ -129,10 +135,10 @@ class MyHome extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 'Sliding with animation',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -145,12 +151,14 @@ class MyHome extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 40),
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 480,
               ),
               Text(
@@ -162,10 +170,10 @@ class MyHome extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 'Where everything is possible and customize your onboarding.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
