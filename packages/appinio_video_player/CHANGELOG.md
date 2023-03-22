@@ -1,3 +1,8 @@
+## [1.2.1] - 2023.03.21
+
+- Fix: Orientation not switching back to portrait in iOS
+- Fix: Negative duration on sliding back
+
 ## [1.2.0] - 2022.08.22
 
 - New: Native Web Video Player
