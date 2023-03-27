@@ -75,6 +75,9 @@ Add these permissions and queries to your AndroidManifest.xml
     <package android:name="org.telegram.messenger" />
     <package android:name="com.whatsapp" />
     <package android:name="com.twitter.android" />
+  
+    <provider android:authorities="com.facebook.katana.provider.PlatformProvider" /> <!-- allows app to access Facebook app features -->
+    <provider android:authorities="com.facebook.orca.provider.PlatformProvider" /> <!-- allows sharing to Messenger app -->
 </queries>
 
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -122,6 +125,16 @@ After created your own file provider and define your own path paste them into th
     <string name="facebook_client_token">[facebook_client_token]</string>
 </resources>
 ```
+
++ Add this inside the application tag in android manifest.
+
+```xml
+  <provider android:name="com.facebook.FacebookContentProvider" android:authorities="com.facebook.app.FacebookContentProvider[facebook_app_id]"
+         android:exported="true" />
+     <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
+     <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token" />
+```
+
 
 + After complete the step above add these xml tags to your AndroidManifest.xml
 
