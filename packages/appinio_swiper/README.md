@@ -99,7 +99,7 @@ class Example extends StatelessWidget {
           cardsBuilder: (BuildContext context,int index){
               return Container(
                           alignment: Alignment.center,
-                          child: const Text(index.toString()),
+                          child: Text(index.toString()),
                           color: CupertinoColors.activeBlue,
                           );
           },
