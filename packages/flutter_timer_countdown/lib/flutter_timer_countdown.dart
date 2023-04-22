@@ -78,10 +78,10 @@ class TimerCountdown extends StatefulWidget {
 
 class _TimerCountdownState extends State<TimerCountdown> {
   Timer? timer;
-  late String countdownDays; // TODO: null safety
-  late String countdownHours;
-  late String countdownMinutes;
-  late String countdownSeconds;
+  String? countdownDays;
+  String? countdownHours;
+  String? countdownMinutes;
+  String? countdownSeconds;
   late Duration difference;
   late DateTime _startTime;
 
@@ -105,15 +105,6 @@ class _TimerCountdownState extends State<TimerCountdown> {
   /// When this difference reached `Duration.zero` the `Timer` is stopped and the [onEnd] callback is invoked.
   void _startTimer() {
     _startTime = DateTime.now();
-
-    // Initialize timer
-    setState(() {
-      difference = getDifference(); // TODO: remove
-      countdownDays = _durationToStringDays(difference);
-      countdownHours = _durationToStringHours(difference);
-      countdownMinutes = _durationToStringMinutes(difference);
-      countdownSeconds = _durationToStringSeconds(difference);
-    });
 
     _onTick(); // Initial call
     timer = Timer.periodic(
@@ -196,7 +187,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          countdownDays,
+          countdownDays ?? _durationToStringDays(Duration.zero),
           style: widget.timeTextStyle,
         ),
         if (widget.enableDescriptions)
@@ -219,7 +210,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          countdownHours,
+          countdownHours ?? _durationToStringHours(Duration.zero),
           style: widget.timeTextStyle,
         ),
         if (widget.enableDescriptions)
@@ -242,7 +233,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          countdownMinutes,
+          countdownMinutes ?? _durationToStringMinutes(Duration.zero),
           style: widget.timeTextStyle,
         ),
         if (widget.enableDescriptions)
@@ -265,7 +256,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          countdownSeconds,
+          countdownSeconds ?? _durationToStringSeconds(Duration.zero),
           style: widget.timeTextStyle,
         ),
         if (widget.enableDescriptions)
