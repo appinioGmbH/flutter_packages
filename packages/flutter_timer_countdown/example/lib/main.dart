@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
                 height: 20,
               ),
               TimerFrame(
-                description: 'whitout minutes & seconds',
+                description: 'without minutes & seconds',
                 timer: TimerBasic(
                   format: CountDownTimerFormat.daysHours,
                 ),
@@ -88,6 +88,28 @@ class MyApp extends StatelessWidget {
                 description: 'only seconds',
                 timer: TimerBasic(
                   format: CountDownTimerFormat.secondsOnly,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TimerFrame(
+                description: 'Reverse Countdown',
+                inverted: true,
+                timer: TimerBasic(
+                  format: CountDownTimerFormat.secondsOnly,
+                  inverted: true,
+                  isReverse: true,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TimerFrame(
+                description: 'Reverse Countdown',
+                timer: TimerBasic(
+                  format: CountDownTimerFormat.daysHoursMinutesSeconds,
+                  isReverse: true,
                 ),
               ),
             ],

@@ -8,10 +8,12 @@ import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 class TimerBasic extends StatelessWidget {
   final CountDownTimerFormat format;
   final bool inverted;
+  final bool isReverse;
 
   TimerBasic({
     required this.format,
     this.inverted = false,
+    this.isReverse = false,
     Key? key,
   }) : super(key: key);
 
@@ -58,6 +60,7 @@ class TimerBasic extends StatelessWidget {
       hoursDescription: "hours",
       minutesDescription: "minutes",
       secondsDescription: "seconds",
+      isReverse: isReverse,
     );
   }
 }

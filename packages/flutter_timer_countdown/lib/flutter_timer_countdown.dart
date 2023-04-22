@@ -20,7 +20,7 @@ class TimerCountdown extends StatefulWidget {
   /// Format for the timer countdown, choose between different `CountDownTimerFormat`s
   final CountDownTimerFormat format;
 
-  /// Defines the time when the timer is over.
+  /// Defines the time when the timer is over. Ignored when [isReverse] is `true`.
   final DateTime endTime;
 
   /// Function to call when the timer is over.
@@ -53,6 +53,9 @@ class TimerCountdown extends StatefulWidget {
   /// Defines the width between the colons and the units.
   final double spacerWidth;
 
+  /// Reversing the timer and counts up.
+  final bool isReverse;
+
   TimerCountdown({
     required this.endTime,
     this.format = CountDownTimerFormat.daysHoursMinutesSeconds,
@@ -66,6 +69,7 @@ class TimerCountdown extends StatefulWidget {
     this.minutesDescription = "Minutes",
     this.secondsDescription = "Seconds",
     this.spacerWidth = 10,
+    this.isReverse = false,
   });
 
   @override
@@ -74,11 +78,12 @@ class TimerCountdown extends StatefulWidget {
 
 class _TimerCountdownState extends State<TimerCountdown> {
   Timer? timer;
-  late String countdownDays;
+  late String countdownDays; // TODO: null safety
   late String countdownHours;
   late String countdownMinutes;
   late String countdownSeconds;
   late Duration difference;
+  late DateTime _startTime;
 
   @override
   void initState() {
@@ -99,39 +104,51 @@ class _TimerCountdownState extends State<TimerCountdown> {
   /// Then create a periodic `Timer` which updates all fields every second depending on the time difference which is getting smaller.
   /// When this difference reached `Duration.zero` the `Timer` is stopped and the [onEnd] callback is invoked.
   void _startTimer() {
-    bool hasOnEnd = widget.onEnd != null;
-    DateTime now = DateTime.now();
-    difference = widget.endTime.isBefore(now)
-        ? Duration.zero
-        : widget.endTime.difference(now);
+    _startTime = DateTime.now();
 
     // Initialize timer
     setState(() {
+      difference = getDifference(); // TODO: remove
       countdownDays = _durationToStringDays(difference);
       countdownHours = _durationToStringHours(difference);
       countdownMinutes = _durationToStringMinutes(difference);
       countdownSeconds = _durationToStringSeconds(difference);
     });
 
-    // Update timer asynchronously
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      difference = widget.endTime.difference(DateTime.now());
-      if (difference <= Duration.zero) {
-        timer.cancel();
-        if (hasOnEnd) {
-          widget.onEnd!();
-        }
-      } else {
-        setState(() {
-          countdownDays = _durationToStringDays(difference);
-          countdownHours = _durationToStringHours(difference);
-          countdownMinutes = _durationToStringMinutes(difference);
-          countdownSeconds = _durationToStringSeconds(difference);
-        });
+    _onTick(); // Initial call
+    timer = Timer.periodic(
+        Duration(seconds: 1), _onTick); // Update timer asynchronously
+  }
+
+  void _onTick([Timer? timer]) {
+    difference = getDifference();
+
+    if (difference <= Duration.zero) {
+      timer?.cancel();
+      if (widget.onEnd != null) {
+        widget.onEnd!();
       }
+      return;
+    }
+
+    setState(() {
+      countdownDays = _durationToStringDays(difference);
+      countdownHours = _durationToStringHours(difference);
+      countdownMinutes = _durationToStringMinutes(difference);
+      countdownSeconds = _durationToStringSeconds(difference);
     });
+  }
 
+  Duration getDifference() {
+    DateTime now = DateTime.now();
 
+    if (widget.isReverse) {
+      return now.difference(_startTime);
+    } else {
+      return widget.endTime.isBefore(now)
+          ? Duration.zero
+          : widget.endTime.difference(now);
+    }
   }
 
   @override
