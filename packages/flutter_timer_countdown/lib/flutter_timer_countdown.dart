@@ -2,6 +2,7 @@ library flutter_timer_countdown;
 
 import 'dart:async';
 import 'package:flutter/widgets.dart';
+import 'timer_controller.dart';
 
 enum CountDownTimerFormat {
   daysHoursMinutesSeconds,
@@ -56,6 +57,9 @@ class TimerCountdown extends StatefulWidget {
   /// Reversing the timer and counts up.
   final bool isReverse;
 
+  /// `TimerController` for start, pause, resume and stop operations. If controller is `null` timer starts automatically.
+  final TimerController? controller;
+
   TimerCountdown({
     required this.endTime,
     this.format = CountDownTimerFormat.daysHoursMinutesSeconds,
@@ -70,24 +74,28 @@ class TimerCountdown extends StatefulWidget {
     this.secondsDescription = "Seconds",
     this.spacerWidth = 10,
     this.isReverse = false,
+    this.controller,
   });
 
   @override
-  _TimerCountdownState createState() => _TimerCountdownState();
+  TimerCountdownState createState() => TimerCountdownState();
 }
 
-class _TimerCountdownState extends State<TimerCountdown> {
+class TimerCountdownState extends State<TimerCountdown> {
   Timer? timer;
   String? countdownDays;
   String? countdownHours;
   String? countdownMinutes;
   String? countdownSeconds;
   late Duration difference;
-  late DateTime _startTime;
 
   @override
   void initState() {
-    _startTimer();
+    if (widget.controller == null) {
+      TimerController.withState(this).start();
+    } else {
+      widget.controller?.setWidgetState(this);
+    }
     super.initState();
   }
 
@@ -99,52 +107,19 @@ class _TimerCountdownState extends State<TimerCountdown> {
     super.dispose();
   }
 
-  /// Calculate the time difference between now end the given [endTime] and initialize all UI timer values.
-  ///
-  /// Then create a periodic `Timer` which updates all fields every second depending on the time difference which is getting smaller.
-  /// When this difference reached `Duration.zero` the `Timer` is stopped and the [onEnd] callback is invoked.
-  void _startTimer() {
-    _startTime = DateTime.now();
-
-    _onTick(); // Initial call
-    timer = Timer.periodic(
-        Duration(seconds: 1), _onTick); // Update timer asynchronously
+  @override
+  Widget build(BuildContext context) {
+    return _countDownTimerFormat();
   }
 
-  void _onTick([Timer? timer]) {
-    difference = getDifference();
-
-    if (difference <= Duration.zero) {
-      timer?.cancel();
-      if (widget.onEnd != null) {
-        widget.onEnd!();
-      }
-      return;
-    }
-
+  void updateCountdown() {
+    if(!mounted) return;
     setState(() {
       countdownDays = _durationToStringDays(difference);
       countdownHours = _durationToStringHours(difference);
       countdownMinutes = _durationToStringMinutes(difference);
       countdownSeconds = _durationToStringSeconds(difference);
     });
-  }
-
-  Duration getDifference() {
-    DateTime now = DateTime.now();
-
-    if (widget.isReverse) {
-      return now.difference(_startTime);
-    } else {
-      return widget.endTime.isBefore(now)
-          ? Duration.zero
-          : widget.endTime.difference(now);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _countDownTimerFormat();
   }
 
   /// Builds the UI colons between the time units.

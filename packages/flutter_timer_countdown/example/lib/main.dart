@@ -1,14 +1,23 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:example/timer_basic.dart';
 import 'package:example/timer_frame.dart';
+import 'package:flutter_timer_countdown/timer_controller.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  TimerController? timerController = TimerController();
+
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
@@ -110,7 +119,37 @@ class MyApp extends StatelessWidget {
                 timer: TimerBasic(
                   format: CountDownTimerFormat.daysHoursMinutesSeconds,
                   isReverse: true,
+                  timerController: timerController,
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => timerController?.start(),
+                    child: Text("START"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (timerController?.state == TimerState.paused)
+                        timerController?.resume();
+                      else
+                        timerController?.pause();
+                      setState(() {});
+                    },
+                    child: Text(timerController?.state == TimerState.paused
+                        ? "RESUME"
+                        : "PAUSE"),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => timerController?.stop(),
+                    child: Text("STOP"),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  ),
+                ],
               ),
             ],
           ),

@@ -4,22 +4,26 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:example/timer_frame.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:flutter_timer_countdown/timer_controller.dart';
 
 class TimerBasic extends StatelessWidget {
   final CountDownTimerFormat format;
   final bool inverted;
   final bool isReverse;
+  TimerController? timerController;
 
   TimerBasic({
     required this.format,
     this.inverted = false,
     this.isReverse = false,
+    this.timerController,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TimerCountdown(
+      controller: timerController,
       format: format,
       endTime: DateTime.now().add(
         Duration(
