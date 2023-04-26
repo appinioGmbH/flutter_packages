@@ -83,6 +83,7 @@ class CustomVideoPlayerController {
   }
 
   Future<void> _exitFullscreen() async {
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     await SystemChrome.setEnabledSystemUIMode(
       customVideoPlayerSettings.systemUIModeAfterFullscreen,
       overlays: customVideoPlayerSettings.systemUIOverlaysAfterFullscreen,
