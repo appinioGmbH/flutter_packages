@@ -93,13 +93,13 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     String twoDigitHours = twoDigits(duration.inHours);
-    if(int.parse(twoDigitMinutes)<0) {
+    if (int.parse(twoDigitMinutes) < 0) {
       twoDigitMinutes = "00";
     }
-    if(int.parse(twoDigitSeconds)<0) {
+    if (int.parse(twoDigitSeconds) < 0) {
       twoDigitSeconds = "00";
     }
-    if(int.parse(twoDigitHours)<0) {
+    if (int.parse(twoDigitHours) < 0) {
       twoDigitHours = "00";
     }
     if (duration > const Duration(hours: 1)) {

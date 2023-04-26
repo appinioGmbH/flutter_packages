@@ -1,4 +1,4 @@
-## [1.2.1] - 2023.03.21
+## [1.2.1] - 2023.04.26
 
 - Fix: Orientation not switching back to portrait in iOS
 - Fix: Negative duration on sliding back
