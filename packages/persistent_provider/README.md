@@ -3,7 +3,7 @@
 <br />
 
 
-## Top Sharing Features
+## Top Features
 
 - Saves the state of your provider when you call notifylistener
 - loads the state when app opens up
