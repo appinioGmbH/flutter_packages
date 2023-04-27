@@ -37,6 +37,7 @@ abstract class PersistentProvider extends ChangeNotifier {
     String filePath = '${appDocumentsDirectory.path}/store.json';
 
     File file = File(filePath);
+    if(!await file.exists()) return;
     String fileContents = await file.readAsString();
 
     Map<String, dynamic> json = jsonDecode(fileContents);
