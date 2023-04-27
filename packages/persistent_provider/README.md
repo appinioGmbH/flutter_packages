@@ -17,7 +17,7 @@
 
 Paste the following attribute in the manifest tag in the AndroidManifest.xml
 
-Add these permissions and queries to your AndroidManifest.xml
+Add these permissions to your AndroidManifest.xml
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
