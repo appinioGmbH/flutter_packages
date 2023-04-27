@@ -33,47 +33,116 @@ Add these permissions and queries to your AndroidManifest.xml
 
 ```dart
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  AppinioSocialShare appinioSocialShare =  AppinioSocialShare();
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: "Share Feature",
-        home: Scaffold(
-          body: Column(
-            children: [
-              ElevatedButton(
-                  child: Text("ShareToWhatsapp"),
-                  onPressed: () {
-                    shareToWhatsApp("Message Text!!", file.getAbsolutePath());
-                  },
-              ),
-            ],
-          ),
-        )
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const MyHomePage(
+          title: 'Flutter Demo Home Page',
+        ),
+      ),
     );
   }
+}
 
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
 
-  Future<void> shareToWhatsApp(String message, String filePath) async{
-    String response = await appinioSocialShare.shareToWhatsapp(message,filePath: filePath);
-    print(response);
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<UserProvider>(context, listen: false).initialize();
+    });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            UserCard(
+              name: Provider.of<UserProvider>(context).name,
+              age: 24,
+              gender: "Male",
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * .6,
+              child: TextField(
+                onChanged: (String value) {
+                  Provider.of<UserProvider>(context, listen: false).name =
+                      value;
+                },
+                decoration: const InputDecoration(hintText: "Enter new name"),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
+
 
 
 ```
 
 <br />
+
+*** Implement a provider like this.
+
+```dart
+
+class UserProvider extends PersistentProvider {
+  String _name = '';
+
+  String get name => _name;
+
+  set name(String value) {
+    _name = value;
+    notifyListeners();
+  }
+
+  @override
+  void fromJson(Map<String, dynamic> data) {
+    _name = data['name'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {"name": _name};
+  }
+}
+
+
+```
 
 
 | Method        | iOS | Android | Parameters | Description
