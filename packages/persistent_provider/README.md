@@ -1,39 +1,245 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+```persistent_provider``` is a small plugin which saves the state of your provider locally and loads it when app opens next time.
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+<br />
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## Top Sharing Features
 
-## Features
+- Saves the state of your provider when you call notifylistener
+- loads the state when app opens up
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
 
-## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+**Simply Extend PersistentProvider class while creating a provider instead of ChangeNotifier and implement the required methods.
+
+## Android
+
+Paste the following attribute in the manifest tag in the AndroidManifest.xml
+
+```xml
+
+<manifest xmlns:tools="http://schemas.android.com/tools">
+</manifest>
+```
+
+For example:
+
+```xml
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="your package...">
+</manifest>
+```
+
+Add these permissions and queries to your AndroidManifest.xml
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        package="your package...">
+  
+<queries>
+    <!-- Explicit apps you know in advance about: -->
+          
+    <package android:name="com.instagram.android" />
+    <package android:name="com.zhiliaoapp.musically" />
+    <package android:name="com.facebook.katana" />
+    <package android:name="com.facebook.orca" />
+    <package android:name="org.telegram.messenger" />
+    <package android:name="com.whatsapp" />
+    <package android:name="com.twitter.android" />
+  
+    <provider android:authorities="com.facebook.katana.provider.PlatformProvider" /> <!-- allows app to access Facebook app features -->
+    <provider android:authorities="com.facebook.orca.provider.PlatformProvider" /> <!-- allows sharing to Messenger app -->
+</queries>
+
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.INTERNET" />
+
+</manifest>
+```
+
+Create xml folder and add a provider path file to it (for example: provider_paths_app.xml) in android/app/src/main/res and 
+add the lines below to the created xml file
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-path
+        name="external_files"
+        path="." />
+</paths>
+```
+
+After created your own file provider and define your own path paste them into this and add to your AndroidManifest.xml
+
+```xml
+
+<provider android:name="androidx.core.content.FileProvider" 
+        android:authorities="${applicationId}.provider"
+    android:exported="false" android:grantUriPermissions="true">
+    <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/[your_custom_fileProvider_file_name]" />
+</provider>
+```
+
+### Facebook app register
+
++ In /android/app/src/main/values folder create a strings.xml file and add your facebook app id and facebook client token.
++ To get the facebook client token: Open your app on Meta for developer ([link](https://developers.facebook.com)) > Settings > Advanced > Security >
+  Application code
++ To get the facebook app id follow the Meta link above and go to your app Settings > Basic information > App ID
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">[facebook_app_id]</string>
+    <string name="facebook_client_token">[facebook_client_token]</string>
+</resources>
+```
+
++ Add this inside the application tag in android manifest.
+
+```xml
+  <provider android:name="com.facebook.FacebookContentProvider" android:authorities="com.facebook.app.FacebookContentProvider[facebook_app_id]"
+         android:exported="true" />
+     <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
+     <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token" />
+```
+
+
++ After complete the step above add these xml tags to your AndroidManifest.xml
+
+
+## iOS
+
+***Open Xcode and change your deployment target to iOS 11***
+
+Add these lines to your Info.plist file
+
+```xml
+<dict>
+  <key>CFBundleURLTypes</key>
+  <array>
+  <dict>
+      <key>CFBundleURLSchemes</key>
+      <array>
+          <string>fb[your_facebook_app_id]</string>
+      </array>
+  </dict>
+  </array>
+  
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+  <string>instagram</string>
+  <string>fb</string>
+  <string>fbauth2</string>
+  <string>fbshareextension</string>
+  <string>fbapi</string>
+  <string>facebook-reels</string>
+  <string>facebook-stories</string>
+  <string>fb-messenger-share-api</string>
+  <string>fb-messenger</string>
+  <string>tg</string>
+  <string>whatsapp</string>
+  <string>twitter</string>
+  </array>
+  
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>$(PRODUCT_NAME) needs permission to access photos and videos on your device</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>$(PRODUCT_NAME) does not require access to the microphone.</string>
+  <key>NSCameraUsageDescription</key>
+  <string>$(PRODUCT_NAME) requires access to the camera.</string>
+  <key>NSAppleMusicUsageDescription</key>
+  <string>$(PRODUCT_NAME) requires access to play music</string>
+  
+  <key>FacebookAppID</key>
+  <string>[your_facebook_app_id]</string>
+  <key>FacebookClientToken</key>
+  <string>[your_facebook_client_token]</string>
+  <key>FacebookDisplayName</key>
+  <string>[your_facebook_app_display_name]</string>
+  
+  <key>NSBonjourServices</key>
+  <array>
+  <string>_dartobservatory._tcp</string>
+  </array>
+</dict>
+```
+
+***The facebook app id and facebook client token you can get by complete the steps mentioned on Android config***
+
+Add these lines to the AppDelegate.swift file
+
+```
+import FBSDKCoreKit
+
+// Put these lines in the application function
+FBSDKCoreKit.ApplicationDelegate.shared.application(
+        application,
+        didFinishLaunchingWithOptions: launchOptions
+)
+```
+
+<br />
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
 ```dart
-const like = 'sample';
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  AppinioSocialShare appinioSocialShare =  AppinioSocialShare();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: "Share Feature",
+        home: Scaffold(
+          body: Column(
+            children: [
+              ElevatedButton(
+                  child: Text("ShareToWhatsapp"),
+                  onPressed: () {
+                    shareToWhatsApp("Message Text!!", file.getAbsolutePath());
+                  },
+              ),
+            ],
+          ),
+        )
+    );
+  }
+
+
+  Future<void> shareToWhatsApp(String message, String filePath) async{
+    String response = await appinioSocialShare.shareToWhatsapp(message,filePath: filePath);
+    print(response);
+  }
+
+}
+
+
 ```
 
-## Additional information
+<br />
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+
+| Method        | iOS | Android | Parameters | Description
+|:-------------|:-------------:|:-------------:|:-------------|:-------------
+| initialize      |✔️| ✔️ |  -   | call this method on the first screen of your app to load the saved provider state.
+
+
+
+
+
+<hr/>
+Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
