@@ -11,6 +11,7 @@
 
 
 ** Simply Extend PersistentProvider class while creating a provider instead of ChangeNotifier and implement the required methods.
+** Do not add provider to your pubspec.yaml explicitely because persistent_provider already uses this as a dependency.
 
 ## Android
 
@@ -116,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 <br />
 
-*** Implement a provider like this.
+*** Implement the provider like this.
 
 ```dart
 
