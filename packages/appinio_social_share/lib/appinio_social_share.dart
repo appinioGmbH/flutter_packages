@@ -42,9 +42,27 @@ class AppinioSocialShare {
     return AppinioSocialSharePlatform.instance.copyToClipBoard(message);
   }
 
-  Future<String> shareToFacebook(String hashtag, String filePath) {
-    return AppinioSocialSharePlatform.instance
-        .shareToFacebook(hashtag, filePath);
+  /// One of imagesPath or videosPath must not be empty
+  /// iOS restrictions:
+  /// Up to 20 combined images and videos.
+  /// [videosPath]: 1 video at most
+  /// [imagesPath]: 20 images at most or 19 in case you set videoPath as well
+  /// Official docs for ShareMediaContent on iOS: https://developers.facebook.com/docs/sharing/ios
+  ///
+  /// Android restrictions:
+  /// Up to 6 combined images and videos.
+  /// [videosPath]: 6 videos at most, depending on how much images you set
+  /// [imagesPath]: 6 images at most, depending on how much videos you set
+  /// Official docs for ShareMediaContent on iOS: https://developers.facebook.com/docs/sharing/android
+  Future<String> shareToFacebook(
+      String hashtag,
+      @Deprecated('This param will no longer be used in upcoming versions, instead use imagesPath')
+          String? filePath,
+      {List<String>? imagesPath,
+      List<String>? videosPath}) {
+    return AppinioSocialSharePlatform.instance.shareToFacebook(
+        hashtag, filePath,
+        imagesPath: imagesPath, videosPath: videosPath);
   }
 
   Future<String> shareToInstagramStory(

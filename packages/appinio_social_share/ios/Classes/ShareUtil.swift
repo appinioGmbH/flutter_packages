@@ -17,6 +17,8 @@ public class ShareUtil{
 
     let argAttributionURL: String  = "attributionURL";
     let argImagePath: String  = "imagePath";
+    let argImagesPath: String  = "imagesPath";
+    let argVideosPath: String  = "videosPath";
     let argbackgroundImage: String  = "backgroundImage";
     let argMessage: String  = "message";
     let argTitle: String  = "title";
@@ -312,32 +314,91 @@ public class ShareUtil{
             result(ERROR_APP_NOT_AVAILABLE);
         }
     }
-    
-    
-    
-    func shareToFacebookPost(args : [String: Any?],result: @escaping FlutterResult, delegate: SharingDelegate) {
-        let message = args[self.argMessage] as? String
-        let imagePath = args[self.argImagePath] as? String
-        
-        let photo = SharePhoto(image: UIImage.init(contentsOfFile: imagePath!)!, isUserGenerated: true)
-        let content = SharePhotoContent()
-        content.photos = [photo]
-        content.hashtag = Hashtag(message!)
-        let dialog = ShareDialog(
-            viewController: UIApplication.shared.windows.first!.rootViewController,
-            content: content,
-            delegate: delegate
-        )
+
+    func showShareFacebookDialog(content: FBSDKShareKit.SharingContent, delegate: SharingDelegate, result: @escaping FlutterResult) {
         do {
+            let dialog = ShareDialog(
+                viewController: UIApplication.shared.windows.first!.rootViewController,
+                content: content,
+                delegate: delegate
+            )
             try dialog.validate()
-        } catch {
+            dialog.show()
+            result(self.SUCCESS)
+        } catch let error {
            result(ERROR)
+           print(error.localizedDescription)
         }
-        dialog.show()
-        result(self.SUCCESS)
-        
     }
     
+    // Solution 4
+    func shareToFacebookPost(args : [String: Any?], result: @escaping FlutterResult, delegate: SharingDelegate) {
+        let message = args[self.argMessage] as? String
+        let imagesPath = args[self.argImagesPath] as? [String]
+        let videosPath = args[self.argVideosPath] as? [String]
+        let videoPath = videosPath != nil && !videosPath!.isEmpty ? videosPath![0] : nil;
+        
+        var imagesSize = (imagesPath == nil || imagesPath!.isEmpty) ? 0 : imagesPath!.count
+        let videosSize = (videosPath == nil || videosPath!.isEmpty) ? 0 : 1
+        let facebookMaxSharingMedias = 20; //ShareMediaContent docs: https://developers.facebook.com/docs/sharing/android
+
+        if(imagesSize + videosSize > facebookMaxSharingMedias) {
+            imagesSize = imagesSize - (imagesSize + videosSize - facebookMaxSharingMedias);
+        }
+        
+        let content = ShareMediaContent()
+        if(message != nil) {
+            content.hashtag = Hashtag(message!)
+        }
+
+        if(imagesSize > 0) {
+            for i in 0...imagesSize - 1 {
+                let imagePath = imagesPath![i]
+                let photo = SharePhoto(image: UIImage.init(contentsOfFile: imagePath)!, isUserGenerated: true)
+                content.media.append(photo)
+            }
+            if(videosSize == 0) {
+                showShareFacebookDialog(content: content, delegate: delegate, result: result)
+                return
+            }
+        }
+
+        if(videoPath != nil) {
+            let videoURL = URL(fileURLWithPath: videoPath!)
+            var videoAssetUrl: URL?
+
+            PHPhotoLibrary.shared().performChanges({
+                let assetCreationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
+                let assetPlaceholder = assetCreationRequest?.placeholderForCreatedAsset
+                 let localIdentifier = assetPlaceholder?.localIdentifier ?? "";
+                let localIdentifierPrefix = String(localIdentifier.prefix(36))
+
+                videoAssetUrl = URL(string: "assets-library://asset/asset.mp4?id="+localIdentifierPrefix+"&ext=mp4")
+
+                DispatchQueue.main.async {
+                    let video = ShareVideo(videoURL: videoAssetUrl!);
+                    content.media.append(video)
+                    self.showShareFacebookDialog(content: content, delegate: delegate, result: result)
+
+                    // Deleting video asks user for confirmation so it doesn't make sense.
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//                            let assets = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil)
+//                            PHPhotoLibrary.shared().performChanges({
+//                                PHAssetChangeRequest.deleteAssets(assets)
+//                            })
+//                        }
+                }
+            }) { (success, error) in
+                if success {
+                    print("Asset creation successful!")
+                } else {
+                    print("Asset creation failed: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
+    }
+    
+        
     
     func shareToTelegram(args : [String: Any?],result: @escaping FlutterResult) {
         let message = args[self.argMessage] as? String
