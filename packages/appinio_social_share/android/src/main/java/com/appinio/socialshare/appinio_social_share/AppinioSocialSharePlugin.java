@@ -69,15 +69,16 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
 
     public String decideApp(@NonNull MethodCall call, @NonNull Result result) {
         activeContext = (activity != null) ? activity.getApplicationContext() : context;
-        String title = call.argument("title");
-        String message = call.argument("message");
-        String facebookAppId = call.argument("appId");
-        String imagePath = call.argument("imagePath");
-        String stickerImage = call.argument("stickerImage");
-        String attributionURL = call.argument("attributionURL");
-        String backgroundImage = call.argument("backgroundImage");
-        String backgroundTopColor = call.argument("backgroundTopColor");
-        String backgroundBottomColor = call.argument("backgroundBottomColor");
+        Map<String, Object> arguments = (Map<String, Object>) call.arguments;
+        String title = call.argument(SocialShareUtil.argTitle);
+        String message = call.argument(SocialShareUtil.argMessage);
+        String facebookAppId = call.argument(SocialShareUtil.argAppId);
+        String imagePath = call.argument(SocialShareUtil.argImagePath);
+        String stickerImage = call.argument(SocialShareUtil.argStickerImage);
+        String attributionURL = call.argument(SocialShareUtil.argAttributionURL);
+        String backgroundImage = call.argument(SocialShareUtil.argBackgroundImage);
+        String backgroundTopColor = call.argument(SocialShareUtil.argBackgroundTopColor);
+        String backgroundBottomColor = call.argument(SocialShareUtil.argBackgroundBottomColor);
         switch (call.method) {
             case INSTALLED_APPS:
                 Map<String, Boolean> response =  socialShareUtil.getInstalledApps(activeContext);
@@ -95,7 +96,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
                 return socialShareUtil.shareToMessenger(message, activeContext);
             case FACEBOOK:
                 if (activity == null) return SocialShareUtil.ERROR;
-                socialShareUtil.shareToFacebook(imagePath, message, activity, result);
+                socialShareUtil.shareToFacebook(arguments, activity, result);
                 return null;
             case WHATSAPP:
                 return socialShareUtil.shareToWhatsApp(imagePath, message, activeContext);

@@ -19,8 +19,10 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareMediaContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.model.ShareVideo;
 import com.facebook.share.widget.ShareDialog;
 
 import java.io.File;
@@ -52,6 +54,21 @@ public class SocialShareUtil {
     private final String FACEBOOK_MESSENGER_PACKAGE = "com.facebook.orca";
     private final String FACEBOOK_MESSENGER_LITE_PACKAGE = "com.facebook.mlite";
     private final String SMS_DEFAULT_APPLICATION = "sms_default_application";
+
+
+    public static final String argAttributionURL = "attributionURL";
+    public static final String argImagePath = "imagePath";
+    public static final String argImagesPath = "imagesPath";
+    public static final String argVideosPath = "videosPath";
+    public static final String argBackgroundImage = "backgroundImage";
+    public static final String argMessage = "message";
+    public static final String argTitle = "title";
+    public static final String argStickerImage = "stickerImage";
+    public static final String argAppId = "appId";
+    public static final String argBackgroundTopColor = "backgroundTopColor";
+    public static final String argBackgroundBottomColor = "backgroundBottomColor";
+    public static final String argImages = "images";
+    public static final String argVideoFile = "videoFile";
 
 
     private static CallbackManager callbackManager;
@@ -177,39 +194,83 @@ public class SocialShareUtil {
 
     }
 
+    private void showShareFacebookDialog(Activity activity, ShareMediaContent content, MethodChannel.Result result) {
+        try {
+            callbackManager = callbackManager == null ? CallbackManager.Factory.create() : callbackManager;
+            ShareDialog shareDialog = new ShareDialog(activity);
+            shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+                @Override
+                public void onSuccess(Sharer.Result result1) {
+                    System.out.println("---------------onSuccess");
+                    result.success(SUCCESS);
+                }
 
-    public void shareToFacebook(String imagePath, String text, Activity activity, MethodChannel.Result result) {
+                @Override
+                public void onCancel() {
+                    result.success(ERROR);
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+                    System.out.println("---------------onError");
+                    result.success(ERROR);
+                }
+            });
+
+
+            if (ShareDialog.canShow(SharePhotoContent.class)) {
+                shareDialog.show(content);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            result.success(ERROR);
+        }
+    }
+
+    public void shareToFacebook(Map<String, Object> arguments, Activity activity, MethodChannel.Result result) {
         FacebookSdk.sdkInitialize(activity.getApplicationContext());
-        callbackManager = callbackManager == null ? CallbackManager.Factory.create() : callbackManager;
-        ShareDialog shareDialog = new ShareDialog(activity);
-        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-            @Override
-            public void onSuccess(Sharer.Result result1) {
-                System.out.println("---------------onSuccess");
-                result.success(SUCCESS);
-            }
 
-            @Override
-            public void onCancel() {
-                result.success(ERROR);
-            }
+        final String message = (String) arguments.get(argMessage);
+        final List<String> imagesPath = (List<String>) arguments.get(argImagesPath);
+        final List<String> videosPath = (List<String>) arguments.get(argVideosPath);
+        int imagesSize = (imagesPath == null || imagesPath.isEmpty()) ? 0 : imagesPath.size();
+        int videosSize = (videosPath == null || videosPath.isEmpty()) ? 0 : videosPath.size();
+        final int facebookMaxSharingMedias = 6; //ShareMediaContent docs: https://developers.facebook.com/docs/sharing/android
 
-            @Override
-            public void onError(FacebookException error) {
-                System.out.println("---------------onError");
-                result.success(ERROR);
+        if(imagesSize + videosSize > facebookMaxSharingMedias) {
+            if(imagesSize > videosSize) {
+                imagesSize = imagesSize - (imagesSize + videosSize - facebookMaxSharingMedias);
+            } else if(videosSize > imagesSize) {
+                videosSize = videosSize - (videosSize + imagesSize - facebookMaxSharingMedias);
+            } else {
+                int evenDistribution = facebookMaxSharingMedias / 2;
+                imagesSize = videosSize = evenDistribution;
             }
-        });
-        File file = new File(imagePath);
-        Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
-        List<SharePhoto> sharePhotos = new ArrayList<>();
-        sharePhotos.add(new SharePhoto.Builder().setImageUrl(fileUri).build());
-        SharePhotoContent content = new SharePhotoContent.Builder()
-                .setShareHashtag(new ShareHashtag.Builder().setHashtag(text).build())
-                .setPhotos(sharePhotos)
-                .build();
-        if (ShareDialog.canShow(SharePhotoContent.class)) {
-            shareDialog.show(content);
+        }
+
+        final ShareMediaContent.Builder contentBuilder = new ShareMediaContent.Builder()
+                .setShareHashtag(new ShareHashtag.Builder().setHashtag(message).build());
+
+        if(imagesSize > 0) {
+            for(int i = 0; i < imagesSize; i++) {
+                final String imagePath = imagesPath.get(i);
+                Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(imagePath));
+                contentBuilder.addMedium(new SharePhoto.Builder().setImageUrl(fileUri).build());
+            }
+            if(videosSize == 0) {
+                showShareFacebookDialog(activity, contentBuilder.build(), result);
+                return;
+            }
+        }
+
+        if(videosSize > 0) {
+            for(int i = 0; i < videosSize; i++) {
+                final String videoPath = videosPath.get(i);
+                Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(videoPath));
+                contentBuilder.addMedium(new ShareVideo.Builder().setLocalUrl(fileUri).build());
+            }
+            showShareFacebookDialog(activity, contentBuilder.build(), result);
         }
     }
 
@@ -217,9 +278,9 @@ public class SocialShareUtil {
         try {
             Map<String, Boolean> apps = getInstalledApps(activity);
             String packageName;
-            if(apps.get("facebook")){
+            if(apps.get("facebook") == Boolean.TRUE){
                 packageName = FACEBOOK_PACKAGE;
-            }else if(apps.get("facebook-lite")){
+            }else if(apps.get("facebook-lite") == Boolean.TRUE){
                 packageName = FACEBOOK_LITE_PACKAGE;
             }else{
                 return ERROR_APP_NOT_AVAILABLE;
