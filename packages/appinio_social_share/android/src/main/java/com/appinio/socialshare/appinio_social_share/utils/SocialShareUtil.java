@@ -69,6 +69,7 @@ public class SocialShareUtil {
     public static final String argBackgroundBottomColor = "backgroundBottomColor";
     public static final String argImages = "images";
     public static final String argVideoFile = "videoFile";
+    public static final String argFilePath = "filePath";
 
 
     private static CallbackManager callbackManager;
@@ -87,8 +88,8 @@ public class SocialShareUtil {
         return shareFileAndTextToPackage(imagePath, text, activity, INSTAGRAM_PACKAGE);
     }
 
-    public String shareToTikTok(String imagePath, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, TIKTOK_PACKAGE);
+    public String shareToTikTok(String filePath, Context activity, String text) {
+        return shareFileAndTextToPackage(filePath, text, activity, TIKTOK_PACKAGE);
     }
 
     public String shareToTwitter(String imagePath, Context activity, String text) {
@@ -339,16 +340,16 @@ public class SocialShareUtil {
     }
 
 
-    private String shareFileAndTextToPackage(String imagePath, String text, Context activity, String packageName) {
+    private String shareFileAndTextToPackage(String filePath, String text, Context activity, String packageName) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-        if (imagePath != null) {
-            File file = new File(imagePath);
+        if (filePath != null) {
+            File file = new File(filePath);
             Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
             shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
         }
 
-        shareIntent.setType(imagePath == null ? "text/*" : getMimeTypeOfFile(imagePath));
+        shareIntent.setType(filePath == null ? "text/*" : getMimeTypeOfFile(filePath));
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

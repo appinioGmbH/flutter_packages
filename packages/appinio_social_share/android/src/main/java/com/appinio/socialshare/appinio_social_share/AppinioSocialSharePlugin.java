@@ -79,6 +79,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
         String backgroundImage = call.argument(SocialShareUtil.argBackgroundImage);
         String backgroundTopColor = call.argument(SocialShareUtil.argBackgroundTopColor);
         String backgroundBottomColor = call.argument(SocialShareUtil.argBackgroundBottomColor);
+        String filePath = call.argument(SocialShareUtil.argFilePath);
         switch (call.method) {
             case INSTALLED_APPS:
                 Map<String, Boolean> response =  socialShareUtil.getInstalledApps(activeContext);
@@ -109,7 +110,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
             case SYSTEM_SHARE:
                 return socialShareUtil.shareToSystem(title, message, imagePath, "image/*", title, context);
             case TIKTOK:
-                return socialShareUtil.shareToTikTok(imagePath, activeContext, message);
+                return socialShareUtil.shareToTikTok(filePath, activeContext, message);
             case SMS:
                 return socialShareUtil.shareToSMS(message, activeContext,imagePath);
             default:
