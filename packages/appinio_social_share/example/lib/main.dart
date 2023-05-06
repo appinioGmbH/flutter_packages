@@ -311,79 +311,81 @@ class HomeState extends State<Home> {
         context: context,
         builder: (ctx) {
           final theme = Theme.of(context);
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const ModalIndicator(),
-                if (title != null)
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.titleLarge,
-                    ),
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const ModalIndicator(),
+              if (title != null)
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleLarge,
                   ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: items.length,
-                  separatorBuilder: (context, int index) {
-                    final item = items[index];
-                    return Padding(
-                      padding: EdgeInsets.only(
-                          left: item.icon == null ? 24 : 72, right: 24),
-                      child: const Divider(
-                        height: 0,
-                      ),
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return InkWell(
-                      highlightColor:
-                          item.callback == null ? Colors.transparent : null,
-                      splashColor:
-                          item.callback == null ? Colors.transparent : null,
-                      onTap: closeModalOnItemTap
-                          ? () {
-                              Navigator.pop(context);
-                              item.callback?.call();
-                            }
-                          : item.callback ?? () {},
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            if (item.icon != null) ...[
-                              Icon(item.icon,
-                                  color: item.isEnabled
-                                      ? item.iconColor
-                                      : item.disabledColor),
-                              const SizedBox(width: 24),
-                            ],
-                            Expanded(
-                              child: Text(
-                                item.text,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: item.isEnabled
-                                      ? item.textColor
-                                      : item.disabledColor,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
                 ),
-              ],
-            ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: items.length,
+                    separatorBuilder: (context, int index) {
+                      final item = items[index];
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            left: item.icon == null ? 24 : 72, right: 24),
+                        child: const Divider(
+                          height: 0,
+                        ),
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      return InkWell(
+                        highlightColor:
+                            item.callback == null ? Colors.transparent : null,
+                        splashColor:
+                            item.callback == null ? Colors.transparent : null,
+                        onTap: closeModalOnItemTap
+                            ? () {
+                                Navigator.pop(context);
+                                item.callback?.call();
+                              }
+                            : item.callback ?? () {},
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              if (item.icon != null) ...[
+                                Icon(item.icon,
+                                    color: item.isEnabled
+                                        ? item.iconColor
+                                        : item.disabledColor),
+                                const SizedBox(width: 24),
+                              ],
+                              Expanded(
+                                child: Text(
+                                  item.text,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: item.isEnabled
+                                        ? item.textColor
+                                        : item.disabledColor,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
           );
         });
   }
