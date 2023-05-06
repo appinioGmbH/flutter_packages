@@ -261,7 +261,9 @@ class HomeState extends State<Home> {
                   icon: Icons.tiktok,
                   callback: () async {
                     _executeSafeFunction(() => socialShare.shareToTiktokPost(
-                        null, imagesPath: imagesPath, videosPath: videosPath));
+                        null,
+                        imagesPath: imagesPath,
+                        videosPath: videosPath));
                   },
                 ));
                 break;

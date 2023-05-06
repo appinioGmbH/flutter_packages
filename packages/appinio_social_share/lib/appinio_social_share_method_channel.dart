@@ -35,8 +35,8 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   @override
   Future<String> shareToTiktokStatus(String filePath) async {
     if (Platform.isIOS) return "Not implemented for iOS";
-    return ((await methodChannel.invokeMethod<String>(
-            tiktokStatus, {"filePath": filePath})) ??
+    return ((await methodChannel
+            .invokeMethod<String>(tiktokStatus, {"filePath": filePath})) ??
         "");
   }
 
@@ -51,30 +51,30 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   /// Official docs Android: https://developers.tiktok.com/doc/video-kit-android-video-kit-with-android/
   @override
   Future<String> shareToTiktokPost(
-      @Deprecated('This param will no longer be used in upcoming versions, instead use videosPath')
-      String? videoFile, {
-        List<String>? imagesPath,
-        List<String>? videosPath,
-      }) async {
+    @Deprecated('This param will no longer be used in upcoming versions, instead use videosPath')
+        String? videoFile, {
+    List<String>? imagesPath,
+    List<String>? videosPath,
+  }) async {
     imagesPath ??= [];
     videosPath ??= [];
     if (videoFile != null) {
       videosPath.add(videoFile);
     }
     if (Platform.isAndroid) {
-      if(videosPath.isNotEmpty) {
+      if (videosPath.isNotEmpty) {
         return shareToTiktokStatus(videosPath.first);
       }
-      if(imagesPath.isNotEmpty) {
+      if (imagesPath.isNotEmpty) {
         return shareToTiktokStatus(imagesPath.first);
       }
     }
     assert((imagesPath.isNotEmpty || videosPath.isNotEmpty));
-    return ((await methodChannel.invokeMethod<String>(
-        tiktokPost, {
-      "imagesPath": imagesPath,
-      "videosPath": videosPath,
-    })) ?? "");
+    return ((await methodChannel.invokeMethod<String>(tiktokPost, {
+          "imagesPath": imagesPath,
+          "videosPath": videosPath,
+        })) ??
+        "");
   }
 
   @override

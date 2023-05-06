@@ -64,11 +64,11 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   /// Official docs iOS: https://developers.tiktok.com/doc/video-kit-ios-video-kit-with-swift/
   /// Official docs Android: https://developers.tiktok.com/doc/video-kit-android-video-kit-with-android/
   Future<String> shareToTiktokPost(
-      @Deprecated('This param will no longer be used in upcoming versions, instead use videosPath')
-      String? videoFile, {
-        List<String>? imagesPath,
-        List<String>? videosPath,
-      }) {
+    @Deprecated('This param will no longer be used in upcoming versions, instead use videosPath')
+        String? videoFile, {
+    List<String>? imagesPath,
+    List<String>? videosPath,
+  }) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
