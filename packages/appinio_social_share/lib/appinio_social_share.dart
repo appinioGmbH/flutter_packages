@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'appinio_social_share_platform_interface.dart';
 
 class AppinioSocialShare {
@@ -102,9 +100,22 @@ class AppinioSocialShare {
     return AppinioSocialSharePlatform.instance.shareToTiktokStatus(filePath);
   }
 
-  Future<String> shareToTiktokPost(String videoFile) {
-    if (Platform.isAndroid) return shareToTiktokStatus(videoFile);
-    return AppinioSocialSharePlatform.instance.shareToTiktokPost(videoFile);
+  /// Available only for iOS, for Android will redirect to TikTokStatus
+  ///
+  /// Only one of imagesPath or videosPath must not be empty
+  /// iOS and Android restrictions:
+  /// Up to 12 combined images and videos.
+  /// [videosPath]: 12 videos at most, depending on how much images you set
+  /// [imagesPath]: 12 images at most, depending on how much videos you set
+  /// Official docs iOS: https://developers.tiktok.com/doc/video-kit-ios-video-kit-with-swift/
+  /// Official docs Android: https://developers.tiktok.com/doc/video-kit-android-video-kit-with-android/
+  Future<String> shareToTiktokPost(
+      @Deprecated('This param will no longer be used in upcoming versions, instead use videosPath')
+      String? videoFile, {
+        List<String>? imagesPath,
+        List<String>? videosPath,
+      }) {
+    return AppinioSocialSharePlatform.instance.shareToTiktokPost(videoFile, imagesPath: imagesPath, videosPath: videosPath);
   }
 
   Future<String> shareToSystem(String title, String message,

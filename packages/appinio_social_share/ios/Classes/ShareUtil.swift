@@ -76,33 +76,80 @@ public class ShareUtil{
     }
 
 
-
     public func shareToTiktok(args : [String: Any?],result: @escaping FlutterResult){
-        let images = args[argImages] as? [String]
-        let videoFile = args[argVideoFile] as? String
+        let imagesPath = args[argImagesPath] as? [String]
+        let videosPath = args[argVideosPath] as? [String]
 
+        let tiktokMaxSharingMedias = 12; //ShareMediaContent docs: https://developers.tiktok.com/doc/video-kit-ios-video-kit-with-swift
+        var imagesSize = (imagesPath == nil || imagesPath!.isEmpty) ? 0 : (imagesPath!.count > tiktokMaxSharingMedias ? tiktokMaxSharingMedias : imagesPath!.count)
+        var videosSize = (videosPath == nil || videosPath!.isEmpty) ? 0 : (videosPath!.count > tiktokMaxSharingMedias ? tiktokMaxSharingMedias : videosPath!.count)
 
         let request = TikTokOpenSDKShareRequest()
 
-        request.mediaType = images == nil ? TikTokOpenSDKShareMediaType.video : TikTokOpenSDKShareMediaType.image
-        var mediaLocalIdentifiers: [String] = []
+        request.mediaType = imagesSize > 0 ? TikTokOpenSDKShareMediaType.image : TikTokOpenSDKShareMediaType.video
+        request.localIdentifiers = []
+        
+        if(imagesSize > 0) {
+            for i in 0...imagesSize - 1 {
+                let imagePath = imagesPath![i]
+                let imageURL = URL(fileURLWithPath: imagePath)
+                PHPhotoLibrary.shared().performChanges({
+                    let assetCreationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: imageURL)
+                    let assetPlaceholder = assetCreationRequest?.placeholderForCreatedAsset
+                    let localIdentifier = assetPlaceholder?.localIdentifier ?? "";
+                    request.localIdentifiers.append(localIdentifier)
 
-
-        if(videoFile==nil){
-            mediaLocalIdentifiers.append(contentsOf: images!)
-        }else{
-            mediaLocalIdentifiers.append(videoFile!)
+                    if(request.localIdentifiers.count >= imagesSize) {
+                        DispatchQueue.main.async {
+                            request.send(completionBlock: { response in
+                              print("Response from TikTok")
+                              print(response.errCode.rawValue)
+                              print(response.shareState.rawValue)
+                            })
+                        }
+                        result(self.SUCCESS)
+                    }
+                }) { (success, error) in
+                    if success {
+                        print("Asset creation successful!")
+                    } else {
+                        print("Asset creation failed: \(error?.localizedDescription ?? "Unknown error")")
+                    }
+                }
+            }
+            return;
         }
-
-              request.localIdentifiers = mediaLocalIdentifiers
-              DispatchQueue.main.async {
-                let a = request.send(completionBlock: { response in
-                  print("Response from TikTok")
-                  print(response.errCode.rawValue)
-                  print(response.shareState.rawValue)
-                })
-              }
-        result(SUCCESS)
+        
+        if(videosSize > 0) {
+            for i in 0...videosSize - 1 {
+                let videoPath = videosPath![i]
+                let videoURL = URL(fileURLWithPath: videoPath)
+                PHPhotoLibrary.shared().performChanges({
+                    let assetCreationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
+                    let assetPlaceholder = assetCreationRequest?.placeholderForCreatedAsset
+                    let localIdentifier = assetPlaceholder?.localIdentifier ?? "";
+                    request.localIdentifiers.append(localIdentifier)
+                    
+                    if(request.localIdentifiers.count >= videosSize) {
+                        DispatchQueue.main.async {
+                            request.send(completionBlock: { response in
+                              print("Response from TikTok")
+                              print(response.errCode.rawValue)
+                              print(response.shareState.rawValue)
+                            })
+                        }
+                        result(self.SUCCESS)
+                    }
+                }) { (success, error) in
+                    if success {
+                        print("Asset creation successful!")
+                    } else {
+                        print("Asset creation failed: \(error?.localizedDescription ?? "Unknown error")")
+                    }
+                }
+            }
+            return;
+        }
     }
 
 
@@ -331,7 +378,6 @@ public class ShareUtil{
         }
     }
     
-    // Solution 4
     func shareToFacebookPost(args : [String: Any?], result: @escaping FlutterResult, delegate: SharingDelegate) {
         let message = args[self.argMessage] as? String
         let imagesPath = args[self.argImagesPath] as? [String]

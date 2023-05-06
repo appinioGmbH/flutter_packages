@@ -46,7 +46,7 @@ public class SwiftAppinioSocialSharePlugin: NSObject, FlutterPlugin, SharingDele
           result(shareUtil.NOT_IMPLEMENTED)
           break
       case TIKTOK_POST:
-          result(shareUtil.NOT_IMPLEMENTED)
+          shareUtil.shareToTiktok(args: args!, result: result)
           break
       case INSTALLED_APPS:
           shareUtil.getInstalledApps(result: result)

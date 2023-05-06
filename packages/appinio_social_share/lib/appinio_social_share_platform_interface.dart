@@ -54,8 +54,21 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  ///This function only works for iOS
-  Future<String> shareToTiktokPost(String videoFile) {
+  /// Available only for iOS, for Android will redirect to TikTokStatus
+  ///
+  /// Only one of imagesPath or videosPath must not be empty
+  /// iOS and Android restrictions:
+  /// Up to 12 combined images and videos.
+  /// [videosPath]: 12 videos at most, depending on how much images you set
+  /// [imagesPath]: 12 images at most, depending on how much videos you set
+  /// Official docs iOS: https://developers.tiktok.com/doc/video-kit-ios-video-kit-with-swift/
+  /// Official docs Android: https://developers.tiktok.com/doc/video-kit-android-video-kit-with-android/
+  Future<String> shareToTiktokPost(
+      @Deprecated('This param will no longer be used in upcoming versions, instead use videosPath')
+      String? videoFile, {
+        List<String>? imagesPath,
+        List<String>? videosPath,
+      }) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 

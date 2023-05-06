@@ -36,16 +36,45 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   Future<String> shareToTiktokStatus(String filePath) async {
     if (Platform.isIOS) return "Not implemented for iOS";
     return ((await methodChannel.invokeMethod<String>(
-            tiktokStatus, {"imagePath": filePath, "message": ""})) ??
+            tiktokStatus, {"filePath": filePath})) ??
         "");
   }
 
+  /// Available only for iOS, for Android will redirect to TikTokStatus
+  ///
+  /// Only one of imagesPath or videosPath must not be empty
+  /// iOS and Android restrictions:
+  /// Up to 12 combined images and videos.
+  /// [videosPath]: 12 videos at most, depending on how much images you set
+  /// [imagesPath]: 12 images at most, depending on how much videos you set
+  /// Official docs iOS: https://developers.tiktok.com/doc/video-kit-ios-video-kit-with-swift/
+  /// Official docs Android: https://developers.tiktok.com/doc/video-kit-android-video-kit-with-android/
   @override
-  Future<String> shareToTiktokPost(String videoFile) async {
-    if (Platform.isAndroid) return "Not implemented for android";
-    return ((await methodChannel
-            .invokeMethod<String>(tiktokPost, {"videoFile": videoFile})) ??
-        "");
+  Future<String> shareToTiktokPost(
+      @Deprecated('This param will no longer be used in upcoming versions, instead use videosPath')
+      String? videoFile, {
+        List<String>? imagesPath,
+        List<String>? videosPath,
+      }) async {
+    imagesPath ??= [];
+    videosPath ??= [];
+    if (videoFile != null) {
+      videosPath.add(videoFile);
+    }
+    if (Platform.isAndroid) {
+      if(videosPath.isNotEmpty) {
+        return shareToTiktokStatus(videosPath.first);
+      }
+      if(imagesPath.isNotEmpty) {
+        return shareToTiktokStatus(imagesPath.first);
+      }
+    }
+    assert((imagesPath.isNotEmpty || videosPath.isNotEmpty));
+    return ((await methodChannel.invokeMethod<String>(
+        tiktokPost, {
+      "imagesPath": imagesPath,
+      "videosPath": videosPath,
+    })) ?? "");
   }
 
   @override
