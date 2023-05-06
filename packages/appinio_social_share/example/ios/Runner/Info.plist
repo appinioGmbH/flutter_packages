@@ -36,9 +36,9 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 <!-- Replace XXXXXXXXXXXXXXXXXX with the data from your Facebook developer account https://developers.facebook.com -->
 	<key>FacebookAppID</key>
-	<string>XXXXXXXXXXXX</string>
+	<string>XXXXXXXXXXXXXXXXXX</string>
 	<key>FacebookClientToken</key>
-	<string>XXXXXXXXXXXX</string>
+	<string>XXXXXXXXXXXXXXXXXX</string>
 	<key>FacebookDisplayName</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>LSApplicationQueriesSchemes</key>

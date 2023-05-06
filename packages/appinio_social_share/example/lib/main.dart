@@ -47,20 +47,20 @@ class HomeState extends State<Home> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ElevatedButton(
-              onPressed: isLoading ? null : share1Image,
+              onPressed: isLoading ? null : shareImage,
               child: isLoading
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
-                  : const Text("Share 1 Image"),
+                  : const Text("Share Image"),
             ),
             ElevatedButton(
-              onPressed: isLoading ? null : share1Video,
+              onPressed: isLoading ? null : shareVideo,
               child: isLoading
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
-                  : const Text("Share 1 Video"),
+                  : const Text("Share Video"),
             ),
             ElevatedButton(
               onPressed: isLoading ? null : shareMultipleImage,
@@ -118,14 +118,14 @@ class HomeState extends State<Home> {
     }
   }
 
-  Future<void> share1Image() async {
+  Future<void> shareImage() async {
     setState(() => isLoading = true);
     await prepareImagesPath();
     await showShareOptions(imagesPath: imagesPath.sublist(0, 1));
     setState(() => isLoading = false);
   }
 
-  Future<void> share1Video() async {
+  Future<void> shareVideo() async {
     setState(() => isLoading = true);
     await prepareVideosPath();
     await showShareOptions(videosPath: videosPath.sublist(0, 1));
@@ -260,15 +260,8 @@ class HomeState extends State<Home> {
                   text: 'Tiktok',
                   icon: Icons.tiktok,
                   callback: () async {
-                    Future Function()? function;
-                    if (imagePath != null) {
-                      function = () => socialShare.shareToTiktokPost(imagePath);
-                    } else if (videoPath != null) {
-                      function = () => socialShare.shareToTiktokPost(videoPath);
-                    }
-                    if (function != null) {
-                      _executeSafeFunction(function);
-                    }
+                    _executeSafeFunction(() => socialShare.shareToTiktokPost(
+                        null, imagesPath: imagesPath, videosPath: videosPath));
                   },
                 ));
                 break;
