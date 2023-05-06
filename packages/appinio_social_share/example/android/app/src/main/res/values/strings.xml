@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- Replace XXXXXXXXXXXXXXXXXX with the data from your Facebook developer account https://developers.facebook.com -->
+    <string name="facebook_app_id">XXXXXXXXXXXXXXXXXX</string>
+    <string name="facebook_client_token">XXXXXXXXXXXXXXXXXX</string>
+</resources>

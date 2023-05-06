@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import FBSDKCoreKit
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -8,6 +9,13 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+
+    // Put these lines in the application function
+    FBSDKCoreKit.ApplicationDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+    )
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

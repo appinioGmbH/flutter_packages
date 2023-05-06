@@ -1,0 +1,64 @@
+PODS:
+  - appinio_social_share (0.0.1):
+    - FBSDKCoreKit (= 15.1.0)
+    - FBSDKShareKit (= 15.1.0)
+    - Flutter
+    - TikTokOpenSDK (= 5.0.14)
+  - FBAEMKit (15.1.0):
+    - FBSDKCoreKit_Basics (= 15.1.0)
+  - FBSDKCoreKit (15.1.0):
+    - FBAEMKit (= 15.1.0)
+    - FBSDKCoreKit_Basics (= 15.1.0)
+  - FBSDKCoreKit_Basics (15.1.0)
+  - FBSDKShareKit (15.1.0):
+    - FBSDKCoreKit (= 15.1.0)
+  - Flutter (1.0.0)
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - TikTokOpenSDK (5.0.14)
+  - Toast (4.0.0)
+
+DEPENDENCIES:
+  - appinio_social_share (from `.symlinks/plugins/appinio_social_share/ios`)
+  - Flutter (from `Flutter`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+
+SPEC REPOS:
+  trunk:
+    - FBAEMKit
+    - FBSDKCoreKit
+    - FBSDKCoreKit_Basics
+    - FBSDKShareKit
+    - TikTokOpenSDK
+    - Toast
+
+EXTERNAL SOURCES:
+  appinio_social_share:
+    :path: ".symlinks/plugins/appinio_social_share/ios"
+  Flutter:
+    :path: Flutter
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/ios"
+
+SPEC CHECKSUMS:
+  appinio_social_share: 813392f94886d6ee998d26fb6debac482c429d95
+  FBAEMKit: c7f82b5145d446bcbbcd50485c032689032fc6a2
+  FBSDKCoreKit: 7542746fc63a2a38dd6a865eeb54268341f37b83
+  FBSDKCoreKit_Basics: 92d6b26c0bed30ab09bbdd96dccaa26e6c9978d1
+  FBSDKShareKit: 18e8ba99d38e3e92c631120cdcf162c45b661e0f
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
+  path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
+  TikTokOpenSDK: 28f5244497b87cbaebb36d7ad468374ad2c2e8e2
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+
+PODFILE CHECKSUM: 15b1e2092a4bfb4dcef7c7f6d3f4804e789f82a9
+
+COCOAPODS: 1.12.0
