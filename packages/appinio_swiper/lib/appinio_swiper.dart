@@ -23,6 +23,9 @@ class AppinioSwiper extends StatefulWidget {
   /// duration of every animation
   final Duration duration;
 
+  /// add listener to check when the card is swiping
+  final void Function(AppinioSwiperDirection direction)? onSwiping;
+
   /// padding of the swiper
   final EdgeInsetsGeometry padding;
 
@@ -78,6 +81,7 @@ class AppinioSwiper extends StatefulWidget {
     this.unlimitedUnswipe = false,
     this.onTapDisabled,
     this.onSwipe,
+    this.onSwiping,
     this.onEnd,
     this.unswipe,
     this.direction = AppinioSwiperDirection.right,
@@ -375,6 +379,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
               _calculateScale();
               _calculateDifference();
             });
+            _onSwiping();
           }
         },
         onPanEnd: (tapInfo) {
@@ -386,6 +391,18 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         },
       ),
     );
+  }
+
+  Future<void> _onSwiping() async{
+    AppinioSwiperDirection direction;
+    if (_left < 0) {
+      direction = _top < 0 ? (_left < _top ? AppinioSwiperDirection.left : AppinioSwiperDirection.top)
+          : (_left.abs() > _top ? AppinioSwiperDirection.left : AppinioSwiperDirection.bottom);
+    } else {
+      direction = _top < 0 ? (_left < _top.abs() ? AppinioSwiperDirection.top : AppinioSwiperDirection.right)
+          : (_left > _top ? AppinioSwiperDirection.right : AppinioSwiperDirection.bottom);
+    }
+    widget.onSwiping?.call(direction);
   }
 
   void _calculateAngle() {
