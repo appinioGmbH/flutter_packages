@@ -1,3 +1,9 @@
+[comment]: <> (## [0.2.1] - 2023.03.13)
+
+* Bug Fix:
+  - System sheet crashing for iOS on sharing text without file.
+
+
 ## [0.2.1] - 2023.03.13
 
 * Enhancements:
