@@ -12,10 +12,11 @@ We build this package because we wanted to:
 - be able to swipe in every direction
 - trigger unswipe however we want
 - choose our own settings for the swiper such as duration, angle, padding..
-- NEW: trigger swipe, swipe left/right or swipe up/down however we want
-- NEW: set swipe options and restrict horizontal or vertical swipe.
-- NEW: set loop for infinite scroll
-- NEW: update the list of cards between swipes.
+- trigger swipe, swipe left/right or swipe up/down however we want
+- set swipe options and restrict horizontal or vertical swipe.
+- set loop for infinite scroll
+- update the list of cards between swipes.
+- NEW : Check in which direction the card is being swiped and modify your widget accordingly.
 
 ## ❗NEW  Features ❗
 

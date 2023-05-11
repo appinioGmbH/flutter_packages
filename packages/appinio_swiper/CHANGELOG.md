@@ -1,3 +1,9 @@
+[comment]: <> (## [0.2.0] - 2022.11.08)
+
+* Features:
+    - You can add a listener and check in which direction the card is being swiped.
+
+
 ## [2.0.0] - 2023.03.16
 
 Features:
