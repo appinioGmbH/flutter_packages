@@ -1,12 +1,14 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart'
+    if (dart.library.js) "package:flutter/material.dart";
 
 import 'disable_screenshot_platform_interface.dart';
-import 'dart:ui' as ui;
 
 /// An implementation of [DisableScreenshotPlatform] that uses method channels.
 class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
@@ -42,6 +44,7 @@ class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
     }
   }
 
+  @override
   Future<String?> captureScreenShot({
     required GlobalKey screenshotWidgetKey,
     String name = 'screenshot',
@@ -50,7 +53,10 @@ class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
       RenderRepaintBoundary boundary = screenshotWidgetKey.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 3);
-      String directory = (await getApplicationDocumentsDirectory()).path;
+      String directory = !kIsWeb
+          ? (await getApplicationDocumentsDirectory()).path
+          : '/assets/db';
+
       ByteData? byteData =
           await (image.toByteData(format: ui.ImageByteFormat.png));
       if (byteData != null) {
@@ -67,6 +73,7 @@ class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
     }
   }
 
+  @override
   Future<String?> captureScreenShotFromWidget(Widget widget,
       {Duration delay = const Duration(milliseconds: 50),
       double? pixelRatio,
@@ -93,14 +100,15 @@ class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
 
     final RenderRepaintBoundary repaintBoundary = RenderRepaintBoundary();
 
-    Size logicalSize = ui.window.physicalSize / ui.window.devicePixelRatio;
-    Size imageSize = ui.window.physicalSize;
+    Size logicalSize =
+        View.of(context!).physicalSize / View.of(context).devicePixelRatio;
+    Size imageSize = View.of(context).physicalSize;
 
     assert(logicalSize.aspectRatio.toPrecision(5) ==
         imageSize.aspectRatio.toPrecision(5));
 
     final RenderView renderView = RenderView(
-      window: ui.window,
+      view: View.of(context),
       child: RenderPositionedBox(
           alignment: Alignment.center, child: repaintBoundary),
       configuration: ViewConfiguration(
@@ -185,13 +193,14 @@ class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
       ///
       ///retry untill capture is successfull
       ///
-
     } while (isDirty && retryCounter >= 0);
 
     final ByteData? byteData =
         await image.toByteData(format: ui.ImageByteFormat.png);
 
-    String directory = (await getApplicationDocumentsDirectory()).path;
+    String directory = !kIsWeb
+        ? (await getApplicationDocumentsDirectory()).path
+        : '/assets/db';
     await (image.toByteData(format: ui.ImageByteFormat.png));
     if (byteData != null) {
       var pngBytes = byteData.buffer.asUint8List();
@@ -199,6 +208,8 @@ class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
       File imgFile = File(path);
       await imgFile.writeAsBytes(pngBytes);
       return path;
+    } else {
+      return null;
     }
   }
 }
