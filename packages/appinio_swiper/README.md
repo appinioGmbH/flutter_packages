@@ -12,12 +12,16 @@ We build this package because we wanted to:
 - be able to swipe in every direction
 - trigger unswipe however we want
 - choose our own settings for the swiper such as duration, angle, padding..
-- NEW: trigger swipe, swipe left/right or swipe up/down however we want
-- NEW: set swipe options and restrict horizontal or vertical swipe.
-- NEW: set loop for infinite scroll
-- NEW: update the list of cards between swipes.
+- trigger swipe, swipe left/right or swipe up/down however we want
+- set swipe options and restrict horizontal or vertical swipe.
+- set loop for infinite scroll
+- update the list of cards between swipes.
+- NEW : Check in which direction the card is being swiped and modify your widget accordingly.
 
 ## ❗NEW  Features ❗
+
+### Listen to card swipes
+Now you can check in which direction the card is being swiped and modify your widget accordingly
 
 ### Trigger swipe up and swipe down through controller
 You can now trigger swipe up and swipe down with our ```AppinioSwiperController``` regardless of the chosen ```AppinioSwipeDirection``` (which is still used when ```swipe``` is called through the controller). Just like the swipeLeft and swipeRight call, you can call ```swipeUp``` or ```swipeDown``` through the controller anywhere you want.
@@ -96,6 +100,9 @@ class Example extends StatelessWidget {
         height: MediaQuery.of(context).size.height * 0.75,
         child: AppinioSwiper(
           cardsCount: 10,
+          onSwiping: (AppinioSwiperDirection direction){
+            print(direction.toString());
+          },
           cardsBuilder: (BuildContext context,int index){
               return Container(
                           alignment: Alignment.center,
@@ -132,6 +139,7 @@ class Example extends StatelessWidget {
 | allowUnswipe     | true                                               | Set to ```false``` if unswipe should be disabled away                                                                               |  false   |
 | unlimitedUnswipe | false                                              | Set to ```true``` if the user can unswipe as many cards as possible                                                                 |  false   |
 | unswipe          | -                                                  | Called with the boolean ```true``` when the last card gets unswiped and with the boolean ```false``` if there is no card to unswipe |  false   |
+| onSwiping        | -                                                  | Pass a callback of type ```void Function(AppinioSwiperDirection direction)``` and check when and in which direction the card is getting swiped | false |
 
 #### Controller
 
