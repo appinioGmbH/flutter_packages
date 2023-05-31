@@ -1,9 +1,10 @@
 import 'dart:developer';
-import 'package:flutter/cupertino.dart';
 
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:example/example_candidate_model.dart';
 import 'package:example/example_card.dart';
+import 'package:flutter/cupertino.dart';
+
 import 'example_buttons.dart';
 
 void main() {
@@ -49,8 +50,8 @@ class _ExamplePageState extends State<Example> {
               unlimitedUnswipe: true,
               controller: controller,
               unswipe: _unswipe,
-              onSwiping: (AppinioSwiperDirection direction){
-                print(direction.toString());
+              onSwiping: (AppinioSwiperDirection direction) {
+                debugPrint(direction.toString());
               },
               onSwipe: _swipe,
               padding: const EdgeInsets.only(

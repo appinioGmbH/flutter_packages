@@ -1,4 +1,4 @@
-[comment]: <> (## [0.2.0] - 2022.11.08)
+## [2.0.1] - 2023.05.31
 
 * Features:
     - You can add a listener and check in which direction the card is being swiped.
