@@ -1,11 +1,11 @@
 name: appinio_social_share
 description: Supports sharing text, images, files and text with image to social media (Facebook, Instagram, Instagram Story, Messenger, Telegram, WhatsApp, Twitter, Tiktok, SMS, System, etc.).
-version: 0.2.2
+version: 0.2.3
 homepage: https://github.com/appinioGmbH/flutter_packages
-repository: https://github.com/appinioGmbH/flutter_packages
+repository: https://github.com/appinioGmbH/flutter_packages/tree/main/packages/appinio_social_share
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ">=2.17.6 <4.0.0"
   flutter: ">=2.5.0"
 
 dependencies:

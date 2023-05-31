@@ -279,11 +279,15 @@ public class ShareUtil{
 
 
     public func shareToSystem(args : [String: Any?],result: @escaping FlutterResult) {
-                       let text = args[argMessage] as? String
-                       let filePath = args[argImagePath] as? String
-                       let activityViewController = UIActivityViewController(activityItems: [text!,URL(fileURLWithPath: filePath!)], applicationActivities: nil)
-                       UIApplication.topViewController()?.present(activityViewController, animated: true, completion: nil)
-                       result(SUCCESS)
+                    let text = args[argMessage] as? String
+                    let filePath = args[argImagePath] as? String 
+                    var data : [Any] = [text!];
+                    if(!(filePath == nil)){
+                        data.append(URL(fileURLWithPath: filePath!))
+                    }
+                    let activityViewController = UIActivityViewController(activityItems: data, applicationActivities: nil)
+                    UIApplication.topViewController()?.present(activityViewController, animated: true, completion: nil)
+                    result(SUCCESS)
     }
     
     

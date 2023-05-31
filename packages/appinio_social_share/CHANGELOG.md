@@ -1,7 +1,12 @@
-## [0.2.2] - 2023.04.26
+## [0.2.3] - 2023.05.31
+
+* Bug Fix:
+  - System sheet crashing for iOS on sharing text without file.
+
+## [0.2.2] - 2023.04.27
 
 * Enhancements:
-  - updating Readme
+  - Updating Readme.
 
 ## [0.2.1] - 2023.03.13
 
