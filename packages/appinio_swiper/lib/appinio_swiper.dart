@@ -17,6 +17,9 @@ class AppinioSwiper extends StatefulWidget {
   ///cards count
   final int cardsCount;
 
+  ///background cards count
+  final int backgroundCardsCount;
+
   /// controller to trigger unswipe action
   final AppinioSwiperController? controller;
 
@@ -74,6 +77,7 @@ class AppinioSwiper extends StatefulWidget {
     this.duration = const Duration(milliseconds: 200),
     this.maxAngle = 30,
     this.threshold = 50,
+    this.backgroundCardsCount = 1,
     this.isDisabled = false,
     this.loop = false,
     this.swipeOptions = const AppinioSwipeOptions.all(),
@@ -103,6 +107,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   double _maxAngle = 0;
   double _scale = 0.9;
   double _difference = 40;
+  final double _backgroundCardsDifference = 40;
+  final double _backgroundCardsScaleDifference = 0.1;
   int currentIndex = 0;
 
   int _swipeType = 0; // 1 = swipe, 2 = unswipe, 3 = goBack
@@ -304,7 +310,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                   fit: StackFit.expand,
                   children: [
                     if (widget.loop || currentIndex < widget.cardsCount - 1)
-                      _backgroundItem(constraints),
+                      ..._backgroundCards(constraints),
                     if (currentIndex < widget.cardsCount)
                       _foregroundItem(constraints)
                   ]);
@@ -315,18 +321,36 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     );
   }
 
-  Widget _backgroundItem(BoxConstraints constraints) {
+  List<Widget> _backgroundCards(BoxConstraints constraints) {
+    List<Widget> backgroundCards = [];
+    int i = currentIndex + 1;
+    int j = 1;
+    double difference = _difference;
+    double scale = _scale;
+    while ((i < widget.cardsCount || widget.loop) && j <= widget.backgroundCardsCount) {
+      backgroundCards.add(_backgroundItem(constraints, i, difference , scale));
+      difference += _backgroundCardsDifference;
+      scale -= _backgroundCardsScaleDifference;
+      i++;
+      j++;
+    }
+    return backgroundCards.reversed.toList();
+  }
+
+  Widget _backgroundItem(BoxConstraints constraints, int index, double difference, double scale) {
     return Positioned(
-      top: _difference,
+      top: difference,
       left: 0,
       child: Container(
         color: Colors.transparent,
         child: Transform.scale(
-          scale: _scale,
+          scale: scale,
           child: Container(
             constraints: constraints,
             child: widget.cardsBuilder(
-                context, (currentIndex + 1) % widget.cardsCount),
+              context,
+              (index % widget.cardsCount),
+            ),
           ),
         ),
       ),
@@ -371,14 +395,20 @@ class _AppinioSwiperState extends State<AppinioSwiper>
               } else if (swipeOption.vertical) {
                 _top += tapInfo.delta.dy;
               } else {
-                AppinioSwiperDirection direction = _calculateDirection(top: _top+tapInfo.delta.dy,left: _left+tapInfo.delta.dx);
-                if(direction == AppinioSwiperDirection.right && swipeOption.right){
+                AppinioSwiperDirection direction = _calculateDirection(
+                    top: _top + tapInfo.delta.dy,
+                    left: _left + tapInfo.delta.dx);
+                if (direction == AppinioSwiperDirection.right &&
+                    swipeOption.right) {
                   _left += tapInfo.delta.dx;
-                }else if(direction == AppinioSwiperDirection.left && swipeOption.left){
+                } else if (direction == AppinioSwiperDirection.left &&
+                    swipeOption.left) {
                   _left += tapInfo.delta.dx;
-                }else if(direction == AppinioSwiperDirection.top && swipeOption.top){
+                } else if (direction == AppinioSwiperDirection.top &&
+                    swipeOption.top) {
                   _top += tapInfo.delta.dy;
-                }else if(direction == AppinioSwiperDirection.bottom && swipeOption.bottom){
+                } else if (direction == AppinioSwiperDirection.bottom &&
+                    swipeOption.bottom) {
                   _top += tapInfo.delta.dy;
                 }
               }
@@ -402,8 +432,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   }
 
   AppinioSwiperDirection _calculateDirection(
-      {required double top,
-      required double left}) {
+      {required double top, required double left}) {
     AppinioSwiperDirection direction;
     if (left < 0) {
       direction = top < 0
@@ -426,7 +455,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   }
 
   Future<void> _onSwiping() async {
-    widget.onSwiping?.call(_calculateDirection(top: _top,left: _left));
+    widget.onSwiping?.call(_calculateDirection(top: _top, left: _left));
   }
 
   void _calculateAngle() {
