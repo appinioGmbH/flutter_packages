@@ -516,7 +516,7 @@ public class ShareUtil{
             let attributionURL =  args[self.argAttributionURL] as? String
 
             
-            guard let instagramURL = URL(string: "instagram-stories://share?source_application=\(appId)") else {
+            guard let instagramURL = URL(string: "instagram-stories://share?source_application=\(appId!)") else {
                 result(ERROR_APP_NOT_AVAILABLE)
                 return
             }
