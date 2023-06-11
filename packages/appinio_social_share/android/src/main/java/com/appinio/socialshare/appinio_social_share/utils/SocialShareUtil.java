@@ -146,11 +146,12 @@ public class SocialShareUtil {
     }
 
 
-    public String shareToInstagramStory(String stickerImage, String backgroundImage, String backgroundTopColor, String backgroundBottomColor, String attributionURL, Context activity) {
+    public String shareToInstagramStory(String appId, String stickerImage, String backgroundImage, String backgroundTopColor, String backgroundBottomColor, String attributionURL, Context activity) {
 
         try {
 
             Intent shareIntent = new Intent(INSTAGRAM_STORY_PACKAGE);
+            intent.putExtra("source_application", appId);
             shareIntent.setType("image/*");
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
