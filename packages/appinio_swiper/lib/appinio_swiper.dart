@@ -76,7 +76,7 @@ class AppinioSwiper extends StatefulWidget {
     this.threshold = 50,
     this.isDisabled = false,
     this.loop = false,
-    this.swipeOptions = AppinioSwipeOptions.allDirections,
+    this.swipeOptions = const AppinioSwipeOptions.all(),
     this.allowUnswipe = true,
     this.unlimitedUnswipe = false,
     this.onTapDisabled,
@@ -362,17 +362,25 @@ class _AppinioSwiperState extends State<AppinioSwiper>
           if (!widget.isDisabled) {
             setState(() {
               final swipeOption = widget.swipeOptions;
-              switch (swipeOption) {
-                case AppinioSwipeOptions.allDirections:
+
+              if (swipeOption.allDirections) {
+                _left += tapInfo.delta.dx;
+                _top += tapInfo.delta.dy;
+              } else if (swipeOption.horizontal) {
+                _left += tapInfo.delta.dx;
+              } else if (swipeOption.vertical) {
+                _top += tapInfo.delta.dy;
+              } else {
+                AppinioSwiperDirection direction = _calculateDirection(top: _top+tapInfo.delta.dy,left: _left+tapInfo.delta.dx);
+                if(direction == AppinioSwiperDirection.right && swipeOption.right){
                   _left += tapInfo.delta.dx;
-                  _top += tapInfo.delta.dy;
-                  break;
-                case AppinioSwipeOptions.horizontal:
+                }else if(direction == AppinioSwiperDirection.left && swipeOption.left){
                   _left += tapInfo.delta.dx;
-                  break;
-                case AppinioSwipeOptions.vertical:
+                }else if(direction == AppinioSwiperDirection.top && swipeOption.top){
                   _top += tapInfo.delta.dy;
-                  break;
+                }else if(direction == AppinioSwiperDirection.bottom && swipeOption.bottom){
+                  _top += tapInfo.delta.dy;
+                }
               }
               _total = _left + _top;
               _calculateAngle();
@@ -393,16 +401,32 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     );
   }
 
-  Future<void> _onSwiping() async{
+  AppinioSwiperDirection _calculateDirection(
+      {required double top,
+      required double left}) {
     AppinioSwiperDirection direction;
-    if (_left < 0) {
-      direction = _top < 0 ? (_left < _top ? AppinioSwiperDirection.left : AppinioSwiperDirection.top)
-          : (_left.abs() > _top ? AppinioSwiperDirection.left : AppinioSwiperDirection.bottom);
+    if (left < 0) {
+      direction = top < 0
+          ? (left < top
+              ? AppinioSwiperDirection.left
+              : AppinioSwiperDirection.top)
+          : (left.abs() > top
+              ? AppinioSwiperDirection.left
+              : AppinioSwiperDirection.bottom);
     } else {
-      direction = _top < 0 ? (_left < _top.abs() ? AppinioSwiperDirection.top : AppinioSwiperDirection.right)
-          : (_left > _top ? AppinioSwiperDirection.right : AppinioSwiperDirection.bottom);
+      direction = top < 0
+          ? (left < top.abs()
+              ? AppinioSwiperDirection.top
+              : AppinioSwiperDirection.right)
+          : (left > top
+              ? AppinioSwiperDirection.right
+              : AppinioSwiperDirection.bottom);
     }
-    widget.onSwiping?.call(direction);
+    return direction;
+  }
+
+  Future<void> _onSwiping() async {
+    widget.onSwiping?.call(_calculateDirection(top: _top,left: _left));
   }
 
   void _calculateAngle() {
