@@ -2,6 +2,7 @@
 
 * Bug Fix:
   - System sheet crashing for iOS on sharing text without file.
+  - share to instagram story not working.
 
 ## [0.2.2] - 2023.04.27
 
