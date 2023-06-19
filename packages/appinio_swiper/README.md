@@ -16,9 +16,18 @@ We build this package because we wanted to:
 - set swipe options and restrict horizontal or vertical swipe.
 - set loop for infinite scroll
 - update the list of cards between swipes.
-- NEW : Check in which direction the card is being swiped and modify your widget accordingly.
+- Check in which direction the card is being swiped and modify your widget accordingly.
+- NEW - We can have any number of background cards.
+- NEW - Pass any combination of swipe options.
+
 
 ## ❗NEW  Features ❗
+
+### Add different combinations for swipe options.
+Now you can provide any combination of swipe options. For example: The user can swipe to the left and bottom but not top, or any possible combination.
+
+### Show any number of background cards.
+Now you can decide how many background cards you want to show.
 
 ### Listen to card swipes
 Now you can check in which direction the card is being swiped and modify your widget accordingly
@@ -124,6 +133,7 @@ class Example extends StatelessWidget {
 | Parameter        | Default                                            | Description                                                                                                                         | Required |
 |------------------|:---------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------|:--------:|
 | cardsCount       | -                                                  | Number of cards you want to render                                                                                                  |   true   |
+| backgroundCardsCount       | 1                                                  | Number of cards you want to render in background                                                                                                 |   false   |
 | cardsBuilder     | -                                                  | Callback of the type CardsBuilder                                                                                                   |   true   |
 | swipeOptions     | -                                                  | value of type AppinioSwipeOptions to restrict swipes                                                                                |  false   |
 | controller       | -                                                  | Trigger unswipe                                                                                                                     |  false   |
