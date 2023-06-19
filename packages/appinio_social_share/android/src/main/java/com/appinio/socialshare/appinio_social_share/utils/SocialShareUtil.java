@@ -146,7 +146,7 @@ public class SocialShareUtil {
     }
 
 
-    public String shareToInstagramStory(String stickerImage, String backgroundImage, String backgroundTopColor, String backgroundBottomColor, String attributionURL, Context activity) {
+    public String shareToInstagramStory(String appId, String stickerImage, String backgroundImage, String backgroundTopColor, String backgroundBottomColor, String attributionURL, Context activity) {
 
         try {
 
@@ -166,6 +166,7 @@ public class SocialShareUtil {
                 shareIntent.setDataAndType(backgroundImageUri, getMimeTypeOfFile(backgroundImage));
                 activity.grantUriPermission("com.instagram.android", backgroundImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
+            shareIntent.putExtra("source_application", appId);
             shareIntent.putExtra("content_url", attributionURL);
             shareIntent.putExtra("top_background_color", backgroundTopColor);
             shareIntent.putExtra("bottom_background_color", backgroundBottomColor);

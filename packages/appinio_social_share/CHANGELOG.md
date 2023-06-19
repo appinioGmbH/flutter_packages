@@ -1,3 +1,8 @@
+## [0.2.4] - 2023.05.31
+
+* Bug Fix:
+  - share to instagram story not working.
+
 ## [0.2.3] - 2023.05.31
 
 * Bug Fix:

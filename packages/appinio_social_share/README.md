@@ -267,7 +267,7 @@ class _MyAppState extends State<MyApp> {
 | shareToInstagramDirect      |✔️| ✔️ | String message | Share text message to Instagram.
 | shareToInstagramFeed      |✔️| ✔️ | String imagePath | Share image to Instagram feed.
 | shareToInstagramReel      |✔️| ✔️ | String imagePath | Share video to Instagram Reel.
-| shareToInstagramStory      |✔️| ✔️ | String stickerImage,{String? backgroundImage,String? backgroundVideo,  String? backgroundTopColor,String? backgroundBottomColor,String? attributionURL} | Share background image, movable sticker, background colors to Instagram Story.
+| shareToInstagramStory      |✔️| ✔️ | String facebookAppId, String stickerImage,{String? backgroundImage,String? backgroundVideo,  String? backgroundTopColor,String? backgroundBottomColor,String? attributionURL} | Share background image, movable sticker, background colors to Instagram Story.
 | shareToFacebook      |✔️| ✔️ | String message, String filePath | Share text hashtag and image to Facebook.
 | shareToFacebookStory      |✔️| ✔️ |String stickerImage,String appId,{String? backgroundImage, String? backgroundVideo, String? backgroundTopColor, String? backgroundBottomColor, String? attributionURL} | Share background image, movable sticker, background colors to Facebook Story.
 | shareToMessenger      |✔️| ✔️ | String message | Share text message to Messenger.

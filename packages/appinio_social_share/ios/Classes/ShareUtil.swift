@@ -279,15 +279,15 @@ public class ShareUtil{
 
 
     public func shareToSystem(args : [String: Any?],result: @escaping FlutterResult) {
-                    let text = args[argMessage] as? String
-                    let filePath = args[argImagePath] as? String 
-                    var data : [Any] = [text!];
-                    if(!(filePath == nil)){
-                        data.append(URL(fileURLWithPath: filePath!))
-                    }
-                    let activityViewController = UIActivityViewController(activityItems: data, applicationActivities: nil)
-                    UIApplication.topViewController()?.present(activityViewController, animated: true, completion: nil)
-                    result(SUCCESS)
+        let text = args[argMessage] as? String
+        let filePath = args[argImagePath] as? String
+        var data : [Any] = [text!];
+        if(!(filePath == nil)){
+            data.append(URL(fileURLWithPath: filePath!))
+        }
+        let activityViewController = UIActivityViewController(activityItems: data, applicationActivities: nil)
+        UIApplication.topViewController()?.present(activityViewController, animated: true, completion: nil)
+        result(SUCCESS)
     }
     
     
@@ -507,6 +507,7 @@ public class ShareUtil{
     
     func shareToInstagramStory(args : [String: Any?],result: @escaping FlutterResult) {
         if #available(iOS 10.0, *){
+            let appId = args[self.argAppId] as? String
             let imagePath = args[self.argbackgroundImage] as? String
             let argVideoFile = args[self.argVideoFile] as? String
             let imagePathSticker = args[self.argstickerImage] as? String
@@ -515,7 +516,7 @@ public class ShareUtil{
             let attributionURL =  args[self.argAttributionURL] as? String
 
             
-            guard let instagramURL = URL(string: "instagram-stories://share") else {
+            guard let instagramURL = URL(string: "instagram-stories://share?source_application=\(appId!)") else {
                 result(ERROR_APP_NOT_AVAILABLE)
                 return
             }

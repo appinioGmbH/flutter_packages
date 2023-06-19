@@ -113,7 +113,7 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToInstagramStory(
+  Future<String> shareToInstagramStory(String appId,
       {String? stickerImage,
       String? backgroundImage,
       String? backgroundVideo,
@@ -127,7 +127,8 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
           "videoFile": backgroundVideo,
           "backgroundTopColor": backgroundTopColor,
           "backgroundBottomColor": backgroundBottomColor,
-          "attributionURL": attributionURL
+          "attributionURL": attributionURL,
+          "appId": appId
         })) ??
         "");
   }
