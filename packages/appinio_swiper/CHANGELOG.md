@@ -1,4 +1,4 @@
-
+## [2.0.2] - 2023.06.19
 * Features:
     - You can pass any combination of SwipeOptions.
     - You can decide how many background cards you need.
