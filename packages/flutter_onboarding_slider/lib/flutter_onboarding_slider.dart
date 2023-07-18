@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import 'background.dart';
 import 'background_body.dart';
+
 export 'background.dart';
 export 'background_final_button.dart';
 
@@ -212,6 +213,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
                       ),
                       widget.addController
                           ? BackgroundController(
+                              hasFloatingButton: widget.hasFloatingButton,
                               indicatorPosition: widget.indicatorPosition,
                               indicatorAbove: widget.indicatorAbove,
                               currentPage: _currentPage,
