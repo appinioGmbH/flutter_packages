@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'controllers.dart';
 import 'enums.dart';
 
-export 'enums.dart';
 export 'controllers.dart';
+export 'enums.dart';
 export 'types.dart';
 
 class AppinioSwiper extends StatefulWidget {
@@ -16,6 +16,9 @@ class AppinioSwiper extends StatefulWidget {
 
   ///cards count
   final int cardsCount;
+
+  ///cards spacing
+  final double cardsSpacing;
 
   ///background cards count
   final int backgroundCardsCount;
@@ -76,6 +79,7 @@ class AppinioSwiper extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
     this.duration = const Duration(milliseconds: 200),
     this.maxAngle = 30,
+    this.cardsSpacing = 40,
     this.threshold = 50,
     this.backgroundCardsCount = 1,
     this.isDisabled = false,
@@ -107,7 +111,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   double _maxAngle = 0;
   double _scale = 0.9;
   double _difference = 40;
-  final double _backgroundCardsDifference = 40;
+  double _backgroundCardsDifference = 40;
   final double _backgroundCardsScaleDifference = 0.1;
   int currentIndex = 0;
 
@@ -137,6 +141,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   @override
   void initState() {
     super.initState();
+    _difference = widget.cardsSpacing;
+    _backgroundCardsDifference = widget.cardsSpacing;
 
     if (widget.controller != null) {
       widget.controller!
@@ -284,7 +290,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
           _total = 0;
           _angle = 0;
           _scale = 0.9;
-          _difference = 40;
+          _difference = widget.cardsSpacing;
           _swipeType = 0;
         });
       }
@@ -327,8 +333,9 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     int j = 1;
     double difference = _difference;
     double scale = _scale;
-    while ((i < widget.cardsCount || widget.loop) && j <= widget.backgroundCardsCount) {
-      backgroundCards.add(_backgroundItem(constraints, i, difference , scale));
+    while ((i < widget.cardsCount || widget.loop) &&
+        j <= widget.backgroundCardsCount) {
+      backgroundCards.add(_backgroundItem(constraints, i, difference, scale));
       difference += _backgroundCardsDifference;
       scale -= _backgroundCardsScaleDifference;
       i++;
@@ -337,7 +344,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     return backgroundCards.reversed.toList();
   }
 
-  Widget _backgroundItem(BoxConstraints constraints, int index, double difference, double scale) {
+  Widget _backgroundItem(
+      BoxConstraints constraints, int index, double difference, double scale) {
     return Positioned(
       top: difference,
       left: 0,
@@ -475,7 +483,9 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   void _calculateDifference() {
     if (_difference >= 0 && _difference <= _difference) {
-      _difference = (_total > 0) ? 40 - (_total / 10) : 40 + (_total / 10);
+      _difference = (_total > 0)
+          ? widget.cardsSpacing - (_total / 10)
+          : widget.cardsSpacing + (_total / 10);
     }
   }
 
@@ -588,7 +598,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       ).animate(_animationController);
       _differenceAnimation = Tween<double>(
         begin: _difference,
-        end: 40,
+        end: widget.cardsSpacing,
       ).animate(_animationController);
     });
   }

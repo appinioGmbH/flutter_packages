@@ -47,7 +47,7 @@ class _ExamplePageState extends State<Example> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.75,
             child: AppinioSwiper(
-              backgroundCardsCount:3,
+              backgroundCardsCount: 3,
               swipeOptions: const AppinioSwipeOptions.all(),
               unlimitedUnswipe: true,
               controller: controller,
