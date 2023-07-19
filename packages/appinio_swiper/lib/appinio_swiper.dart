@@ -68,6 +68,9 @@ class AppinioSwiper extends StatefulWidget {
   /// direction in which the card gets swiped when triggered by controller, default set to right
   final AppinioSwiperDirection direction;
 
+  ///background cards difference
+  final bool allowBackgroundCardsDifference;
+
   const AppinioSwiper({
     Key? key,
     required this.cardsBuilder,
@@ -89,6 +92,7 @@ class AppinioSwiper extends StatefulWidget {
     this.onEnd,
     this.unswipe,
     this.direction = AppinioSwiperDirection.right,
+    this.allowBackgroundCardsDifference = false,
   })  : assert(maxAngle >= 0 && maxAngle <= 360),
         assert(threshold >= 1 && threshold <= 100),
         assert(direction != AppinioSwiperDirection.none),
@@ -327,8 +331,10 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     int j = 1;
     double difference = _difference;
     double scale = _scale;
-    while ((i < widget.cardsCount || widget.loop) && j <= widget.backgroundCardsCount) {
-      backgroundCards.add(_backgroundItem(constraints, i, difference , scale));
+    while ((i < widget.cardsCount || widget.loop) &&
+        j <= widget.backgroundCardsCount) {
+      backgroundCards.add(_backgroundItem(constraints, i,
+          widget.allowBackgroundCardsDifference ? difference : 0, scale));
       difference += _backgroundCardsDifference;
       scale -= _backgroundCardsScaleDifference;
       i++;
@@ -337,7 +343,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     return backgroundCards.reversed.toList();
   }
 
-  Widget _backgroundItem(BoxConstraints constraints, int index, double difference, double scale) {
+  Widget _backgroundItem(
+      BoxConstraints constraints, int index, double difference, double scale) {
     return Positioned(
       top: difference,
       left: 0,
