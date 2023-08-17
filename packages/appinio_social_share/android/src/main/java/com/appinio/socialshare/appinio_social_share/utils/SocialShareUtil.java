@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.provider.Settings;
-import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
@@ -35,7 +34,8 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class SocialShareUtil {
     public static final String ERROR_APP_NOT_AVAILABLE = "ERROR_APP_NOT_AVAILABLE";
-    public static final String ERROR = "ERROR";
+    public static final String ERROR_CANCELLED = "error : cancelled";
+    public static final String UNKNOWN_ERROR = "unknown error";
     public static final String SUCCESS = "SUCCESS";
 
     //packages
@@ -104,7 +104,7 @@ public class SocialShareUtil {
             clipboard.setPrimaryClip(clip);
             return SUCCESS;
         } catch (Exception e) {
-            return ERROR;
+            return e.getLocalizedMessage();
         }
     }
 
@@ -139,9 +139,8 @@ public class SocialShareUtil {
             chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(chooserIntent);
             return SUCCESS;
-        } catch (Exception ex) {
-            Log.println(Log.ERROR, "", "FlutterShare: Error");
-            return ERROR;
+        } catch (Exception e) {
+            return e.getLocalizedMessage();
         }
     }
 
@@ -173,7 +172,7 @@ public class SocialShareUtil {
             activity.startActivity(shareIntent);
             return SUCCESS;
         } catch (Exception e) {
-            return ERROR;
+            return e.getLocalizedMessage();
         }
 
     }
@@ -192,13 +191,13 @@ public class SocialShareUtil {
 
             @Override
             public void onCancel() {
-                result.success(ERROR);
+                result.success(ERROR_CANCELLED);
             }
 
             @Override
             public void onError(FacebookException error) {
                 System.out.println("---------------onError");
-                result.success(ERROR);
+                result.success(error.getLocalizedMessage());
             }
         });
         File file = new File(imagePath);
@@ -251,7 +250,7 @@ public class SocialShareUtil {
             activity.startActivity(intent);
             return SUCCESS;
         } catch (Exception e) {
-            return ERROR;
+            return e.getLocalizedMessage();
         }
     }
 
@@ -274,7 +273,7 @@ public class SocialShareUtil {
             context.startActivity(intent);
             return SUCCESS;
         } catch (Exception e) {
-            return ERROR;
+            return e.getLocalizedMessage();
         }
     }
 
@@ -298,7 +297,7 @@ public class SocialShareUtil {
             return SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
-            return ERROR;
+            return e.getLocalizedMessage();
         }
     }
 

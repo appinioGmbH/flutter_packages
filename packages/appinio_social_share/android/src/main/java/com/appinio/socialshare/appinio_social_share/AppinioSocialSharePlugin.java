@@ -62,7 +62,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
             }
         }catch (Exception e){
             Log.d("error",e.getLocalizedMessage());
-            result.success(SocialShareUtil.ERROR);
+            result.success(e.getLocalizedMessage());
         }
 
     }
@@ -94,7 +94,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
              case MESSENGER:
                 return socialShareUtil.shareToMessenger(message, activeContext);
             case FACEBOOK:
-                if (activity == null) return SocialShareUtil.ERROR;
+                if (activity == null) return SocialShareUtil.UNKNOWN_ERROR;
                 socialShareUtil.shareToFacebook(imagePath, message, activity, result);
                 return null;
             case WHATSAPP:
