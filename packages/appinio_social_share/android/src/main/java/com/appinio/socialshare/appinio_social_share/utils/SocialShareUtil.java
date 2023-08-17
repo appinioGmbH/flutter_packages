@@ -3,11 +3,15 @@ package com.appinio.socialshare.appinio_social_share.utils;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 
 import androidx.core.content.FileProvider;
@@ -30,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.flutter.Log;
 import io.flutter.plugin.common.MethodChannel;
 
 public class SocialShareUtil {
@@ -268,7 +273,7 @@ public class SocialShareUtil {
             intent.putExtra("content_url", text);
             intent.putExtra("source_application", context.getPackageName());
             intent.putExtra(Intent.EXTRA_TITLE, text);
-            intent.putExtra("com.facebook.platform.extra.APPLICATION_ID", "256861974474648");
+            intent.putExtra("com.facebook.platform.extra.APPLICATION_ID", getFacebookAppId(context));
             intent.setPackage(packageName);
             context.startActivity(intent);
             return SUCCESS;
@@ -292,6 +297,9 @@ public class SocialShareUtil {
         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         shareIntent.setPackage(packageName);
+        if (packageName.equals(INSTAGRAM_PACKAGE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            shareIntent.setComponent(ComponentName.createRelative(packageName,"com.instagram.share.handleractivity.ShareHandlerActivity")); //open instagram feed
+        }
         try {
             activity.startActivity(shareIntent);
             return SUCCESS;
@@ -339,7 +347,7 @@ public class SocialShareUtil {
 
     private static String getMimeTypeOfFile(String pathName) {
         try{
-            Path path = null;
+            Path path;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 path = new File(pathName).toPath();
                 String mimeType = Files.probeContentType(path);
@@ -349,6 +357,25 @@ public class SocialShareUtil {
         }catch (Exception e){
             return "";
         }
+    }
+
+
+    String getFacebookAppId(Context activity){
+        String appId = "";
+        try {
+            ApplicationInfo appInfo = activity.getPackageManager().getApplicationInfo(
+                    activity.getPackageName(), PackageManager.GET_META_DATA);
+
+            Bundle metaData = appInfo.metaData;
+            if (metaData != null) {
+                appId = metaData.getString("com.facebook.sdk.ApplicationId");
+                Log.d("FB_APP_ID",appId);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            // Handle the exception if needed
+        }
+
+        return appId;
     }
 
 }
