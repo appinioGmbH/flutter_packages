@@ -11,6 +11,11 @@ export 'enums.dart';
 export 'types.dart';
 
 class AppinioSwiper extends StatefulWidget {
+
+  /// when the user cancels the swipe
+
+  final VoidCallback? onSwipeCancelled;
+
   /// widget builder for creating cards
   final CardsBuilder cardsBuilder;
 
@@ -89,6 +94,7 @@ class AppinioSwiper extends StatefulWidget {
     this.unlimitedUnswipe = false,
     this.onTapDisabled,
     this.onSwipe,
+    this.onSwipeCancelled,
     this.onSwiping,
     this.onEnd,
     this.unswipe,
@@ -601,6 +607,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         end: widget.cardsSpacing,
       ).animate(_animationController);
     });
+    widget.onSwipeCancelled?.call();
   }
 
   //unswipe the card: brings back the last card that was swiped away
