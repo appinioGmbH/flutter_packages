@@ -1,5 +1,6 @@
 import 'package:appinio_video_player/src/controls/all_controls_overlay.dart';
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
+import 'package:appinio_video_player/src/seek_buttons.dart';
 import 'package:appinio_video_player/src/thumbnail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
@@ -64,6 +65,7 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
               customVideoPlayerController: widget.customVideoPlayerController,
               updateVideoState: _updateVideoState,
             ),
+            SeekButtons(customVideoPlayerController: widget.customVideoPlayerController,)
           ],
         ),
       );

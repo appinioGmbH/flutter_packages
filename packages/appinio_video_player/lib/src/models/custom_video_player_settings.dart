@@ -12,6 +12,9 @@ class CustomVideoPlayerSettings {
   /// Define a custom aspect ratio for the video.
   final double? customAspectRatio;
 
+  /// Define a custom aspect ratio for the video.
+  final Duration seekDuration;
+
   /// The widget that should be shown as long the video is not initialized.
   final Widget? placeholderWidget;
 
@@ -114,6 +117,7 @@ class CustomVideoPlayerSettings {
     this.customAspectRatio,
     this.placeholderWidget,
     this.thumbnailWidget,
+    this.seekDuration = const Duration(seconds: 10),
     this.alwaysShowThumbnailOnVideoPaused = false,
     this.controlsPadding = const EdgeInsets.all(5),
     this.controlBarPadding = const EdgeInsets.all(5),
