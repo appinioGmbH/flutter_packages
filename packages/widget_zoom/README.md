@@ -11,7 +11,8 @@ We build this package because we wanted to:
 - create an easy usage experience for developers
 
 ## Show Case
-<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/zoom.gif?raw=true" height="400">
+
+[comment]: <> (<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/zoom.gif?raw=true" height="400">)
 
 ## Features
 
