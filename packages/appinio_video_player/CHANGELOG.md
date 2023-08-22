@@ -1,3 +1,8 @@
+## version - Date
+
+- Feat: Jump forward and backward like youtube.
+- ```showSeekButtons``` and ```seekDuration``` added to ```CustomVideoPlayerSettings```
+
 ## [1.2.1] - 2023.04.26
 
 - Fix: Orientation not switching back to portrait in iOS
