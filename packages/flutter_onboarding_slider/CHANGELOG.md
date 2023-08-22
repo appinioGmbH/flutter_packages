@@ -1,11 +1,11 @@
+## version - Date
+
+* Bug Fixes
+
 ## [1.0.9] - 2023.03.20
 
 Features:
 * More UI customizing options.
-
-## version - Date
-
-* Bug Fixes
 
 ## [1.0.8] - 2022.09.25
 
