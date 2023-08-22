@@ -23,6 +23,13 @@ We build this package because we wanted to:
 
 ## ❗NEW  Features ❗
 
+
+### Space background cards as per your requirement.
+Now you can decide the spacing between the background cards and can also hide them by giving   ```cardsSpacing = 0```. 
+
+### onSwipeCancelEvent.
+We have added onSwipeCancel event to check if the card swiped completely or if the swipe got canceled in the middle. 
+
 ### Add different combinations for swipe options.
 Now you can provide any combination of swipe options. For example: The user can swipe to the left and bottom but not top, or any possible combination.
 
@@ -139,6 +146,8 @@ class Example extends StatelessWidget {
 | controller       | -                                                  | Trigger unswipe                                                                                                                     |  false   |
 | padding          | EdgeInsets.symmetric(horizontal: 20, vertical: 25) | Control swiper padding                                                                                                              |  false   |
 | duration         | 200 milliseconds                                   | The duration that every animation should last                                                                                       |  false   |
+| cardsSpacing         | 40                                   | The spacing between background cards.                                                                                      |  false   |
+
 | maxAngle         | 30                                                 | Maximum angle the card reaches while swiping                                                                                        |  false   |
 | threshold        | 50                                                 | Threshold from which the card is swiped away                                                                                        |  false   |
 | isDisabled       | false                                              | Set to ```true``` if swiping should be disabled, has no impact when triggered from the outside                                      |  false   |
@@ -149,6 +158,7 @@ class Example extends StatelessWidget {
 | allowUnswipe     | true                                               | Set to ```false``` if unswipe should be disabled away                                                                               |  false   |
 | unlimitedUnswipe | false                                              | Set to ```true``` if the user can unswipe as many cards as possible                                                                 |  false   |
 | unswipe          | -                                                  | Called with the boolean ```true``` when the last card gets unswiped and with the boolean ```false``` if there is no card to unswipe |  false   |
+| onSwipeCancelled          | -                                                  | Gets called when the user leaves the card before the threshold is reached. |  false   |
 | onSwiping        | -                                                  | Pass a callback of type ```void Function(AppinioSwiperDirection direction)``` and check when and in which direction the card is getting swiped | false |
 
 #### Controller
