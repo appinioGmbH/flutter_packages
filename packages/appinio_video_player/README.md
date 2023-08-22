@@ -6,6 +6,7 @@ This package wraps the official video_player package by flutter and extends it w
 
 ## Top Features
 
+- Seek forward and backward
 - Fullscreen Mode
 - Native controls and fullscreen for web apps
 - Change Video Quality
