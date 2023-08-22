@@ -12,7 +12,11 @@ We build this package because we wanted to:
 
 ## Show Case
 
-[comment]: <> (<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/zoom.gif?raw=true" height="400">)
+
+
+https://github.com/appinioGmbH/flutter_packages/assets/58891556/4c55d2ff-b1c7-4f76-bcb2-40483cc8e488
+
+
 
 ## Features
 
