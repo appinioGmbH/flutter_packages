@@ -140,14 +140,13 @@ class Example extends StatelessWidget {
 | Parameter        | Default                                            | Description                                                                                                                         | Required |
 |------------------|:---------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------|:--------:|
 | cardsCount       | -                                                  | Number of cards you want to render                                                                                                  |   true   |
-| backgroundCardsCount       | 1                                                  | Number of cards you want to render in background                                                                                                 |   false   |
+| backgroundCardsCount       | 1                                                  | Number of cards you want to render in background                                                                          |  false   |
 | cardsBuilder     | -                                                  | Callback of the type CardsBuilder                                                                                                   |   true   |
 | swipeOptions     | -                                                  | value of type AppinioSwipeOptions to restrict swipes                                                                                |  false   |
 | controller       | -                                                  | Trigger unswipe                                                                                                                     |  false   |
 | padding          | EdgeInsets.symmetric(horizontal: 20, vertical: 25) | Control swiper padding                                                                                                              |  false   |
 | duration         | 200 milliseconds                                   | The duration that every animation should last                                                                                       |  false   |
-| cardsSpacing         | 40                                   | The spacing between background cards.                                                                                                         |  false   |
-
+| cardsSpacing     | 40                                                 | The spacing between background cards.                                                                                               |  false   |
 | maxAngle         | 30                                                 | Maximum angle the card reaches while swiping                                                                                        |  false   |
 | threshold        | 50                                                 | Threshold from which the card is swiped away                                                                                        |  false   |
 | isDisabled       | false                                              | Set to ```true``` if swiping should be disabled, has no impact when triggered from the outside                                      |  false   |
