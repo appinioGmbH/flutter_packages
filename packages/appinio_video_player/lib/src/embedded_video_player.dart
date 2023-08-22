@@ -65,7 +65,11 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
               customVideoPlayerController: widget.customVideoPlayerController,
               updateVideoState: _updateVideoState,
             ),
-            SeekButtons(customVideoPlayerController: widget.customVideoPlayerController,)
+            if (widget.customVideoPlayerController.customVideoPlayerSettings
+                .showSeekButtons)
+              SeekButtons(
+                customVideoPlayerController: widget.customVideoPlayerController,
+              )
           ],
         ),
       );
