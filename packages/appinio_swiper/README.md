@@ -158,8 +158,8 @@ class Example extends StatelessWidget {
 | allowUnswipe     | true                                               | Set to ```false``` if unswipe should be disabled away                                                                               |  false   |
 | unlimitedUnswipe | false                                              | Set to ```true``` if the user can unswipe as many cards as possible                                                                 |  false   |
 | unswipe          | -                                                  | Called with the boolean ```true``` when the last card gets unswiped and with the boolean ```false``` if there is no card to unswipe |  false   |
-| onSwipeCancelled          | -                                                  | Gets called when the user leaves the card before the threshold is reached. |  false   |
 | onSwiping        | -                                                  | Pass a callback of type ```void Function(AppinioSwiperDirection direction)``` and check when and in which direction the card is getting swiped | false |
+| onSwipeCancelled          | -                                                  | Gets called when the user leaves the card before the threshold is reached |  false   |
 
 #### Controller
 
