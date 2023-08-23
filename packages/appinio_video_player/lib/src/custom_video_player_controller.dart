@@ -1,19 +1,27 @@
 import 'dart:async';
+
 import 'package:appinio_video_player/src/fullscreen_video_player.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_settings.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:video_player/video_player.dart';
 
 /// The extension on the class is able to call private methods
 /// only the package can use these methods and not the public beacuse of the hide keyword in the package exports
 extension ProtectedCustomVideoPlayerController on CustomVideoPlayerController {
   Future<void> Function(String) get switchVideoSource => _switchVideoSource;
+
   ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
+
   ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
+
   ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
+
   bool get isFullscreen => _isFullscreen;
+
+  bool get isMuted => _isMuted;
+
   set updateViewAfterFullscreen(Function updateViewAfterFullscreen) =>
       _updateViewAfterFullscreen = updateViewAfterFullscreen;
 }
@@ -23,12 +31,14 @@ class CustomVideoPlayerController {
   VideoPlayerController videoPlayerController;
   final CustomVideoPlayerSettings customVideoPlayerSettings;
   final Map<String, VideoPlayerController>? additionalVideoSources;
+  final bool isAlwaysLandscapeOnFullscreen;
 
   CustomVideoPlayerController({
     required this.context,
     required this.videoPlayerController,
     this.customVideoPlayerSettings = const CustomVideoPlayerSettings(),
     this.additionalVideoSources,
+    this.isAlwaysLandscapeOnFullscreen = false,
   }) {
     videoPlayerController.addListener(_videoListeners);
   }
@@ -56,6 +66,7 @@ class CustomVideoPlayerController {
   Function? _updateViewAfterFullscreen;
 
   bool _isFullscreen = false;
+  bool _isMuted = false;
   Timer? _timer;
   final ValueNotifier<Duration> _videoProgressNotifier =
       ValueNotifier(Duration.zero);
@@ -101,7 +112,9 @@ class CustomVideoPlayerController {
     final bool isPortraitVideo = videoWidth < videoHeight;
 
     /// if video has more width than height set landscape orientation
-    if (isLandscapeVideo) {
+    /// or is isAlwaysLandscapeOnFullscreen set with true then fullscreen mode will
+    /// always on landscape mode
+    if (isLandscapeVideo || isAlwaysLandscapeOnFullscreen) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
@@ -221,6 +234,16 @@ class CustomVideoPlayerController {
 
   void _playbackSpeedListener() {
     _playbackSpeedNotifier.value = videoPlayerController.value.playbackSpeed;
+  }
+
+  void setVolumeMutedUnMuted() {
+    if (videoPlayerController.value.volume == 0) {
+      videoPlayerController.setVolume(1.0);
+      _isMuted = false;
+    } else {
+      videoPlayerController.setVolume(0.0);
+      _isMuted = true;
+    }
   }
 
   /// call dispose on the dispose method in your parent widget to be sure that every values is disposed
