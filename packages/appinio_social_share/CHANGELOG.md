@@ -1,4 +1,4 @@
-## version - date
+## [0.2.5] - 2023.08.23
 
 * Bug Fix:
   - Bug fixes in facebook story sharing
