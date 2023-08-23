@@ -25,7 +25,6 @@ class CustomVideoPlayerController {
   final Map<String, VideoPlayerController>? additionalVideoSources;
   final ValueNotifier<bool> areControlsVisible = ValueNotifier<bool>(true);
 
-
   CustomVideoPlayerController({
     required this.context,
     required this.videoPlayerController,

@@ -1,4 +1,4 @@
-## version - Date
+## [1.2.2] - 2023.08.23
 
 - Feat: Jump forward and backward like youtube.
 - ```showSeekButtons``` and ```seekDuration``` added to ```CustomVideoPlayerSettings```

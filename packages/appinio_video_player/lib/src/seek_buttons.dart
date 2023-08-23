@@ -71,21 +71,31 @@ class _SeekButtonsState extends State<SeekButtons> {
     );
   }
 
-  void onSeekBack() async{
-    Duration? currentPosition = await widget.customVideoPlayerController.videoPlayerController.position;
-    Duration seekDuration = widget.customVideoPlayerController.customVideoPlayerSettings.seekDuration;
-    if(currentPosition!=null){
-      Duration seekResult = Duration(microseconds: currentPosition.inMicroseconds+seekDuration.inMicroseconds);
-      widget.customVideoPlayerController.videoPlayerController.seekTo(seekResult);
+  void onSeekBack() async {
+    Duration? currentPosition =
+        await widget.customVideoPlayerController.videoPlayerController.position;
+    Duration seekDuration = widget
+        .customVideoPlayerController.customVideoPlayerSettings.seekDuration;
+    if (currentPosition != null) {
+      Duration seekResult = Duration(
+          microseconds:
+              currentPosition.inMicroseconds + seekDuration.inMicroseconds);
+      widget.customVideoPlayerController.videoPlayerController
+          .seekTo(seekResult);
     }
   }
 
-  void onSeekForward() async{
-    Duration? currentPosition = await widget.customVideoPlayerController.videoPlayerController.position;
-    Duration seekDuration = widget.customVideoPlayerController.customVideoPlayerSettings.seekDuration;
-    if(currentPosition!=null){
-      Duration seekResult = Duration(microseconds: currentPosition.inMicroseconds-seekDuration.inMicroseconds);
-      widget.customVideoPlayerController.videoPlayerController.seekTo(seekResult);
+  void onSeekForward() async {
+    Duration? currentPosition =
+        await widget.customVideoPlayerController.videoPlayerController.position;
+    Duration seekDuration = widget
+        .customVideoPlayerController.customVideoPlayerSettings.seekDuration;
+    if (currentPosition != null) {
+      Duration seekResult = Duration(
+          microseconds:
+              currentPosition.inMicroseconds - seekDuration.inMicroseconds);
+      widget.customVideoPlayerController.videoPlayerController
+          .seekTo(seekResult);
     }
   }
 }

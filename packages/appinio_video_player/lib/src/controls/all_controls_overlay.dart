@@ -84,7 +84,8 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
   }
 
   void _toggleControlsVisibility(BuildContext context) {
-    widget.customVideoPlayerController.areControlsVisible.value = !_controlsVisible;
+    widget.customVideoPlayerController.areControlsVisible.value =
+        !_controlsVisible;
     setState(() {
       _controlsVisible = !_controlsVisible;
     });
