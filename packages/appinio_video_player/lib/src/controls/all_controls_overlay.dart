@@ -84,6 +84,8 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
   }
 
   void _toggleControlsVisibility(BuildContext context) {
+    widget.customVideoPlayerController.areControlsVisible.value =
+        !_controlsVisible;
     setState(() {
       _controlsVisible = !_controlsVisible;
     });
@@ -93,6 +95,7 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
   }
 
   Future<void> _fadeOutControls() async {
+    widget.customVideoPlayerController.areControlsVisible.value = true;
     _visibilityToggleCounter++;
     await Future.delayed(
         widget.customVideoPlayerController.customVideoPlayerSettings
@@ -105,6 +108,7 @@ class _AllControlsOverlayState extends State<AllControlsOverlay> {
           widget.customVideoPlayerController.videoPlayerController.value
               .isPlaying) {
         if (_controlsVisible && _visibilityToggleCounter == 0) {
+          widget.customVideoPlayerController.areControlsVisible.value = false;
           if (mounted) {
             setState(() {
               _controlsVisible = false;

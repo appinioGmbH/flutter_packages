@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late CustomVideoPlayerWebController _customVideoPlayerWebController;
 
   final CustomVideoPlayerSettings _customVideoPlayerSettings =
-      const CustomVideoPlayerSettings();
+      const CustomVideoPlayerSettings(showSeekButtons: true);
 
   final CustomVideoPlayerWebSettings _customVideoPlayerWebSettings =
       CustomVideoPlayerWebSettings(

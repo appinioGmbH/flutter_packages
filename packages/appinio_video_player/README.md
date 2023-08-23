@@ -6,6 +6,7 @@ This package wraps the official video_player package by flutter and extends it w
 
 ## Top Features
 
+- Seek forward and backward
 - Fullscreen Mode
 - Native controls and fullscreen for web apps
 - Change Video Quality
@@ -80,4 +81,4 @@ class _MyHomePageState extends State<MyHomePage> {
 ```
 
 <hr/>
-Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
+Made with ❤ by Flutter team at <a href="https://appinio.app">Appinio GmbH</a>
