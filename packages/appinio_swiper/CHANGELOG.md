@@ -1,3 +1,9 @@
+## [2.0.3] - 2023.08.23
+* Features:
+    - Custom background card spacing.
+    - onSwipeCancelled event.
+
+
 ## [2.0.2] - 2023.06.19
 * Features:
     - You can pass any combination of SwipeOptions.
