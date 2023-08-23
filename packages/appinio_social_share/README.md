@@ -283,4 +283,4 @@ class _MyAppState extends State<MyApp> {
 
 
 <hr/>
-Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
+Made with ❤ by Flutter team at <a href="https://appinio.app">Appinio GmbH</a>

@@ -1,7 +1,13 @@
+## [0.2.5] - 2023.08.23
+
+* Bug Fix:
+  - Bug fixes in facebook story sharing
+
 ## [0.2.4] - 2023.06.19
 
 * Bug Fix:
   - share to instagram story not working.
+    
 
 ## [0.2.3] - 2023.05.31
 
