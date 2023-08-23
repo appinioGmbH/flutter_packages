@@ -1,4 +1,4 @@
-## version - Date
+## [1.0.10] - 2023.08.23
 
 * Bug Fixes
 
