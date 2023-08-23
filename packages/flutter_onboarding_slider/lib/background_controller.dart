@@ -6,12 +6,14 @@ class BackgroundController extends StatelessWidget {
   final Color? controllerColor;
   final bool indicatorAbove;
   final double indicatorPosition;
+  final bool hasFloatingButton;
 
   BackgroundController({
     required this.currentPage,
     required this.totalPage,
     required this.controllerColor,
     required this.indicatorAbove,
+    required this.hasFloatingButton,
     required this.indicatorPosition,
   });
 
@@ -25,7 +27,7 @@ class BackgroundController extends StatelessWidget {
               children: _buildPageIndicator(context),
             ),
           )
-        : currentPage == totalPage - 1
+        : (currentPage == totalPage - 1) && hasFloatingButton
             ? SizedBox.shrink()
             : Container(
                 padding: EdgeInsets.only(bottom: 10),
