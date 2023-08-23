@@ -1,4 +1,4 @@
-## version - Date
+## [2.0.3] - 2023.08.23
 * Features:
     - Custom background card spacing.
     - onSwipeCancelled event.

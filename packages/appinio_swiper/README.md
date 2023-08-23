@@ -174,4 +174,4 @@ The ```Controller``` is used to control the ```swipe```, ```swipeLeft```, ```swi
 | unswipe    | Changes the state of the controller to unswipe and brings back the last card that was swiped away. |
 
 <hr/>
-Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
+Made with ❤ by Flutter team at <a href="https://appinio.app">Appinio GmbH</a>

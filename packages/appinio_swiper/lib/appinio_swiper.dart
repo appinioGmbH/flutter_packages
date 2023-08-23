@@ -11,7 +11,6 @@ export 'enums.dart';
 export 'types.dart';
 
 class AppinioSwiper extends StatefulWidget {
-
   /// when the user cancels the swipe
 
   final VoidCallback? onSwipeCancelled;
