@@ -37,6 +37,7 @@ class OnBoardingNavigationBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+    if (hideNavigationBar) return SizedBox.shrink();
     return CupertinoNavigationBar(
       automaticallyImplyLeading: false,
       leading: leading,
@@ -71,5 +72,12 @@ class OnBoardingNavigationBar extends StatelessWidget
       ),
       backgroundColor: headerBackgroundColor,
     );
+  }
+
+  bool get hideNavigationBar {
+    if (currentPage == totalPage - 1) {
+      return finishButton == null;
+    }
+    return skipTextButton == null;
   }
 }
