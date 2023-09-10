@@ -508,7 +508,7 @@ public class ShareUtil{
         UIApplication.topViewController()?.present(composeCtl!,animated:true,completion:nil);
         result(SUCCESS)
     }
-    
+
     
     func shareToInstagramStory(args : [String: Any?],result: @escaping FlutterResult) {
         if #available(iOS 10.0, *){
