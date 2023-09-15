@@ -7,7 +7,7 @@ enum AppinioSwiperState {
   swipeDown
 }
 
-enum AppinioSwiperDirection { none, left, right, top, bottom }
+enum AppinioSwiperDirection { none, left, right, top, bottom, comingBack }
 
 class AppinioSwipeOptions {
   final bool top;

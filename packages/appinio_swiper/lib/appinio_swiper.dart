@@ -109,6 +109,8 @@ class AppinioSwiper extends StatefulWidget {
 
 class _AppinioSwiperState extends State<AppinioSwiper>
     with SingleTickerProviderStateMixin {
+  double? _previousLeft;
+  double? _previousTop;
   double _left = 0;
   double _top = 0;
   double _total = 0;
@@ -222,11 +224,11 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             if (widget.allowUnswipe) {
               if (!_isUnswiping) {
                 if (currentIndex > 0) {
-                  _unswipe();
-                  widget.unswipe?.call(true);
+                  int previousIndex = _unswipe();
+                  widget.unswipe?.call(previousIndex, currentIndex, true);
                   _animationController.forward();
                 } else {
-                  widget.unswipe?.call(false);
+                  widget.unswipe?.call(null, currentIndex, false);
                 }
               }
             }
@@ -273,6 +275,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             _swipedDirectionHorizontal = 0;
             _swipedDirectionVertical = 0;
             _horizontal = false;
+            int previousIndex = currentIndex;
             if (widget.loop) {
               if (currentIndex < widget.cardsCount - 1) {
                 currentIndex++;
@@ -282,7 +285,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             } else {
               currentIndex++;
             }
-            widget.onSwipe?.call(currentIndex, detectedDirection);
+            widget.onSwipe
+                ?.call(previousIndex, currentIndex, detectedDirection);
             if (currentIndex == widget.cardsCount) {
               widget.onEnd?.call();
             }
@@ -396,6 +400,8 @@ class _AppinioSwiperState extends State<AppinioSwiper>
           }
         },
         onPanUpdate: (tapInfo) {
+          _previousLeft = _left;
+          _previousTop = _top;
           if (!widget.isDisabled) {
             setState(() {
               final swipeOption = widget.swipeOptions;
@@ -468,7 +474,29 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   }
 
   Future<void> _onSwiping() async {
-    widget.onSwiping?.call(_calculateDirection(top: _top, left: _left));
+    AppinioSwiperDirection _direction = _calculateDirection(top: _top, left: _left);
+    if(_direction == AppinioSwiperDirection.left){
+      if(_previousLeft!<_left){
+        ///user swiping back from left
+        _direction = AppinioSwiperDirection.comingBack;
+      }
+    }else if(_direction == AppinioSwiperDirection.right){
+      ///user swiping back from right
+      if(_previousLeft!>_left){
+        _direction = AppinioSwiperDirection.comingBack;
+      }
+    }else if(_direction == AppinioSwiperDirection.top){
+      ///user swiping back from top
+      if(_previousTop!<_top){
+        _direction = AppinioSwiperDirection.comingBack;
+      }
+    }else if(_direction == AppinioSwiperDirection.bottom){
+      ///user swiping back from  bottom
+      if(_previousTop!>_top){
+        _direction = AppinioSwiperDirection.comingBack;
+      }
+    }
+    widget.onSwiping?.call(_direction);
   }
 
   void _calculateAngle() {
@@ -610,9 +638,10 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   }
 
   //unswipe the card: brings back the last card that was swiped away
-  void _unswipe() {
+  int _unswipe() {
     _unSwiped = true;
     _isUnswiping = true;
+    int previousIndex = currentIndex;
     if (widget.loop) {
       if (currentIndex == 0) {
         currentIndex = widget.cardsCount - 1;
@@ -675,5 +704,6 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     }
 
     setState(() {});
+    return previousIndex;
   }
 }

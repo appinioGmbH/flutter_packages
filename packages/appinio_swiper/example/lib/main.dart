@@ -91,16 +91,18 @@ class _ExamplePageState extends State<Example> {
     );
   }
 
-  void _swipe(int index, AppinioSwiperDirection direction) {
+  void _swipe(int previousIndex, int currentIndex, AppinioSwiperDirection direction) {
+    log("previousIndex: $previousIndex ,currentIndex: $currentIndex");
     log("the card was swiped to the: " + direction.name);
   }
 
-  void _unswipe(bool unswiped) {
+  void _unswipe(int? previousIndex, int currentIndex, bool unswiped) {
     if (unswiped) {
       log("SUCCESS: card was unswiped");
     } else {
       log("FAIL: no card left to unswipe");
     }
+    log("previousIndex: $previousIndex ,currentIndex: $currentIndex");
   }
 
   void _onEnd() {
