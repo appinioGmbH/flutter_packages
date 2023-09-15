@@ -154,86 +154,17 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     if (widget.controller != null) {
       widget.controller!
         //swipe widget from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipe) {
-            if (currentIndex < widget.cardsCount) {
-              switch (widget.direction) {
-                case AppinioSwiperDirection.right:
-                  _swipeHorizontal(context);
-                  break;
-                case AppinioSwiperDirection.left:
-                  _swipeHorizontal(context);
-                  break;
-                case AppinioSwiperDirection.top:
-                  _swipeVertical(context);
-                  break;
-                case AppinioSwiperDirection.bottom:
-                  _swipeVertical(context);
-                  break;
-                case AppinioSwiperDirection.none:
-                  break;
-              }
-              _animationController.forward();
-            }
-          }
-        })
+        ..addListener(_swipeListener)
         //swipe widget left from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipeLeft) {
-            if (currentIndex < widget.cardsCount) {
-              _left = -1;
-              _swipeHorizontal(context);
-              _animationController.forward();
-            }
-          }
-        })
+        ..addListener(_swipeLeftListener)
         //swipe widget right from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipeRight) {
-            if (currentIndex < widget.cardsCount) {
-              _left = widget.threshold + 1;
-              _swipeHorizontal(context);
-              _animationController.forward();
-            }
-          }
-        })
+        ..addListener(_swipeRightListener)
         //swipe widget up from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipeUp) {
-            if (currentIndex < widget.cardsCount) {
-              _top = -1;
-              _swipeVertical(context);
-              _animationController.forward();
-            }
-          }
-        })
+        ..addListener(_swipeUpListener)
         //swipe widget down from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipeDown) {
-            if (currentIndex < widget.cardsCount) {
-              _top = widget.threshold + 1;
-              _swipeVertical(context);
-              _animationController.forward();
-            }
-          }
-        })
+        ..addListener(_swipeDownListener)
         //unswipe widget from the outside
-        ..addListener(() {
-          if (!widget.unlimitedUnswipe && _unSwiped) return;
-          if (widget.controller!.state == AppinioSwiperState.unswipe) {
-            if (widget.allowUnswipe) {
-              if (!_isUnswiping) {
-                if (currentIndex > 0) {
-                  int previousIndex = _unswipe();
-                  widget.unswipe?.call(previousIndex, currentIndex, true);
-                  _animationController.forward();
-                } else {
-                  widget.unswipe?.call(null, currentIndex, false);
-                }
-              }
-            }
-          }
-        });
+        ..addListener(_unSwipeListener);
     }
 
     if (widget.maxAngle > 0) {
@@ -309,6 +240,12 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   @override
   void dispose() {
     super.dispose();
+    widget.controller?.removeListener(_swipeUpListener);
+    widget.controller?.removeListener(_swipeDownListener);
+    widget.controller?.removeListener(_swipeRightListener);
+    widget.controller?.removeListener(_swipeLeftListener);
+    widget.controller?.removeListener(_swipeListener);
+    widget.controller?.removeListener(_unSwipeListener);
     _animationController.dispose();
   }
 
@@ -705,5 +642,86 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
     setState(() {});
     return previousIndex;
+  }
+
+  void _swipeListener() {
+    if (widget.controller!.state == AppinioSwiperState.swipe) {
+      if (currentIndex < widget.cardsCount) {
+        switch (widget.direction) {
+          case AppinioSwiperDirection.right:
+            _swipeHorizontal(context);
+            break;
+          case AppinioSwiperDirection.left:
+            _swipeHorizontal(context);
+            break;
+          case AppinioSwiperDirection.top:
+            _swipeVertical(context);
+            break;
+          case AppinioSwiperDirection.bottom:
+            _swipeVertical(context);
+            break;
+          case AppinioSwiperDirection.none:
+            break;
+        }
+        _animationController.forward();
+      }
+    }
+  }
+
+  void _swipeLeftListener() {
+    if (widget.controller!.state == AppinioSwiperState.swipeLeft) {
+      if (currentIndex < widget.cardsCount) {
+        _left = -1;
+        _swipeHorizontal(context);
+        _animationController.forward();
+      }
+    }
+  }
+
+  void _swipeRightListener() {
+    if (widget.controller!.state == AppinioSwiperState.swipeRight) {
+      if (currentIndex < widget.cardsCount) {
+        _left = widget.threshold + 1;
+        _swipeHorizontal(context);
+        _animationController.forward();
+      }
+    }
+  }
+
+  void _swipeUpListener() {
+    if (widget.controller!.state == AppinioSwiperState.swipeUp) {
+      if (currentIndex < widget.cardsCount) {
+        _top = -1;
+        _swipeVertical(context);
+        _animationController.forward();
+      }
+    }
+  }
+
+  void _swipeDownListener() {
+    if (widget.controller!.state == AppinioSwiperState.swipeDown) {
+      if (currentIndex < widget.cardsCount) {
+        _top = widget.threshold + 1;
+        _swipeVertical(context);
+        _animationController.forward();
+      }
+    }
+  }
+
+  void _unSwipeListener() {
+    if (!widget.unlimitedUnswipe && _unSwiped) return;
+    if (widget.controller!.state == AppinioSwiperState.unswipe) {
+      if (widget.allowUnswipe) {
+        if (!_isUnswiping) {
+          if (currentIndex > 0) {
+            int previousIndex = _unswipe();
+            widget.unswipe?.call(previousIndex,currentIndex,true);
+            _animationController.forward();
+          } else {
+            widget.unswipe?.call(null, currentIndex, false);
+          }
+        }
+      }
+    }
   }
 }
