@@ -1,3 +1,8 @@
+## [0.2.6] - 2023.09.25
+
+* Enhancements:
+  - Updating FB SDK to 16.1.3
+
 ## [0.2.5] - 2023.08.23
 
 * Bug Fix:
