@@ -14,7 +14,8 @@ We build this package because we wanted to:
 
 ## Pinch to zoom
 
-<video src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/pinch_to_zoom.mp4?raw=true" height="400"/>
+![](https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/pinch_to_zoom.mp4)
+
 https://github.com/appinioGmbH/flutter_packages/assets/58891556/67864343-2352-4f45-98a6-76c058c78f8f
 
 ## Drag down to exit fullscreen
