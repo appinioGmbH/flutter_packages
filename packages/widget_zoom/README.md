@@ -14,7 +14,9 @@ We build this package because we wanted to:
 
 ## Pinch to zoom
 
-![](https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/pinch_to_zoom.mp4)
+<video width="320" height="240" controls>
+  <source src="https://github.com/appinioGmbH/flutter_packages/blob/chore/new_widget_zoom/assets/widget_zoom/pinch_to_zoom.mp4" type="video/mp4">
+</video>
 
 https://github.com/appinioGmbH/flutter_packages/assets/58891556/67864343-2352-4f45-98a6-76c058c78f8f
 
