@@ -11,7 +11,13 @@ We build this package because we wanted to:
 - create an easy usage experience for developers
 
 ## Show Case
-<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/zoom.gif?raw=true" height="400">
+
+#Pinch to zoom
+
+https://github.com/appinioGmbH/flutter_packages/assets/58891556/67864343-2352-4f45-98a6-76c058c78f8f
+
+
+
 
 ## Features
 
