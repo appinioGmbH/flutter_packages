@@ -14,9 +14,7 @@ We build this package because we wanted to:
 
 ## Pinch to zoom
 
-<video width="320" height="240" controls>
-  <source href="https://github.com/appinioGmbH/flutter_packages/blob/chore/new_widget_zoom/assets/widget_zoom/pinch_to_zoom.mp4" type="video/mp4">
-</video>
+https://github.com/appinioGmbH/flutter_packages/blob/chore/new_widget_zoom/assets/widget_zoom/pinch_to_zoom.mp4
 
 
 ## Drag down to exit fullscreen
