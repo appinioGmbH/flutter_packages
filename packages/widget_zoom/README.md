@@ -12,10 +12,17 @@ We build this package because we wanted to:
 
 ## Show Case
 
-##Pinch to zoom
+## Pinch to zoom
 
 https://github.com/appinioGmbH/flutter_packages/assets/58891556/67864343-2352-4f45-98a6-76c058c78f8f
 
+## Drag down to exit fullscreen
+
+https://github.com/appinioGmbH/flutter_packages/assets/58891556/ab511cb8-c209-46b0-9b25-5f734d186b40
+
+## Zoom flutter widgets
+
+https://github.com/appinioGmbH/flutter_packages/assets/58891556/53edfe92-1b1a-43e8-ad61-61a8d8626f78
 
 
 
