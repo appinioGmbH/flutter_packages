@@ -17,8 +17,10 @@ We build this package because we wanted to:
 - set loop for infinite scroll
 - update the list of cards between swipes.
 - Check in which direction the card is being swiped and modify your widget accordingly.
-- NEW - We can have any number of background cards.
-- NEW - Pass any combination of swipe options.
+- We can have any number of background cards.
+- Pass any combination of swipe options.
+- NEW - check when user is swiping card back before reaching the threshold value.
+- NEW - Get current card index.
 
 
 ## ❗NEW  Features ❗
@@ -151,12 +153,12 @@ class Example extends StatelessWidget {
 | threshold        | 50                                                 | Threshold from which the card is swiped away                                                                                        |  false   |
 | isDisabled       | false                                              | Set to ```true``` if swiping should be disabled, has no impact when triggered from the outside                                      |  false   |
 | onTapDisabled    | -                                                  | Function that get triggered when the swiper is disabled                                                                             |  false   |
-| onSwipe          | -                                                  | Called with the new index and detected swipe direction when the user swiped                                                         |  false   |
+| onSwipe          | -                                                  | Called with the new index, previous index and detected swipe direction when the user swiped                                                         |  false   |
 | onEnd            | -                                                  | Called when there is no Widget left to be swiped away                                                                               |  false   |
 | direction        | right                                              | Direction in which the card is swiped away when triggered from the outside                                                          |  false   |
 | allowUnswipe     | true                                               | Set to ```false``` if unswipe should be disabled away                                                                               |  false   |
 | unlimitedUnswipe | false                                              | Set to ```true``` if the user can unswipe as many cards as possible                                                                 |  false   |
-| unswipe          | -                                                  | Called with the boolean ```true``` when the last card gets unswiped and with the boolean ```false``` if there is no card to unswipe |  false   |
+| unswipe          | -                                                  | Called with the previous index, current index and the boolean ```true``` when the last card gets unswiped and with the boolean ```false``` if there is no card to unswipe |  false   |
 | onSwiping        | -                                                  | Pass a callback of type ```void Function(AppinioSwiperDirection direction)``` and check when and in which direction the card is getting swiped | false |
 | onSwipeCancelled | -                                                  | Gets called when the user leaves the card before the threshold is reached                                                           |  false   |
 
