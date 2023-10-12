@@ -25,6 +25,8 @@ We build this package because we wanted to:
 
 ## ❗NEW  Features ❗
 
+### Know when user is coming back without completely swiping the card.
+Now you can track if user is swiping the card back to the center with a new property in AppinioSwiperDirection,  ```comingBack```. 
 
 ### Space background cards as per your requirement.
 Now you can decide the spacing between the background cards and can also hide them by giving   ```cardsSpacing = 0```. 
