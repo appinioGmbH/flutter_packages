@@ -1,8 +1,8 @@
-## 0.0.2
+## [0.0.2] - 2023.10.16
 
-* Updated readme
+- Updated readme.
 
 
-## 0.0.1
+## [0.0.1] - 2022.12.16
 
-* TODO: Describe initial release.
+- Initial release.
