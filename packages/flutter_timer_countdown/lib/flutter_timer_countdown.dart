@@ -16,12 +16,17 @@ enum CountDownTimerFormat {
   secondsOnly,
 }
 
+typedef OnTickCallBack = void Function(Duration remainingTime);
+
 class TimerCountdown extends StatefulWidget {
   /// Format for the timer coundtown, choose between different `CountDownTimerFormat`s
   final CountDownTimerFormat format;
 
   /// Defines the time when the timer is over.
   final DateTime endTime;
+
+  /// Gives you remaining time after every tick.
+  final OnTickCallBack? onTick;
 
   /// Function to call when the timer is over.
   final VoidCallback? onEnd;
@@ -59,6 +64,7 @@ class TimerCountdown extends StatefulWidget {
     this.enableDescriptions = true,
     this.onEnd,
     this.timeTextStyle,
+    this.onTick,
     this.colonsTextStyle,
     this.descriptionTextStyle,
     this.daysDescription = "Days",
@@ -117,6 +123,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
     } else {
       timer = Timer.periodic(Duration(seconds: 1), (timer) {
         difference = widget.endTime.difference(DateTime.now());
+        widget.onTick?.call(difference);
         setState(() {
           countdownDays = _durationToStringDays(difference);
           countdownHours = _durationToStringHours(difference);
