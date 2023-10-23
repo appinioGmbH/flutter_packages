@@ -661,6 +661,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             _swipeVertical(context);
             break;
           case AppinioSwiperDirection.none:
+          case AppinioSwiperDirection.comingBack:
             break;
         }
         _animationController.forward();
