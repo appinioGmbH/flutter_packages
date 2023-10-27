@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:appinio_swiper/types.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'controllers.dart';
@@ -72,8 +73,8 @@ class AppinioSwiper extends StatefulWidget {
   /// function that gets called with the boolean true when the last card gets unswiped and with the boolean false when there is no card to unswipe
   final OnUnSwipe? unswipe;
 
-  /// direction in which the card gets swiped when triggered by controller, default set to right
-  final AppinioSwiperDirection direction;
+  /// default direction in which the card gets swiped when triggered by controller, default set to right
+  final AppinioSwiperDirection defaultDirection;
 
   const AppinioSwiper({
     Key? key,
@@ -97,22 +98,38 @@ class AppinioSwiper extends StatefulWidget {
     this.onSwiping,
     this.onEnd,
     this.unswipe,
-    this.direction = AppinioSwiperDirection.right,
+    this.defaultDirection = AppinioSwiperDirection.right,
   })  : assert(maxAngle >= 0 && maxAngle <= 360),
         assert(threshold >= 1 && threshold <= 100),
-        assert(direction != AppinioSwiperDirection.none),
+        assert(defaultDirection != AppinioSwiperDirection.none),
         super(key: key);
 
   @override
-  State createState() => _AppinioSwiperState();
+  State createState() => AppinioSwiperWidgetState();
 }
 
-class _AppinioSwiperState extends State<AppinioSwiper>
+class AppinioSwiperWidgetState extends State<AppinioSwiper>
     with SingleTickerProviderStateMixin {
-  double _left = 0;
-  double _top = 0;
-  double _total = 0;
-  double _angle = 0;
+  final ValueNotifier<Offset> currentOffset = ValueNotifier(Offset.zero);
+
+  double get _left => currentOffset.value.dx;
+
+  double get _top => currentOffset.value.dy;
+
+  Offset get progress => Offset(
+        _left / MediaQuery.of(context).size.width,
+        _top / MediaQuery.of(context).size.height,
+      );
+
+  double get _total => _left + _top;
+
+  double get _angle {
+    if (_tapOnTop) {
+      return ((_maxAngle / 100) * (_left / 10)).clamp(-_maxAngle, _maxAngle);
+    }
+    return ((_maxAngle / 100) * (_left / 10) * -1).clamp(-_maxAngle, _maxAngle);
+  }
+
   double _maxAngle = 0;
   double _scale = 0.9;
   double _difference = 40;
@@ -143,97 +160,84 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   AppinioSwiperDirection detectedDirection = AppinioSwiperDirection.none;
 
+  void onSwipeDefault() {
+    if (currentIndex >= widget.cardsCount) return;
+    switch (widget.defaultDirection) {
+      case AppinioSwiperDirection.right:
+      case AppinioSwiperDirection.left:
+        _swipeHorizontal(context);
+        break;
+      case AppinioSwiperDirection.top:
+      case AppinioSwiperDirection.bottom:
+        _swipeVertical(context);
+        break;
+      case AppinioSwiperDirection.none:
+        break;
+    }
+    _animationController.forward();
+  }
+
+  void onSwipeLeft() {
+    if (currentIndex >= widget.cardsCount) {
+      return;
+    }
+    _onPositionSet(left: -1);
+    _swipeHorizontal(context);
+    _animationController.forward();
+  }
+
+  void onSwipeRight() {
+    if (currentIndex >= widget.cardsCount) {
+      return;
+    }
+    _swipeHorizontal(context);
+    _onPositionSet(left: widget.threshold + 1);
+    _swipeHorizontal(context);
+    _animationController.forward();
+  }
+
+  void onSwipeUp() {
+    if (currentIndex >= widget.cardsCount) {
+      return;
+    }
+    _onPositionSet(top: -1);
+    _swipeVertical(context);
+    _animationController.forward();
+  }
+
+  void onSwipeDown() {
+    if (currentIndex >= widget.cardsCount) {
+      return;
+    }
+    _onPositionSet(top: widget.threshold + 1);
+    _swipeVertical(context);
+    _animationController.forward();
+  }
+
+  void onUnSwipe() {
+    if (currentIndex >= widget.cardsCount) {
+      return;
+    }
+    if (!widget.unlimitedUnswipe && _unSwiped) {
+      return;
+    }
+    if (!widget.allowUnswipe || _isUnswiping) {
+      return;
+    }
+    if (currentIndex > 0) {
+      _unswipe();
+      widget.unswipe?.call(true);
+      _animationController.forward();
+    } else {
+      widget.unswipe?.call(false);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _difference = widget.cardsSpacing;
     _backgroundCardsDifference = widget.cardsSpacing;
-
-    if (widget.controller != null) {
-      widget.controller!
-        //swipe widget from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipe) {
-            if (currentIndex < widget.cardsCount) {
-              switch (widget.direction) {
-                case AppinioSwiperDirection.right:
-                  _swipeHorizontal(context);
-                  break;
-                case AppinioSwiperDirection.left:
-                  _swipeHorizontal(context);
-                  break;
-                case AppinioSwiperDirection.top:
-                  _swipeVertical(context);
-                  break;
-                case AppinioSwiperDirection.bottom:
-                  _swipeVertical(context);
-                  break;
-                case AppinioSwiperDirection.none:
-                  break;
-              }
-              _animationController.forward();
-            }
-          }
-        })
-        //swipe widget left from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipeLeft) {
-            if (currentIndex < widget.cardsCount) {
-              _left = -1;
-              _swipeHorizontal(context);
-              _animationController.forward();
-            }
-          }
-        })
-        //swipe widget right from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipeRight) {
-            if (currentIndex < widget.cardsCount) {
-              _left = widget.threshold + 1;
-              _swipeHorizontal(context);
-              _animationController.forward();
-            }
-          }
-        })
-        //swipe widget up from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipeUp) {
-            if (currentIndex < widget.cardsCount) {
-              _top = -1;
-              _swipeVertical(context);
-              _animationController.forward();
-            }
-          }
-        })
-        //swipe widget down from the outside
-        ..addListener(() {
-          if (widget.controller!.state == AppinioSwiperState.swipeDown) {
-            if (currentIndex < widget.cardsCount) {
-              _top = widget.threshold + 1;
-              _swipeVertical(context);
-              _animationController.forward();
-            }
-          }
-        })
-        //unswipe widget from the outside
-        ..addListener(() {
-          if (!widget.unlimitedUnswipe && _unSwiped) return;
-          if (widget.controller!.state == AppinioSwiperState.unswipe) {
-            if (widget.allowUnswipe) {
-              if (!_isUnswiping) {
-                if (currentIndex > 0) {
-                  _unswipe();
-                  widget.unswipe?.call(true);
-                  _animationController.forward();
-                } else {
-                  widget.unswipe?.call(false);
-                }
-              }
-            }
-          }
-        });
-    }
-
     if (widget.maxAngle > 0) {
       _maxAngle = widget.maxAngle * (pi / 180);
     }
@@ -245,12 +249,16 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       if (_animationController.status == AnimationStatus.forward) {
         setState(() {
           if (_swipeType != 2) {
-            _left = _leftAnimation.value;
-            _top = _topAnimation.value;
+            _onPositionSet(
+              left: _leftAnimation.value,
+              top: _topAnimation.value,
+            );
           }
           if (_swipeType == 2) {
-            _left = _unSwipeLeftAnimation.value;
-            _top = _unSwipeTopAnimation.value;
+            _onPositionSet(
+              left: _unSwipeLeftAnimation.value,
+              top: _unSwipeTopAnimation.value,
+            );
           }
           _scale = _scaleAnimation.value;
           _difference = _differenceAnimation.value;
@@ -290,22 +298,28 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             _isUnswiping = false;
           }
           _animationController.reset();
-          _left = 0;
-          _top = 0;
-          _total = 0;
-          _angle = 0;
+          _onPositionSet(left: 0, top: 0);
           _scale = 0.9;
           _difference = widget.cardsSpacing;
           _swipeType = 0;
         });
       }
     });
+    widget.controller?.attach(this);
   }
 
   @override
   void dispose() {
     super.dispose();
+    widget.controller?.detach();
     _animationController.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant AppinioSwiper oldWidget) {
+    oldWidget.controller?.detach();
+    widget.controller?.attach(this);
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -396,42 +410,42 @@ class _AppinioSwiperState extends State<AppinioSwiper>
           }
         },
         onPanUpdate: (tapInfo) {
-          if (!widget.isDisabled) {
-            setState(() {
-              final swipeOption = widget.swipeOptions;
-
-              if (swipeOption.allDirections) {
-                _left += tapInfo.delta.dx;
-                _top += tapInfo.delta.dy;
-              } else if (swipeOption.horizontal) {
-                _left += tapInfo.delta.dx;
-              } else if (swipeOption.vertical) {
-                _top += tapInfo.delta.dy;
-              } else {
-                AppinioSwiperDirection direction = _calculateDirection(
-                    top: _top + tapInfo.delta.dy,
-                    left: _left + tapInfo.delta.dx);
-                if (direction == AppinioSwiperDirection.right &&
-                    swipeOption.right) {
-                  _left += tapInfo.delta.dx;
-                } else if (direction == AppinioSwiperDirection.left &&
-                    swipeOption.left) {
-                  _left += tapInfo.delta.dx;
-                } else if (direction == AppinioSwiperDirection.top &&
-                    swipeOption.top) {
-                  _top += tapInfo.delta.dy;
-                } else if (direction == AppinioSwiperDirection.bottom &&
-                    swipeOption.bottom) {
-                  _top += tapInfo.delta.dy;
-                }
-              }
-              _total = _left + _top;
-              _calculateAngle();
-              _calculateScale();
-              _calculateDifference();
-            });
-            _onSwiping();
+          if (widget.isDisabled) {
+            return;
           }
+          setState(() {
+            final swipeOption = widget.swipeOptions;
+
+            if (swipeOption.allDirections) {
+              _onPositionDelta(
+                dx: tapInfo.delta.dx,
+                dy: tapInfo.delta.dy,
+              );
+            } else if (swipeOption.horizontal) {
+              _onPositionDelta(dx: tapInfo.delta.dx);
+            } else if (swipeOption.vertical) {
+              _onPositionDelta(dy: tapInfo.delta.dy);
+            } else {
+              AppinioSwiperDirection direction = _calculateDirection(
+                  top: _top + tapInfo.delta.dy, left: _left + tapInfo.delta.dx);
+              if (direction == AppinioSwiperDirection.right &&
+                  swipeOption.right) {
+                _onPositionDelta(dx: tapInfo.delta.dx);
+              } else if (direction == AppinioSwiperDirection.left &&
+                  swipeOption.left) {
+                _onPositionDelta(dx: tapInfo.delta.dx);
+              } else if (direction == AppinioSwiperDirection.top &&
+                  swipeOption.top) {
+                _onPositionDelta(dy: tapInfo.delta.dy);
+              } else if (direction == AppinioSwiperDirection.bottom &&
+                  swipeOption.bottom) {
+                _onPositionDelta(dy: tapInfo.delta.dy);
+              }
+            }
+            _calculateScale();
+            _calculateDifference();
+          });
+          _onSwiping();
         },
         onPanEnd: (tapInfo) {
           if (!widget.isDisabled) {
@@ -471,18 +485,10 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     widget.onSwiping?.call(_calculateDirection(top: _top, left: _left));
   }
 
-  void _calculateAngle() {
-    if (_angle <= _maxAngle && _angle >= -_maxAngle) {
-      (_tapOnTop == true)
-          ? _angle = (_maxAngle / 100) * (_left / 10)
-          : _angle = (_maxAngle / 100) * (_left / 10) * -1;
-    }
-  }
-
   void _calculateScale() {
-    if (_scale <= 1.0 && _scale >= 0.9) {
-      _scale =
-          (_total > 0) ? 0.9 + (_total / 5000) : 0.9 + -1 * (_total / 5000);
+    if (_scale >= 0.9 && _scale <= 1.0) {
+      final double sign = _total > 0 ? 1 : -1;
+      _scale = 0.9 + sign * (_total / 5000);
     }
   }
 
@@ -512,7 +518,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       _leftAnimation = Tween<double>(
         begin: _left,
         end: (_left == 0)
-            ? (widget.direction == AppinioSwiperDirection.right)
+            ? (widget.defaultDirection == AppinioSwiperDirection.right)
                 ? MediaQuery.of(context).size.width
                 : -MediaQuery.of(context).size.width
             : (_left > widget.threshold)
@@ -533,7 +539,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       ).animate(_animationController);
     });
     if (_left > widget.threshold ||
-        _left == 0 && widget.direction == AppinioSwiperDirection.right) {
+        _left == 0 && widget.defaultDirection == AppinioSwiperDirection.right) {
       _swipedDirectionHorizontal = 1;
       detectedDirection = AppinioSwiperDirection.right;
     } else {
@@ -556,7 +562,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       _topAnimation = Tween<double>(
         begin: _top,
         end: (_top == 0)
-            ? (widget.direction == AppinioSwiperDirection.bottom)
+            ? (widget.defaultDirection == AppinioSwiperDirection.bottom)
                 ? MediaQuery.of(context).size.height
                 : -MediaQuery.of(context).size.height
             : (_top > widget.threshold)
@@ -573,7 +579,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       ).animate(_animationController);
     });
     if (_top > widget.threshold ||
-        _top == 0 && widget.direction == AppinioSwiperDirection.bottom) {
+        _top == 0 && widget.defaultDirection == AppinioSwiperDirection.bottom) {
       _swipedDirectionVertical = -1;
       detectedDirection = AppinioSwiperDirection.bottom;
     } else {
@@ -675,5 +681,22 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     }
 
     setState(() {});
+  }
+
+  void _onPositionDelta({double? dx, double? dy}) {
+    _onPositionSet(
+      left: dx != null ? _left + dx : null,
+      top: dy != null ? _top + dy : null,
+    );
+  }
+
+  void _onPositionSet({double? left, double? top}) {
+    assert(
+      left != null || top != null,
+      'Either the horizontal or vertical axis should have changed.',
+    );
+    setState(() {
+      currentOffset.value = Offset(left ?? _left, top ?? _top);
+    });
   }
 }
