@@ -55,32 +55,34 @@ class _ExamplePageState extends State<Example> {
             const SizedBox(
               height: 50,
             ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.75,
-              padding: const EdgeInsets.only(
-                left: 25,
-                right: 25,
-                top: 50,
-                bottom: 40,
-              ),
-              child: AppinioSwiper(
-                invertAngleOnBottomDrag: true,
-                backgroundCardCount: 3,
-                swipeOptions: const SwipeOptions.all(),
-                controller: controller,
-                unswipe: _unswipe,
-                onCardPositionChanged: (
-                  AxisDirection direction,
-                  Offset position,
-                ) {
-                  //debugPrint('$direction, $position');
-                },
-                onSwipe: _swipe,
-                onEnd: _onEnd,
-                cardCount: candidates.length,
-                cardBuilder: (BuildContext context, int index) {
-                  return ExampleCard(candidate: candidates[index]);
-                },
+            FractionallySizedBox(
+              heightFactor: .75,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 25,
+                  right: 25,
+                  top: 50,
+                  bottom: 40,
+                ),
+                child: AppinioSwiper(
+                  invertAngleOnBottomDrag: true,
+                  backgroundCardCount: 3,
+                  swipeOptions: const SwipeOptions.all(),
+                  controller: controller,
+                  unswipe: _unswipe,
+                  onCardPositionChanged: (
+                    AxisDirection direction,
+                    Offset position,
+                  ) {
+                    //debugPrint('$direction, $position');
+                  },
+                  onSwipe: _swipe,
+                  onEnd: _onEnd,
+                  cardCount: candidates.length,
+                  cardBuilder: (BuildContext context, int index) {
+                    return ExampleCard(candidate: candidates[index]);
+                  },
+                ),
               ),
             ),
             IconTheme.merge(

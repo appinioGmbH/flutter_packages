@@ -9,6 +9,20 @@ import 'enums.dart';
 export 'enums.dart';
 export 'types.dart';
 
+final List<Recipient> recipients = [];
+
+class Recipient {
+  const Recipient(this.emailVerifiedAt);
+
+  final String emailVerifiedAt;
+
+  bool get isVerified => emailVerifiedAt.isNotEmpty;
+}
+
+// Inline wherever you need it....
+final List<Recipient> onlyVerified =
+    recipients.where((r) => r.isVerified).toList();
+
 class AppinioSwiper extends StatefulWidget {
   /// A callback that's called when the user lifts their finger during a drag
   /// without having reached [threshold].
@@ -19,9 +33,6 @@ class AppinioSwiper extends StatefulWidget {
 
   /// The number of cards in the stack.
   final int cardCount;
-
-  /// Cards spacing.
-  final double cardsSpacing;
 
   /// Background cards count
   final int backgroundCardCount;
@@ -119,7 +130,6 @@ class AppinioSwiper extends StatefulWidget {
     this.duration = const Duration(milliseconds: 200),
     this.maxAngle = 15,
     this.invertAngleOnBottomDrag = true,
-    this.cardsSpacing = 40,
     this.threshold = 50,
     this.backgroundCardCount = 1,
     this.backgroundCardScale = .9,
@@ -540,18 +550,16 @@ class AppinioSwiperController extends ChangeNotifier {
   ///
   /// This is 0 when there is no active swipe. It increments up to 1 during an
   /// active swipe and then resets to 0 when the swipe is complete.
-  Offset get swipeProgress {
-    _assertIsAttached();
-    return position!.offsetRelativeToSize;
+  Offset? get swipeProgress {
+    return position?.offsetRelativeToSize;
   }
 
   /// The index of the card currently on the top.
   ///
   /// This cycles to the next card only after the previous card has fully
   /// animated off the screen.
-  int get cardIndex {
-    _assertIsAttached();
-    return position!.index;
+  int? get cardIndex {
+    return position?.index;
   }
 
   /// Swipe the card in the default direction.
