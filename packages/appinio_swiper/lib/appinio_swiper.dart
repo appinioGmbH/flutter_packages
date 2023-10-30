@@ -666,6 +666,10 @@ class SwiperPosition with ChangeNotifier {
 
   Size get cardSize => _cardSize;
 
+  // When the user starts a pan we save the point they tapped. We then rotate
+  // the card around this point as they swipe.
+  // By rotating around the point of their tap we ensure that their finger
+  // stays in the same local position relative to the card.
   Offset? _rotationPosition;
 
   Alignment? get _rotationAlignment => _rotationPosition?.toAlignment(cardSize);
