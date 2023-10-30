@@ -117,7 +117,7 @@ class AppinioSwiper extends StatefulWidget {
     required this.cardCount,
     this.controller,
     this.duration = const Duration(milliseconds: 200),
-    this.maxAngle = 30,
+    this.maxAngle = 15,
     this.invertAngleOnBottomDrag = true,
     this.cardsSpacing = 40,
     this.threshold = 50,
@@ -726,7 +726,7 @@ class SwiperPosition with ChangeNotifier {
             _rotationAlignment!.y > 0
         ? -1
         : 1;
-    return (direction * (_maxAngle / 100) * (_offset.dx / 10))
+    return (direction * _maxAngle * (_offset.dx / _cardSize.width))
         .clamp(-_maxAngle, _maxAngle);
   }
 
