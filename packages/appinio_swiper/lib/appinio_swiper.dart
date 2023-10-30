@@ -15,7 +15,7 @@ class AppinioSwiper extends StatefulWidget {
   final VoidCallback? onSwipeCancelled;
 
   /// The indexed widget builder that builds a card for the given index.
-  final IndexedWidgetBuilder cardsBuilder;
+  final IndexedWidgetBuilder cardBuilder;
 
   /// The number of cards in the stack.
   final int cardCount;
@@ -113,7 +113,7 @@ class AppinioSwiper extends StatefulWidget {
 
   const AppinioSwiper({
     Key? key,
-    required this.cardsBuilder,
+    required this.cardBuilder,
     required this.cardCount,
     this.controller,
     this.duration = const Duration(milliseconds: 200),
@@ -328,7 +328,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
               effectiveBackgroundCardCount,
               (index) => (foregroundIndex + 1) % widget.cardCount,
             ),
-            builder: widget.cardsBuilder,
+            builder: widget.cardBuilder,
             scaleIncrement: _effectiveScaleIncrement,
             offsetIncrement: _effectiveOffset,
             initialEffectFactor: 1 - maxProgressToThreshold,
@@ -344,7 +344,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                 alignment:
                     position._rotationAlignment ?? Alignment.bottomCenter,
                 child: Container(
-                  child: widget.cardsBuilder(context, foregroundIndex),
+                  child: widget.cardBuilder(context, foregroundIndex),
                 ),
               ),
               onTap: () {

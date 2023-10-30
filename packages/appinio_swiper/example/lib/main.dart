@@ -78,7 +78,7 @@ class _ExamplePageState extends State<Example> {
                 onSwipe: _swipe,
                 onEnd: _onEnd,
                 cardCount: candidates.length,
-                cardsBuilder: (BuildContext context, int index) {
+                cardBuilder: (BuildContext context, int index) {
                   return ExampleCard(candidate: candidates[index]);
                 },
               ),
