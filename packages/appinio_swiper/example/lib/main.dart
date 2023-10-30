@@ -4,6 +4,7 @@ import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:example/example_candidate_model.dart';
 import 'package:example/example_card.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'example_buttons.dart';
 
@@ -36,62 +37,80 @@ class Example extends StatefulWidget {
 
 class _ExamplePageState extends State<Example> {
   final AppinioSwiperController controller = AppinioSwiperController();
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 1)).then((_) {
+      _shakeCard();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.75,
-            child: AppinioSwiper(
-              backgroundCardsCount: 3,
-              swipeOptions: const AppinioSwipeOptions.all(),
-              unlimitedUnswipe: true,
-              controller: controller,
-              unswipe: _unswipe,
-              onSwiping: (AppinioSwiperDirection direction) {
-                debugPrint(direction.toString());
-              },
-              onSwipe: _swipe,
+    return Material(
+      child: CupertinoPageScaffold(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.75,
               padding: const EdgeInsets.only(
                 left: 25,
                 right: 25,
                 top: 50,
                 bottom: 40,
               ),
-              onEnd: _onEnd,
-              cardsCount: candidates.length,
-              cardsBuilder: (BuildContext context, int index) {
-                return ExampleCard(candidate: candidates[index]);
-              },
+              child: AppinioSwiper(
+                invertAngleOnBottomDrag: true,
+                backgroundCardCount: 3,
+                swipeOptions: const SwipeOptions.all(),
+                controller: controller,
+                unswipe: _unswipe,
+                onCardPositionChanged: (
+                  AxisDirection direction,
+                  Offset position,
+                ) {
+                  //debugPrint('$direction, $position');
+                },
+                onSwipe: _swipe,
+                onEnd: _onEnd,
+                cardCount: candidates.length,
+                cardsBuilder: (BuildContext context, int index) {
+                  return ExampleCard(candidate: candidates[index]);
+                },
+              ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                width: 80,
+            IconTheme.merge(
+              data: const IconThemeData(size: 40),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TutorialAnimationButton(_shakeCard),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  swipeLeftButton(controller),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  swipeRightButton(controller),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  unswipeButton(controller),
+                ],
               ),
-              swipeLeftButton(controller),
-              const SizedBox(
-                width: 20,
-              ),
-              swipeRightButton(controller),
-              const SizedBox(
-                width: 20,
-              ),
-              unswipeButton(controller),
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  void _swipe(int index, AppinioSwiperDirection direction) {
+  void _swipe(int index, AxisDirection direction) {
     log("the card was swiped to the: " + direction.name);
   }
 
@@ -105,5 +124,24 @@ class _ExamplePageState extends State<Example> {
 
   void _onEnd() {
     log("end reached!");
+  }
+
+  Future<void> _shakeCard() async {
+    const double distance = 30;
+    await controller.animateTo(
+      const Offset(-distance, 0),
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+    await controller.animateTo(
+      const Offset(distance, 0),
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+    await controller.animateTo(
+      const Offset(0, 0),
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
   }
 }
