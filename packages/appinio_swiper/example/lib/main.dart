@@ -126,8 +126,10 @@ class _ExamplePageState extends State<Example> {
     log("end reached!");
   }
 
+  // Animates the card back and forth to teach the user that it is swipable.
   Future<void> _shakeCard() async {
     const double distance = 30;
+    // We can animate back and forth by chaining different animations.
     await controller.animateTo(
       const Offset(-distance, 0),
       duration: const Duration(milliseconds: 200),
@@ -138,6 +140,8 @@ class _ExamplePageState extends State<Example> {
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
     );
+    // We need to animate back to the center because `animateTo` does not center
+    // the card for us.
     await controller.animateTo(
       const Offset(0, 0),
       duration: const Duration(milliseconds: 200),

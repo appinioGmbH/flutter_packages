@@ -54,25 +54,31 @@ Widget swipeRightButton(AppinioSwiperController controller) {
 
 //swipe card to the left side
 Widget swipeLeftButton(AppinioSwiperController controller) {
+  // We can listen to the controller to get updated as the card shifts position!
   return ListenableBuilder(
     listenable: controller,
     builder: (context, child) {
       final SwiperPosition? position = controller.position;
       final SwiperActivity? activity = controller.swipeActivity;
-      final double progress = (activity is Swipe || activity == null) &&
+      // Lets measure the progress of the swipe iff it is a horizontal swipe.
+      final double horizontalProgress = (activity is Swipe || activity == null) &&
               position != null &&
               position.offset.toAxisDirection().isHorizontal
           ? -1 * position.progressRelativeToThreshold.clamp(-1, 1)
           : 0;
+      // Lets animate the button according to the
+      // progress. Here we'll color the button more grey as we swipe away from
+      // it.
       final Color color = Color.lerp(
         const Color(0xFFFF3868),
         CupertinoColors.systemGrey2,
-        (-1 * progress).clamp(0, 1),
+        (-1 * horizontalProgress).clamp(0, 1),
       )!;
       return GestureDetector(
         onTap: () => controller.swipeLeft(),
         child: Transform.scale(
-          scale: 1 + .1 * progress.clamp(0, 1),
+          // Increase the button size as we swipe towards it.
+          scale: 1 + .1 * horizontalProgress.clamp(0, 1),
           child: Container(
             height: 60,
             width: 60,
