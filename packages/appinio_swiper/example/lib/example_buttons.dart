@@ -6,49 +6,50 @@ import 'package:appinio_swiper/appinio_swiper.dart';
 //swipe card to the right side
 Widget swipeRightButton(AppinioSwiperController controller) {
   return ListenableBuilder(
-      listenable: controller,
-      builder: (context, child) {
-        final SwiperPosition? position = controller.position;
-        final SwiperActivity? activity = controller.swipeActivity;
-        final double progress = (activity is Swipe || activity == null) &&
-                position != null &&
-                position.offset.toAxisDirection().isHorizontal
-            ? position.progressRelativeToThreshold.clamp(-1, 1)
-            : 0;
-        final Color color = Color.lerp(
-          CupertinoColors.activeGreen,
-          CupertinoColors.systemGrey2,
-          (-1 * progress).clamp(0, 1),
-        )!;
-        return GestureDetector(
-          onTap: () => controller.swipeRight(),
-          child: Transform.scale(
-            scale: 1 + .1 * progress.clamp(0, 1),
-            child: Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: color.withOpacity(0.9),
-                    spreadRadius: -10,
-                    blurRadius: 20,
-                    offset: const Offset(0, 20), // changes position of shadow
-                  ),
-                ],
-              ),
-              alignment: Alignment.center,
-              child: const Icon(
-                Icons.check,
-                color: CupertinoColors.white,
-                size: 40,
-              ),
+    listenable: controller,
+    builder: (context, child) {
+      final SwiperPosition? position = controller.position;
+      final SwiperActivity? activity = controller.swipeActivity;
+      final double progress = (activity is Swipe || activity == null) &&
+              position != null &&
+              position.offset.toAxisDirection().isHorizontal
+          ? position.progressRelativeToThreshold.clamp(-1, 1)
+          : 0;
+      final Color color = Color.lerp(
+        CupertinoColors.activeGreen,
+        CupertinoColors.systemGrey2,
+        (-1 * progress).clamp(0, 1),
+      )!;
+      return GestureDetector(
+        onTap: () => controller.swipeRight(),
+        child: Transform.scale(
+          scale: 1 + .1 * progress.clamp(0, 1),
+          child: Container(
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: color.withOpacity(0.9),
+                  spreadRadius: -10,
+                  blurRadius: 20,
+                  offset: const Offset(0, 20), // changes position of shadow
+                ),
+              ],
+            ),
+            alignment: Alignment.center,
+            child: const Icon(
+              Icons.check,
+              color: CupertinoColors.white,
+              size: 40,
             ),
           ),
-        );
-      });
+        ),
+      );
+    },
+  );
 }
 
 //swipe card to the left side
