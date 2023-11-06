@@ -239,7 +239,6 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   @override
   void dispose() {
-    super.dispose();
     widget.controller?.removeListener(_swipeUpListener);
     widget.controller?.removeListener(_swipeDownListener);
     widget.controller?.removeListener(_swipeRightListener);
@@ -247,6 +246,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     widget.controller?.removeListener(_swipeListener);
     widget.controller?.removeListener(_unSwipeListener);
     _animationController.dispose();
+    super.dispose();
   }
 
   @override
