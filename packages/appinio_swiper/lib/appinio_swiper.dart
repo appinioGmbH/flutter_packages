@@ -24,10 +24,6 @@ final List<Recipient> onlyVerified =
     recipients.where((r) => r.isVerified).toList();
 
 class AppinioSwiper extends StatefulWidget {
-  /// A callback that's called when the user lifts their finger during a drag
-  /// without having reached [threshold].
-  final VoidCallback? onSwipeCancelled;
-
   /// The indexed widget builder that builds a card for the given index.
   final IndexedWidgetBuilder cardBuilder;
 
@@ -61,9 +57,9 @@ class AppinioSwiper extends StatefulWidget {
   /// is triggered by [AppinioSwiperController].
   final Duration duration;
 
-  /// A callback that is called whenever the card moves.
-  final void Function(AxisDirection direction, Offset position)?
-      onCardPositionChanged;
+  /// A callback that is called with the card's [SwiperPosition] whenever the
+  /// position changes.
+  final void Function(SwiperPosition position)? onCardPositionChanged;
 
   /// The maximum angle the card reaches while horizontally swiping.
   ///
@@ -99,9 +95,16 @@ class AppinioSwiper extends StatefulWidget {
   /// The looped cards will be displayed under the foreground card as if
   final bool loop;
 
-  /// Callback that fires with the direction and new index whenever a swipe is
-  /// triggered by the user or the [controller].
-  final OnSwipe? onSwipe;
+  /// Callback that fires with the new swiping activity (eg a user swipes or
+  /// the controller triggers a programmatic swipe).
+  ///
+  /// See [SwiperActivity] for a list of activities.
+  final OnSwipe? onSwipeBegin;
+
+  /// Callback that fires with a swipe activity after the activity is complete.
+  ///
+  /// See [SwiperActivity] for a list of activities.
+  final OnSwipe? onSwipeEnd;
 
   /// Function that is called when the card stack runs out of cards.
   final VoidCallback? onEnd;
@@ -109,12 +112,6 @@ class AppinioSwiper extends StatefulWidget {
   /// Function that is called when a user attempts to swipe but swiping is
   /// disabled.
   final VoidCallback? onTapDisabled;
-
-  /// Function that gets called when an unswipe is triggered.
-  ///
-  /// This is called with a boolean flag that is true if the unswipe was
-  /// successful and false if it was not (there was no swipe to undo).
-  final OnUnSwipe? unswipe;
 
   /// The default direction in which the card gets swiped when triggered by
   /// controller.
@@ -138,14 +135,13 @@ class AppinioSwiper extends StatefulWidget {
     this.loop = false,
     this.swipeOptions = const SwipeOptions.all(),
     this.onTapDisabled,
-    this.onSwipe,
-    this.onSwipeCancelled,
+    this.onSwipeBegin,
+    this.onSwipeEnd,
     this.onCardPositionChanged,
     this.onEnd,
-    this.unswipe,
     this.defaultDirection = AxisDirection.right,
   })  : assert(maxAngle >= 0),
-        assert(threshold >= 1 && threshold <= 100),
+        assert(threshold > 0),
         super(key: key);
 
   @override
@@ -163,12 +159,15 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   SwiperActivity? _swipeActivity;
 
+  // The future associated with the current swipe activity.
+  Future<bool>? _previousActivityFuture;
+
   AnimationController get _defaultAnimation => AnimationController(
         vsync: this,
         duration: widget.duration,
       );
 
-  late SwiperPosition position = SwiperPosition(
+  late final SwiperPosition _position = SwiperPosition(
     cardSize: MediaQuery.sizeOf(context),
     cardCount: widget.cardCount,
     threshold: widget.threshold,
@@ -180,75 +179,92 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   // Keep track of the swiped items to unswipe from the same direction
   final Queue<Swipe> _activityHistory = Queue();
 
+  bool get _canUnswipe => _activityHistory.isNotEmpty;
+
   Future<void> _onSwipe(AxisDirection direction) async {
-    if (position.index == widget.cardCount) {
-      widget.onEnd?.call();
-      return;
-    }
     final Swipe swipe = Swipe(
       _defaultAnimation,
-      begin: position._offset,
+      begin: _position._offset,
       end: _directionToTarget(direction),
     );
-    _activityHistory.add(swipe);
-    widget.onSwipe?.call(position._baseIndex + 1, direction);
     await _startActivity(swipe);
   }
 
-  Future<void> _onUnSwipe() async {
-    if (_activityHistory.isEmpty) {
-      // There is no history to swipe from.
-      return widget.unswipe?.call(false);
+  Future<void> _onUnswipe() async {
+    if (!_canUnswipe) {
+      return;
     }
-    widget.unswipe?.call(true);
     final Swipe swipeToUndo = _activityHistory.removeLast();
-    await _startActivity(Unswipe(
-      _defaultAnimation,
-      begin: _directionToTarget(swipeToUndo.direction),
-    ));
+    await _startActivity(
+      Unswipe(
+        _defaultAnimation,
+        begin: _directionToTarget(swipeToUndo.direction),
+      ),
+    );
   }
 
   // Moves the card back to starting position when a drag finished without
   // having reached the threshold.
   void _onSwipeCancelled(BuildContext context) {
-    widget.onSwipeCancelled?.call();
-    _startActivity(CancelSwipe(
-      _defaultAnimation,
-      begin: position._offset,
-    ));
+    _startActivity(
+      CancelSwipe(
+        _defaultAnimation,
+        begin: _position._offset,
+      ),
+    );
   }
 
   Future<void> _startActivity(SwiperActivity newActivity) async {
+    final int previousIndex = _position.index;
+    final SwiperActivity? oldActivity = _swipeActivity;
+    if (oldActivity != null) {
+      // Cancel the existing animation and wait for it to clean up.
+      oldActivity.animation.stop();
+      await _previousActivityFuture;
+    }
+    final int targetIndex =
+        _position._baseIndexToEffectiveIndex(switch (newActivity) {
+      Swipe() => _position._baseIndex + 1,
+      Unswipe() => _position._baseIndex - 1,
+      CancelSwipe() => _position._baseIndex,
+      DrivenActivity() => _position._baseIndex,
+    });
+    if (targetIndex > widget.cardCount && newActivity is Swipe) {
+      // We reached the end, do not run the activity.
+      widget.onEnd?.call();
+      return;
+    }
     _swipeActivity = newActivity;
+    if (newActivity is Swipe) {
+      _activityHistory.add(newActivity);
+    }
     newActivity.animation.addListener(() {
-      position.offset = newActivity.currentOffset;
+      _position.offset = newActivity.currentOffset;
       setState(() {});
     });
-    final Future<void> activityFuture = newActivity.animation.forward()
-      ..whenCompleteOrCancel(() {
-        position._rotationPosition = null;
-        // Close the activity after it finishes.
-        newActivity.animation.dispose();
-        if (_swipeActivity == newActivity) {
-          // Only null out the activity if it is still the active swipe.
-          _swipeActivity = null;
-        }
-        switch (newActivity) {
-          case Swipe():
-            position._baseIndex++;
-            break;
-          case Unswipe():
-            position._baseIndex--;
-            break;
-          case CancelSwipe():
-          case DrivenActivity():
-            break;
-        }
-        if (newActivity is! DrivenActivity) {
-          position._offset = Offset.zero;
-        }
-      });
-    await activityFuture;
+    widget.onSwipeBegin?.call(_position.index, targetIndex, newActivity);
+    _previousActivityFuture = newActivity.animation
+        .forward()
+        .orCancel
+        .then((_) => false)
+        .onError((error, stackTrace) {
+      if (error is TickerCanceled) {
+        return true;
+      }
+      throw error!;
+    }).then((wasCancelled) {
+      newActivity.animation.dispose();
+      _swipeActivity = null;
+      _position._rotationPosition = null;
+      _position._baseIndex = targetIndex;
+      _swipeActivity = null;
+      if (!wasCancelled && newActivity is! DrivenActivity) {
+        _position._offset = Offset.zero;
+      }
+      return wasCancelled;
+    });
+    await _previousActivityFuture;
+    widget.onSwipeEnd?.call(previousIndex, targetIndex, newActivity);
     setState(() {});
   }
 
@@ -263,7 +279,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         duration: duration,
       ),
       curve: curve,
-      begin: position.offset,
+      begin: _position.offset,
       end: target,
     );
     await _startActivity(newActivity);
@@ -294,8 +310,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
         oldWidget.maxAngle != widget.maxAngle ||
         oldWidget.invertAngleOnBottomDrag != widget.invertAngleOnBottomDrag ||
         oldWidget.loop != widget.loop) {
-      position._updateFromWidgetState(widget);
-      widget.controller?._attach(this);
+      _position._updateFromWidgetState(widget);
     }
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller?._detach();
@@ -306,7 +321,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   @override
   void didChangeDependencies() {
-    position._cardSize = MediaQuery.of(context).size;
+    _position._cardSize = MediaQuery.of(context).size;
     super.didChangeDependencies();
   }
 
@@ -314,17 +329,19 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   Widget build(BuildContext context) {
     // Use the clamp to ensure we don't go past 1.
     final double maxProgressToThreshold = max(
-      position.offsetRelativeToSize.dx.abs(),
-      position.offsetRelativeToSize.dy.abs(),
+      _position._offsetRelativeToSize.dx.abs(),
+      _position._offsetRelativeToSize.dy.abs(),
     ).clamp(0, 1);
     // If we're unswiping we need to apply the foreground transformations to the
     // incoming card item instead of the current index.
     final int foregroundIndex = _swipeActivity is Unswipe
         // Add the card count and mod it back out to handle the case where
         // loop is enabled and we're undoing the first card in the list.
-        ? (position.index - 1 + widget.cardCount) % widget.cardCount
-        : position.index;
-    final int backgroundIndex = (foregroundIndex + 1) % widget.cardCount;
+        ? (_position.index + widget.cardCount - 1) % widget.cardCount
+        : _position.index;
+    final int backgroundIndex = _swipeActivity is Unswipe
+        ? foregroundIndex
+        : (foregroundIndex + 1) % widget.cardCount;
     final int effectiveBackgroundCardCount =
         _effectiveBackgroundCardCount(backgroundIndex);
     return Stack(
@@ -333,7 +350,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       children: [
         if (effectiveBackgroundCardCount > 0)
           _BackgroundCards(
-            position: position,
+            position: _position,
             indices: List.generate(
               effectiveBackgroundCardCount,
               (index) => (foregroundIndex + 1) % widget.cardCount,
@@ -347,12 +364,12 @@ class _AppinioSwiperState extends State<AppinioSwiper>
           ),
         if (foregroundIndex < widget.cardCount)
           Transform.translate(
-            offset: position.offset,
+            offset: _position.offset,
             child: GestureDetector(
               child: Transform.rotate(
-                angle: position.angleRadians,
+                angle: _position.angleRadians,
                 alignment:
-                    position._rotationAlignment ?? Alignment.bottomCenter,
+                    _position._rotationAlignment ?? Alignment.bottomCenter,
                 child: Container(
                   child: widget.cardBuilder(context, foregroundIndex),
                 ),
@@ -366,7 +383,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                 if (widget.isDisabled) {
                   return;
                 }
-                position._rotationPosition = tapInfo.localPosition;
+                _position._rotationPosition = tapInfo.localPosition;
               },
               onPanUpdate: (tapInfo) {
                 if (widget.isDisabled) {
@@ -388,7 +405,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                   } else if (swipeOption.right && tapInfo.delta.dx > 0) {
                     dx = tapDelta.dx;
                   }
-                  position.offset += Offset(dx, dy);
+                  _position.offset += Offset(dx, dy);
                 });
                 _onSwiping();
               },
@@ -412,16 +429,13 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     if (widget.loop) {
       return effectiveCardCount;
     }
-    final int remaining = widget.cardCount - position.index - 1;
+    final int remaining = widget.cardCount - _position.index - 1;
     return (_swipeActivity is Unswipe ? remaining + 1 : remaining)
         .clamp(0, effectiveCardCount);
   }
 
   Future<void> _onSwiping() async {
-    widget.onCardPositionChanged?.call(
-      position.offset.toAxisDirection(),
-      position.offset,
-    );
+    widget.onCardPositionChanged?.call(_position);
   }
 
   Offset _directionToTarget(AxisDirection direction) {
@@ -438,11 +452,11 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     // TODO: Use a ballistic simulation to determine if the swipe should be
     // triggered or not.
     // See the snapping behavior from `DraggableScrollableSheet`.
-    if (position.offsetRelativeToThreshold.dx.abs() < 1 &&
-        position.offsetRelativeToThreshold.dy.abs() < 1) {
+    if (_position._offsetRelativeToThreshold.dx.abs() < 1 &&
+        _position._offsetRelativeToThreshold.dy.abs() < 1) {
       return _onSwipeCancelled(context);
     }
-    await _onSwipe(position.offset.toAxisDirection());
+    await _onSwipe(_position.offset.toAxisDirection());
   }
 
   Future<void> _onSwipeDefault() async {
@@ -542,7 +556,15 @@ class AppinioSwiperController extends ChangeNotifier {
 
   /// The position of the swiper.
   SwiperPosition? get position {
-    return _attachedSwiper?.position;
+    return _attachedSwiper?._position;
+  }
+
+  /// The history of swipes for the swiper widget currently attached to this
+  /// controller.
+  ///
+  /// If the history is empty, un swipes will do nothing.
+  Future<List<SwiperActivity>?> get activityHistory async {
+    return _attachedSwiper?._activityHistory.toList(growable: false);
   }
 
   /// The current position of the card, as a result of a user drag and/or a
@@ -551,7 +573,7 @@ class AppinioSwiperController extends ChangeNotifier {
   /// This is 0 when there is no active swipe. It increments up to 1 during an
   /// active swipe and then resets to 0 when the swipe is complete.
   Offset? get swipeProgress {
-    return position?.offsetRelativeToSize;
+    return position?._offsetRelativeToSize;
   }
 
   /// The index of the card currently on the top.
@@ -589,7 +611,7 @@ class AppinioSwiperController extends ChangeNotifier {
   /// Unswipe the card.
   Future<void> unswipe() async {
     _assertIsAttached();
-    await _attachedSwiper!._onUnSwipe();
+    await _attachedSwiper!._onUnswipe();
     notifyListeners();
   }
 
@@ -630,11 +652,11 @@ class AppinioSwiperController extends ChangeNotifier {
       'Controller can only be attached to one swiper widget at a time.',
     );
     _attachedSwiper = swiper;
-    swiper.position.addListener(notifyListeners);
+    swiper._position.addListener(notifyListeners);
   }
 
   void _detach() {
-    _attachedSwiper?.position.removeListener(notifyListeners);
+    _attachedSwiper?._position.removeListener(notifyListeners);
     _attachedSwiper = null;
   }
 
@@ -670,9 +692,66 @@ class SwiperPosition with ChangeNotifier {
     notifyListeners();
   }
 
+  /// The offset of the card on the top of the stack.
   Offset get offset => _offset;
 
+  /// The rotation angle of the card in degrees.
+  ///
+  /// This is 0 when [progress] is 0 and negative or positive
+  /// [AppinioSwiper.maxAngle] when [progress] is 1.
+  ///
+  /// A negative angle indicated counterclockwise rotation, positive clockwise.
+  double get angle {
+    // If we allow inverting the direction and the user is dragging from the
+    // bottom half of the card, angle in the opposite direction.
+    final direction = _invertAngleOnBottomDrag &&
+            _rotationAlignment != null &&
+            _rotationAlignment!.y > 0
+        ? -1
+        : 1;
+    return (direction * _maxAngle * (_offset.dx / _cardSize.width))
+        .clamp(-_maxAngle, _maxAngle);
+  }
+
+  /// The rotation angle of the card in radians.
+  ///
+  /// See [angle].
+  double get angleRadians => angle * (pi / 180);
+
+  /// The current swiping progress of the top card.
+  ///
+  /// This is 0 when the card is centered and 1 when it is swiped offscreen and
+  /// about to be dismissed.
+  double get progress => max(
+        _offsetRelativeToSize.dx.abs(),
+        _offsetRelativeToSize.dy.abs(),
+      );
+
+  /// The current swiping progress relative to the swiping threshold.
+  ///
+  /// This is 0 when the card is centered and greater than 1 when it is swiped
+  /// past the threshold at which a card will swipe off screen instead of
+  /// returning to the center.
+  double get progressRelativeToThreshold {
+    final Offset offset = _offsetRelativeToThreshold;
+    if (offset.dx.abs() > offset.dy) {
+      return offset.dx;
+    }
+    return offset.dy;
+  }
+
+  /// The pixel size of the top card.
+  ///
+  /// This can be used to convert offsets relative to the card size.
   Size get cardSize => _cardSize;
+
+  /// The current index of the swiper.
+  ///
+  /// This is updated after a [SwiperActivity] is completely finished. If
+  /// [AppinioSwiper.loop] is true, this will wrap to 0 at the end of the card
+  /// stack. Otherwise, it will be equal to the length of the card stack when
+  /// the stack is finished.
+  int get index => _baseIndexToEffectiveIndex(_baseIndex);
 
   // When the user starts a pan we save the point they tapped. We then rotate
   // the card around this point as they swipe.
@@ -701,44 +780,15 @@ class SwiperPosition with ChangeNotifier {
   // This is the index before modulo-ing to account for looping.
   int _baseIndex = 0;
 
-  int get index => _loop ? _baseIndex % _cardCount : _baseIndex;
-
-  double get progress => max(
-        offsetRelativeToSize.dx.abs(),
-        offsetRelativeToSize.dy.abs(),
-      );
-
-  double get progressRelativeToThreshold {
-    final Offset offset = offsetRelativeToThreshold;
-    if (offset.dx.abs() > offset.dy) {
-      return offset.dx;
-    }
-    return offset.dy;
-  }
-
-  Offset get offsetRelativeToSize => Offset(
+  Offset get _offsetRelativeToSize => Offset(
         _offset.dx / _cardSize.width,
         _offset.dy / _cardSize.height,
       );
 
-  Offset get offsetRelativeToThreshold => Offset(
+  Offset get _offsetRelativeToThreshold => Offset(
         _offset.dx / _threshold,
         _offset.dy / _threshold,
       );
-
-  double get angle {
-    // If we allow inverting the direction and the user is dragging from the
-    // bottom half of the card, angle in the opposite direction.
-    final direction = _invertAngleOnBottomDrag &&
-            _rotationAlignment != null &&
-            _rotationAlignment!.y > 0
-        ? -1
-        : 1;
-    return (direction * _maxAngle * (_offset.dx / _cardSize.width))
-        .clamp(-_maxAngle, _maxAngle);
-  }
-
-  double get angleRadians => angle * (pi / 180);
 
   void _updateFromWidgetState(AppinioSwiper widget) {
     _cardCount = widget.cardCount;
@@ -747,5 +797,9 @@ class SwiperPosition with ChangeNotifier {
     _invertAngleOnBottomDrag = widget.invertAngleOnBottomDrag;
     _loop = widget.loop;
     notifyListeners();
+  }
+
+  int _baseIndexToEffectiveIndex(int i) {
+    return _loop ? i % _cardCount : i;
   }
 }

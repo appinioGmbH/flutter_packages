@@ -1,5 +1,9 @@
+import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/material.dart';
 
+/// An activity that moves the top card with a beginning and an end.
+///
+/// All Swiper activities inherit from this class.
 sealed class SwiperActivity extends Tween<Offset> {
   SwiperActivity(
     this.animation, {
@@ -16,6 +20,7 @@ sealed class SwiperActivity extends Tween<Offset> {
   }
 }
 
+/// A swipe triggered either by the controller or a user drag.
 class Swipe extends SwiperActivity {
   Swipe(
     super.animation, {
@@ -24,6 +29,9 @@ class Swipe extends SwiperActivity {
   });
 }
 
+/// An unwwipe which undoes the last [Swipe] activity.
+///
+/// Can only be triggered by [AppinioSwiperController].
 class Unswipe extends SwiperActivity {
   Unswipe(
     super.animation, {
@@ -34,6 +42,8 @@ class Unswipe extends SwiperActivity {
   AxisDirection get direction => super.direction.opposite;
 }
 
+/// A return to center triggered when a user releases a drag without having
+/// reached [AppinioSwiper.threshold]
 class CancelSwipe extends SwiperActivity {
   CancelSwipe(
     super.animation, {
@@ -44,6 +54,7 @@ class CancelSwipe extends SwiperActivity {
   AxisDirection get direction => super.direction.opposite;
 }
 
+/// An animation triggered by [AppinioSwiperController.animateTo].
 class DrivenActivity extends SwiperActivity {
   DrivenActivity(
     super.animation, {

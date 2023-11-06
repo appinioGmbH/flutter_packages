@@ -1,5 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:appinio_swiper/appinio_swiper.dart';
 
-typedef OnSwipe = void Function(int index, AxisDirection direction);
-
-typedef OnUnSwipe = void Function(bool unswiped);
+typedef OnSwipe = void Function(
+  int previousIndex,
+  int targetIndex,
+  SwiperActivity activity,
+);

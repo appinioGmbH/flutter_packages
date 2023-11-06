@@ -1,3 +1,9 @@
+## [2.0.4] - 2023.11.06
+* Features:
+  - Get current card index, offset and rotation.
+  - Get when user is swiping card back before threshold is reached.
+  - Bug fixes.
+
 ## [2.0.3] - 2023.08.23
 * Features:
     - Custom background card spacing.

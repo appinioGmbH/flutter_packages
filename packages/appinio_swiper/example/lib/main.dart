@@ -55,8 +55,8 @@ class _ExamplePageState extends State<Example> {
             const SizedBox(
               height: 50,
             ),
-            FractionallySizedBox(
-              heightFactor: .75,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * .75,
               child: Padding(
                 padding: const EdgeInsets.only(
                   left: 25,
@@ -69,14 +69,14 @@ class _ExamplePageState extends State<Example> {
                   backgroundCardCount: 3,
                   swipeOptions: const SwipeOptions.all(),
                   controller: controller,
-                  unswipe: _unswipe,
                   onCardPositionChanged: (
-                    AxisDirection direction,
-                    Offset position,
+                    SwiperPosition position,
                   ) {
-                    //debugPrint('$direction, $position');
+                    //debugPrint('${position.offset.toAxisDirection()}, '
+                    //    '${position.offset}, '
+                    //    '${position.angle}');
                   },
-                  onSwipe: _swipe,
+                  onSwipeEnd: _swipeEnd,
                   onEnd: _onEnd,
                   cardCount: candidates.length,
                   cardBuilder: (BuildContext context, int index) {
@@ -112,20 +112,25 @@ class _ExamplePageState extends State<Example> {
     );
   }
 
-  void _swipe(int index, AxisDirection direction) {
-    log("the card was swiped to the: " + direction.name);
-  }
-
-  void _unswipe(bool unswiped) {
-    if (unswiped) {
-      log("SUCCESS: card was unswiped");
-    } else {
-      log("FAIL: no card left to unswipe");
+  void _swipeEnd(int previousIndex, int targetIndex, SwiperActivity activity) {
+    switch (activity) {
+      case Swipe():
+        log('The card was swiped to the : ${activity.direction}');
+        log('previous index: $previousIndex, target index: $targetIndex');
+        break;
+      case Unswipe():
+        log('A ${activity.direction.name} swipe was undone.');
+        break;
+      case CancelSwipe():
+        log('A swipe was cancelled');
+        break;
+      case DrivenActivity():
+        break;
     }
   }
 
   void _onEnd() {
-    log("end reached!");
+    log('end reached!');
   }
 
   // Animates the card back and forth to teach the user that it is swipable.
