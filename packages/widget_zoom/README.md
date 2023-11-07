@@ -14,15 +14,15 @@ We build this package because we wanted to:
 
 ## Pinch to zoom
 
-<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/pinch_to_zoom.gif?raw=true" height="400">
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/new_widget_zoom/assets/widget_zoom/pinch_to_zoom.gif?raw=true" height="400">
 
 ## Drag down to exit fullscreen
 
-<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/swipe_to_exit.gif?raw=true" height="400">
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/new_widget_zoom/assets/widget_zoom/swipe_to_exit.gif?raw=true" height="400">
 
 ## Zoom flutter widgets
 
-<img src="https://github.com/appinioGmbH/flutter_packages/blob/main/assets/widget_zoom/zoom_widget.gif?raw=true" height="400">
+<img src="https://github.com/appinioGmbH/flutter_packages/blob/new_widget_zoom/assets/widget_zoom/zoom_widget.gif?raw=true" height="400">
 
 ## Features
 
