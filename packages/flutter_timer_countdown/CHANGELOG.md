@@ -1,4 +1,8 @@
-## [1.0.6] - 2022.10.16
+## [1.0.7] - 2023.11.06
+
+* Removing flutter_lints dependency.
+
+## [1.0.6] - 2023.10.16
 
 * Get remaining time onTick.
 
