@@ -16,41 +16,69 @@ We build this package because we wanted to:
 - set swipe options and restrict horizontal or vertical swipe.
 - set loop for infinite scroll
 - update the list of cards between swipes.
-- Check in which direction the card is being swiped and modify your widget accordingly.
+- Check in which direction the card is being swiped and modify your widget accordingly.- We can have any number of
+  background cards.
+- Pass any combination of swipe options.
+- NEW - check when user is swiping card back before reaching the threshold value.
+- NEW - Get current card index, offset and rotation
+- NEW - Programmatically animate card swipe.
 - NEW - We can have any number of background cards.
 - NEW - Pass any combination of swipe options.
 
-
 ## ❗NEW  Features ❗
 
+### Animate the top card.
+
+Now you can arbitrarily animate the position of the top card using ```AppinioSwiperController.animatTo```.
+
+### Listen to the card offset and rotation.
+
+Now you can track the offset and rotation of the top card by listening to the ```AppinioSwiperController```.
+
+### Know when user is coming back without completely swiping the card.
+
+Now you can track if user is swiping the card back to the center with the ```CancelSwipe``` ```SwiperActivity```.
 
 ### Space background cards as per your requirement.
-Now you can decide the spacing between the background cards and can also hide them by giving   ```cardsSpacing = 0```. 
+
+Now you can decide the spacing between the background cards and can also hide them by
+giving   ```backgroundCardOffset = Offset.zero```.
 
 ### onSwipeCancelEvent.
-We have added onSwipeCancel event to check if the card swiped completely or if the swipe got canceled in the middle. 
+
+We have added onSwipeCancel event to check if the card swiped completely or if the swipe got canceled in the middle.
 
 ### Add different combinations for swipe options.
-Now you can provide any combination of swipe options. For example: The user can swipe to the left and bottom but not top, or any possible combination.
+
+Now you can provide any combination of swipe options. For example: The user can swipe to the left and bottom but not
+top, or any possible combination.
 
 ### Show any number of background cards.
+
 Now you can decide how many background cards you want to show.
 
 ### Listen to card swipes
+
 Now you can check in which direction the card is being swiped and modify your widget accordingly
 
 ### Trigger swipe up and swipe down through controller
-You can now trigger swipe up and swipe down with our ```AppinioSwiperController``` regardless of the chosen ```AppinioSwipeDirection``` (which is still used when ```swipe``` is called through the controller). Just like the swipeLeft and swipeRight call, you can call ```swipeUp``` or ```swipeDown``` through the controller anywhere you want.
+
+You can now trigger swipe up and swipe down with our ```AppinioSwiperController``` regardless of the chosen swipe
+direction (which is still used when ```swipe``` is called through the controller). Just like the swipeLeft and
+swipeRight call, you can call ```swipeUp``` or ```swipeDown``` through the controller anywhere you want.
 
 ### Restrict horizontal or vertical swipe
+
 You can now restrict the swipe in either horizontal directions or vertical directions using ```swipeOptions``` property.
 
 ### Set looping for card swipe
+
 Now you can set the ```loop``` property to ```true``` and make the list infinitely scrollable.
 
 ### Update the cards while swiping
-In this version we have replaced the list of cards with ```cardsBuilder```. Now the widget only renders two cards at a time which makes it lightweight and scalable. So you can perform operations on your card anytime.
 
+In this version we have replaced the list of cards with ```cardsBuilder```. Now the widget only renders two cards at a
+time which makes it lightweight and scalable. So you can perform operations on your card anytime.
 
 ## Show Cases
 
@@ -75,13 +103,17 @@ Customize the threshold of the swiper, when the card should slide away...
 ## Installation
 
 Create a new project with the command
+
 ```yaml
 flutter create MyApp
 ```
+
 Add
+
 ```yaml
 appinio_swiper: ...
 ```
+
 to your `pubspec.yaml` of your flutter project.
 **OR**
 run
@@ -89,8 +121,8 @@ run
 ```yaml
 flutter pub add appinio_swiper
 ```
-in your project's root directory.
 
+in your project's root directory.
 
 In your library add the following import:
 
@@ -101,7 +133,9 @@ import 'package:appinio_swiper/appinio_swiper.dart';
 For help getting started with Flutter, view the online [documentation](https://flutter.io/).
 
 ## Usage
-You can place your `AppinioSwiper` inside of a `Scaffold` or `CupertinoPageScaffold` like we did here. Optional parameters can be defined to enable different features. See the following example..
+
+You can place your `AppinioSwiper` inside of a `Scaffold` or `CupertinoPageScaffold` like we did here. Optional
+parameters can be defined to enable different features. See the following example..
 
 ```dart
 import 'package:appinio_swiper/appinio_swiper.dart';
@@ -113,18 +147,21 @@ class Example extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.75,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.75,
         child: AppinioSwiper(
           cardsCount: 10,
-          onSwiping: (AppinioSwiperDirection direction){
+          onSwiping: (AppinioSwiperDirection direction) {
             print(direction.toString());
           },
-          cardsBuilder: (BuildContext context,int index){
-              return Container(
-                          alignment: Alignment.center,
-                          child: const Text(index.toString()),
-                          color: CupertinoColors.activeBlue,
-                          );
+          cardsBuilder: (BuildContext context, int index) {
+            return Container(
+              alignment: Alignment.center,
+              child: const Text(index.toString()),
+              color: CupertinoColors.activeBlue,
+            );
           },
         ),
       ),
@@ -134,8 +171,8 @@ class Example extends StatelessWidget {
 ```
 
 ## Constructor
-#### Basic
 
+#### Basic
 
 | Parameter        | Default                                            | Description                                                                                                                         | Required |
 |------------------|:---------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------|:--------:|
@@ -162,7 +199,10 @@ class Example extends StatelessWidget {
 
 #### Controller
 
-The ```Controller``` is used to control the ```swipe```, ```swipeLeft```, ```swipeRight```, ```swipeUp```, ```swipeDown``` or ```unswipe``` function of the swiper from outside of the widget. You can create a controller called ```AppinioSwiperController``` and save the instance for further usage. Please have a closer look to our Example for the usage.
+The ```Controller``` is used to control the ```swipe```, ```swipeLeft```, ```swipeRight```, ```swipeUp```
+, ```swipeDown``` or ```unswipe``` function of the swiper from outside of the widget. You can create a controller
+called ```AppinioSwiperController``` and save the instance for further usage. Please have a closer look to our Example
+for the usage.
 
 | Method     | Description                                                                                        |
 |------------|:---------------------------------------------------------------------------------------------------|
