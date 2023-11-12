@@ -120,11 +120,13 @@ class _ExamplePageState extends State<Example> {
         break;
       case Unswipe():
         log('A ${activity.direction.name} swipe was undone.');
+        log('previous index: $previousIndex, target index: $targetIndex');
         break;
       case CancelSwipe():
         log('A swipe was cancelled');
         break;
       case DrivenActivity():
+        log('Driven Activity');
         break;
     }
   }
