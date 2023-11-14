@@ -16,6 +16,9 @@ class AppinioSwiper extends StatefulWidget {
   /// The number of cards in the stack.
   final int cardCount;
 
+  /// Allow unswipe.
+  final bool allowUnSwipe;
+
   /// Background cards count
   final int backgroundCardCount;
 
@@ -126,6 +129,7 @@ class AppinioSwiper extends StatefulWidget {
     this.onCardPositionChanged,
     this.onEnd,
     this.defaultDirection = AxisDirection.right,
+    this.allowUnSwipe = true,
   })  : assert(maxAngle >= 0),
         assert(threshold > 0),
         super(key: key);
@@ -165,7 +169,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   // Keep track of the swiped items to unswipe from the same direction
   final Queue<Swipe> _activityHistory = Queue();
 
-  bool get _canUnswipe => _activityHistory.isNotEmpty;
+  bool get _canUnswipe => _activityHistory.isNotEmpty && widget.allowUnSwipe;
 
   Future<void> _onSwipe(AxisDirection direction) async {
     final Swipe swipe = Swipe(
