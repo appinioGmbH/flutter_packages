@@ -19,6 +19,9 @@ class AppinioSwiper extends StatefulWidget {
   /// Allow unswipe.
   final bool allowUnSwipe;
 
+  /// Allow unlimited unswipe.
+  final bool allowUnlimitedUnSwipe;
+
   /// Background cards count
   final int backgroundCardCount;
 
@@ -130,6 +133,7 @@ class AppinioSwiper extends StatefulWidget {
     this.onEnd,
     this.defaultDirection = AxisDirection.right,
     this.allowUnSwipe = true,
+    this.allowUnlimitedUnSwipe = true,
   })  : assert(maxAngle >= 0),
         assert(threshold > 0),
         super(key: key);
@@ -140,6 +144,7 @@ class AppinioSwiper extends StatefulWidget {
 
 class _AppinioSwiperState extends State<AppinioSwiper>
     with TickerProviderStateMixin {
+  bool _canUnSwipeOnce = false;
   static const _defaultBackgroundCardOffset = Offset(0, 40);
 
   double get _effectiveScaleIncrement => 1 - widget.backgroundCardScale;
@@ -172,6 +177,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   bool get _canUnswipe => _activityHistory.isNotEmpty && widget.allowUnSwipe;
 
   Future<void> _onSwipe(AxisDirection direction) async {
+    _canUnSwipeOnce = true;
     final Swipe swipe = Swipe(
       _defaultAnimation,
       begin: _position._offset,
@@ -184,6 +190,10 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     if (!_canUnswipe) {
       return;
     }
+    if(!widget.allowUnlimitedUnSwipe && !_canUnSwipeOnce){
+      return;
+    }
+    _canUnSwipeOnce = false;
     final Swipe swipeToUndo = _activityHistory.removeLast();
     await _startActivity(
       Unswipe(
