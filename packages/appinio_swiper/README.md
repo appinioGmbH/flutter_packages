@@ -176,11 +176,14 @@ class Example extends StatelessWidget {
 
 | Parameter        | Default                                            | Description                                                                                                                         | Required |
 |------------------|:---------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------|:--------:|
-| cardsCount       | -                                                  | Number of cards you want to render                                                                                                  |   true   |
-| backgroundCardsCount       | 1                                                  | Number of cards you want to render in background                                                                          |  false   |
-| cardsBuilder     | -                                                  | Callback of the type CardsBuilder                                                                                                   |   true   |
-| swipeOptions     | -                                                  | value of type AppinioSwipeOptions to restrict swipes                                                                                |  false   |
-| controller       | -                                                  | Trigger unswipe                                                                                                                     |  false   |
+| cardCount       | -                                                   | Number of cards you want to render.                                                                                                 |   true   |
+| backgroundCardCount       | 1                                         | Number of cards you want to render in background.                                                                                   |  false   |
+| backgroundCardScale       | .9                                        | Scale factor for the background card.                                                                                               |  false   |
+| backgroundCardOffset      | -                                         | Offset for the background card.                                                                                                     |  false   |
+| cardBuilder     | -                                                   | Callback of the type CardsBuilder.                                                                                                  |   true   |
+| swipeOptions     | -                                                  | value of type AppinioSwipeOptions to restrict swipes.                                                                               |  false   |
+| invertAngleOnBottomDrag     | true                                    | Sets whether the card should angle in the opposite direction when it is dragged from the bottom half.                               |  false   |
+| controller       | -                                                  | Trigger swipe, unSwipe and animateTo.                                                                                               |  false   |
 | padding          | EdgeInsets.symmetric(horizontal: 20, vertical: 25) | Control swiper padding                                                                                                              |  false   |
 | duration         | 200 milliseconds                                   | The duration that every animation should last                                                                                       |  false   |
 | cardsSpacing     | 40                                                 | The spacing between background cards.                                                                                               |  false   |
@@ -188,19 +191,20 @@ class Example extends StatelessWidget {
 | threshold        | 50                                                 | Threshold from which the card is swiped away                                                                                        |  false   |
 | isDisabled       | false                                              | Set to ```true``` if swiping should be disabled, has no impact when triggered from the outside                                      |  false   |
 | onTapDisabled    | -                                                  | Function that get triggered when the swiper is disabled                                                                             |  false   |
-| onSwipe          | -                                                  | Called with the new index and detected swipe direction when the user swiped                                                         |  false   |
+| onSwipeBegin     | -                                                  | Called when user starts to swipe a card.                                                                                            |  false   |
+| onSwipeEnd       | -                                                  | Called swipe action completes.                                                                                                      |  false   |
+| onCardPositionChanged   | -                                           | Called when card position changes.                                                                                                  |  false   |
 | onEnd            | -                                                  | Called when there is no Widget left to be swiped away                                                                               |  false   |
-| direction        | right                                              | Direction in which the card is swiped away when triggered from the outside                                                          |  false   |
+| defaultDirection        | right                                       | Direction in which the card is swiped away when triggered from the outside                                                          |  false   |
 | allowUnswipe     | true                                               | Set to ```false``` if unswipe should be disabled away                                                                               |  false   |
 | unlimitedUnswipe | false                                              | Set to ```true``` if the user can unswipe as many cards as possible                                                                 |  false   |
-| unswipe          | -                                                  | Called with the boolean ```true``` when the last card gets unswiped and with the boolean ```false``` if there is no card to unswipe |  false   |
-| onSwiping        | -                                                  | Pass a callback of type ```void Function(AppinioSwiperDirection direction)``` and check when and in which direction the card is getting swiped | false |
+| onUnswipe          | -                                                  | Called with the boolean ```true``` when the last card gets unswiped and with the boolean ```false``` if there is no card to unswipe |  false   |
 | onSwipeCancelled | -                                                  | Gets called when the user leaves the card before the threshold is reached                                                           |  false   |
 
 #### Controller
 
-The ```Controller``` is used to control the ```swipe```, ```swipeLeft```, ```swipeRight```, ```swipeUp```
-, ```swipeDown``` or ```unswipe``` function of the swiper from outside of the widget. You can create a controller
+The ```Controller``` is used to control the ```swipeDefault```, ```swipeLeft```, ```swipeRight```, ```swipeUp```
+, ```swipeDown``` , ```unswipe```  and ```animateTo``` function of the swiper from outside of the widget. You can create a controller
 called ```AppinioSwiperController``` and save the instance for further usage. Please have a closer look to our Example
 for the usage.
 
@@ -212,6 +216,7 @@ for the usage.
 | swipeUp    | Changes the state of the controller to swipe up and swipes the card to the up side.                |
 | swipeDown  | Changes the state of the controller to swipe down and swipes the card to the down side.            |
 | unswipe    | Changes the state of the controller to unswipe and brings back the last card that was swiped away. |
+| animateTo    | Animates the current offset of the card on top to the required Offset in a given duration. |
 
 <hr/>
 Made with ❤ by Flutter team at <a href="https://appinio.app">Appinio GmbH</a>
