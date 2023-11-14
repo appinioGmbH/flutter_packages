@@ -17,7 +17,7 @@ class AppinioSwiper extends StatefulWidget {
   final int cardCount;
 
   /// This callback is called when user unswipe the card
-  final void Function(SwiperActivity activity) onUnSwipe;
+  final void Function(SwiperActivity activity)? onUnSwipe;
 
   /// Allow unswipe.
   final bool allowUnSwipe;
@@ -137,6 +137,7 @@ class AppinioSwiper extends StatefulWidget {
     this.defaultDirection = AxisDirection.right,
     this.allowUnSwipe = true,
     this.allowUnlimitedUnSwipe = true,
+    this.onUnSwipe,
   })  : assert(maxAngle >= 0),
         assert(threshold > 0),
         super(key: key);
@@ -203,7 +204,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       begin: _directionToTarget(swipeToUndo.direction),
     );
     await _startActivity(unSwipe);
-    widget.onUnSwipe(unSwipe);
+    widget.onUnSwipe?.call(unSwipe);
   }
 
   // Moves the card back to starting position when a drag finished without
