@@ -1,8 +1,10 @@
-## [2.0.4] - 2023.11.06
+## [2.0.4] - 2023.11.14
 * Features:
-  - Get current card index, offset and rotation.
-  - Get when user is swiping card back before threshold is reached.
-  - Bug fixes.
+  - The controller now exposes all relevant card state (index, card offset+rotation, etc).
+  - The controller now has animateTo to arbitrarily animate the top card’s offset.
+  - Added onSwipeEnd, onSwipeBegin and onCardPositionChanged methods to give the swipe information.
+  - Added SwiperActivity class to give more information during card swipe.
+  - Better documentation, linting and code formatting.
 
 ## [2.0.3] - 2023.08.23
 * Features:
