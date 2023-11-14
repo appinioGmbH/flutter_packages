@@ -9,20 +9,6 @@ import 'enums.dart';
 export 'enums.dart';
 export 'types.dart';
 
-final List<Recipient> recipients = [];
-
-class Recipient {
-  const Recipient(this.emailVerifiedAt);
-
-  final String emailVerifiedAt;
-
-  bool get isVerified => emailVerifiedAt.isNotEmpty;
-}
-
-// Inline wherever you need it....
-final List<Recipient> onlyVerified =
-    recipients.where((r) => r.isVerified).toList();
-
 class AppinioSwiper extends StatefulWidget {
   /// The indexed widget builder that builds a card for the given index.
   final IndexedWidgetBuilder cardBuilder;
@@ -229,10 +215,12 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       CancelSwipe() => _position._baseIndex,
       DrivenActivity() => _position._baseIndex,
     });
-    if (targetIndex > widget.cardCount && newActivity is Swipe) {
+    if (targetIndex >= widget.cardCount && newActivity is Swipe) {
       // We reached the end, do not run the activity.
+      if (targetIndex > widget.cardCount && !widget.loop) {
+        return;
+      }
       widget.onEnd?.call();
-      return;
     }
     _swipeActivity = newActivity;
     if (newActivity is Swipe) {
