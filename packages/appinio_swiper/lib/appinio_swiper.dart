@@ -19,6 +19,9 @@ class AppinioSwiper extends StatefulWidget {
   /// This callback is called when user unswipe the card
   final void Function(SwiperActivity activity)? onUnSwipe;
 
+  /// This callback is called when user cancels the swipe before reaching threshold
+  final void Function(SwiperActivity activity)? onSwipeCancelled;
+
   /// Allow unswipe.
   final bool allowUnSwipe;
 
@@ -138,6 +141,7 @@ class AppinioSwiper extends StatefulWidget {
     this.allowUnSwipe = true,
     this.allowUnlimitedUnSwipe = true,
     this.onUnSwipe,
+    this.onSwipeCancelled,
   })  : assert(maxAngle >= 0),
         assert(threshold > 0),
         super(key: key);
@@ -209,13 +213,13 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   // Moves the card back to starting position when a drag finished without
   // having reached the threshold.
-  void _onSwipeCancelled(BuildContext context) {
-    _startActivity(
-      CancelSwipe(
-        _defaultAnimation,
-        begin: _position._offset,
-      ),
+  void _onSwipeCancelled(BuildContext context) async{
+    final CancelSwipe cancelSwipe = CancelSwipe(
+      _defaultAnimation,
+      begin: _position._offset,
     );
+   await _startActivity(cancelSwipe);
+   widget.onSwipeCancelled?.call(cancelSwipe);
   }
 
   Future<void> _startActivity(SwiperActivity newActivity) async {
