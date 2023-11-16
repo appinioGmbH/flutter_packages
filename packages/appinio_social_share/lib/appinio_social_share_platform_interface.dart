@@ -33,7 +33,7 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   }
 
   ///filaPath only works for android
-  Future<String> shareToWhatsapp(String message, {String? filePath}) {
+  Future<String> shareToWhatsapp(String message, {List<String>? filePaths}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
@@ -41,7 +41,7 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String> shareToInstagramFeed(String filePath) {
+  Future<String> shareToInstagramFeed(List<String> filePaths) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
@@ -50,7 +50,7 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   }
 
   ///This function only works for android
-  Future<String> shareToTiktokStatus(String filePath) {
+  Future<String> shareToTiktokStatus(List<String> filePaths) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
@@ -59,16 +59,16 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String> shareToTwitter(String message, {String? filePath}) {
+  Future<String> shareToTwitter(String message, {List<String>? filePaths}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
   ///filepath only works for android
-  Future<String> shareToTelegram(String message, {String? filePath}) {
+  Future<String> shareToTelegram(String message, {List<String>? filePaths}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String> shareToFacebook(String hashtag, String filePath) {
+  Future<String> shareToFacebook(String hashtag, List<String> filePaths) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
@@ -97,12 +97,12 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   }
 
   Future<String> shareToSystem(String title, String message,
-      {String? filePath}) {
+      {List<String>? filePaths}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
   ///filePath only works for android
-  Future<String> shareToSMS(String message, {String? filePath}) {
+  Future<String> shareToSMS(String message, {List<String>? filePaths}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }
