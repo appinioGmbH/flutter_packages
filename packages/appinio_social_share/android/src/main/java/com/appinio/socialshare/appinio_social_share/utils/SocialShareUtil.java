@@ -63,7 +63,7 @@ public class SocialShareUtil {
 
 
     public String shareToWhatsApp(ArrayList<String> imagePaths, String msg, Context context) {
-        return shareFileAndTextToPackage(imagePath, msg, context, WHATSAPP_PACKAGE);
+        return shareFileAndTextToPackage(imagePaths, msg, context, WHATSAPP_PACKAGE);
     }
 
 
@@ -72,19 +72,19 @@ public class SocialShareUtil {
     }
 
     public String shareToInstagramFeed(ArrayList<String> imagePaths, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, INSTAGRAM_PACKAGE);
+        return shareFileAndTextToPackage(imagePaths, text, activity, INSTAGRAM_PACKAGE);
     }
 
     public String shareToTikTok(ArrayList<String> imagePaths, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, TIKTOK_PACKAGE);
+        return shareFileAndTextToPackage(imagePaths, text, activity, TIKTOK_PACKAGE);
     }
 
     public String shareToTwitter(ArrayList<String> imagePaths, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, TWITTER_PACKAGE);
+        return shareFileAndTextToPackage(imagePaths, text, activity, TWITTER_PACKAGE);
     }
 
     public String shareToTelegram(ArrayList<String> imagePaths, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, TELEGRAM_PACKAGE);
+        return shareFileAndTextToPackage(imagePaths, text, activity, TELEGRAM_PACKAGE);
     }
 
 
@@ -115,7 +115,7 @@ public class SocialShareUtil {
 
     public String shareToSMS(String content, Context activity, ArrayList<String> imagePaths) {
         String defaultApplication = Settings.Secure.getString(activity.getContentResolver(), SMS_DEFAULT_APPLICATION);
-        return shareFileAndTextToPackage(imagePath, content, activity, defaultApplication);
+        return shareFileAndTextToPackage(imagePaths, content, activity, defaultApplication);
     }
 
 
@@ -186,7 +186,7 @@ public class SocialShareUtil {
     }
 
 
-    public void shareToFacebook(List<String> imagePaths, String text, Activity activity, MethodChannel.Result result) {
+    public void shareToFacebook(List<String> filePaths, String text, Activity activity, MethodChannel.Result result) {
         FacebookSdk.fullyInitialize();
         callbackManager = callbackManager == null ? CallbackManager.Factory.create() : callbackManager;
         ShareDialog shareDialog = new ShareDialog(activity);
@@ -209,8 +209,8 @@ public class SocialShareUtil {
             }
         });
         List<SharePhoto> sharePhotos = new ArrayList<>();
-        for (int i = 0; i < imagePaths.size(); i++) {
-            Uri fileUri = FileProvider.getUriForFile(activity,  "com.facebook.app.FacebookContentProvider"+getFacebookAppId(activity), new File(imagePaths.get(i)));
+        for (int i = 0; i < filePaths.size(); i++) {
+            Uri fileUri = FileProvider.getUriForFile(activity, "com.facebook.app.FacebookContentProvider" + getFacebookAppId(activity), new File(filePaths.get(i)));
             sharePhotos.add(new SharePhoto.Builder().setImageUrl(fileUri).build());
         }
         SharePhotoContent content = new SharePhotoContent.Builder()
