@@ -1,4 +1,4 @@
-## [2.0.4] - 2023.11.14
+## [2.1.0] - 2023.11.21
 * Features:
   - The controller now exposes all relevant card state (index, card offset+rotation, etc).
   - The controller now has animateTo to arbitrarily animate the top card’s offset.

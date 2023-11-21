@@ -213,13 +213,13 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   // Moves the card back to starting position when a drag finished without
   // having reached the threshold.
-  void _onSwipeCancelled(BuildContext context) async{
+  void _onSwipeCancelled(BuildContext context) async {
     final CancelSwipe cancelSwipe = CancelSwipe(
       _defaultAnimation,
       begin: _position._offset,
     );
-   await _startActivity(cancelSwipe);
-   widget.onSwipeCancelled?.call(cancelSwipe);
+    await _startActivity(cancelSwipe);
+    widget.onSwipeCancelled?.call(cancelSwipe);
   }
 
   Future<void> _startActivity(SwiperActivity newActivity) async {

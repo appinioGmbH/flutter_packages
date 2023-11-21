@@ -64,11 +64,12 @@ Widget swipeLeftButton(AppinioSwiperController controller) {
     builder: (context, child) {
       final SwiperPosition? position = controller.position;
       final SwiperActivity? activity = controller.swipeActivity;
-      final double horizontalProgress = (activity is Swipe || activity == null) &&
-              position != null &&
-              position.offset.toAxisDirection().isHorizontal
-          ? -1 * position.progressRelativeToThreshold.clamp(-1, 1)
-          : 0;
+      final double horizontalProgress =
+          (activity is Swipe || activity == null) &&
+                  position != null &&
+                  position.offset.toAxisDirection().isHorizontal
+              ? -1 * position.progressRelativeToThreshold.clamp(-1, 1)
+              : 0;
       final Color color = Color.lerp(
         const Color(0xFFFF3868),
         CupertinoColors.systemGrey2,
