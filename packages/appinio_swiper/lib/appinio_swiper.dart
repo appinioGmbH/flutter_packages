@@ -154,7 +154,7 @@ class AppinioSwiper extends StatefulWidget {
     this.onSwipeCancelled,
   })  : assert(maxAngle >= 0),
         assert(threshold > 0),
-        assert(initialIndex == null || initialIndex < cardCount),
+        assert(initialIndex == null || initialIndex <=git  cardCount),
         super(key: key);
 
   @override
