@@ -49,6 +49,15 @@ class AppinioSwiper extends StatefulWidget {
   /// on swiper state changes.
   final AppinioSwiperController? controller;
 
+  /// The card index to start the swiper at.
+  ///
+  /// This field is only considered when initializing an [AppinioSwiper].
+  /// Changing the [initialIndex] to a swiper that is already built will have no
+  /// effect.
+  ///
+  /// Defaults to 0.
+  final int? initialIndex;
+
   /// The duration of swipe animations.
   ///
   /// Swipe animations start after the user lifts their finger or when a drag
@@ -122,6 +131,7 @@ class AppinioSwiper extends StatefulWidget {
     required this.cardBuilder,
     required this.cardCount,
     this.controller,
+    this.initialIndex,
     this.duration = const Duration(milliseconds: 200),
     this.maxAngle = 15,
     this.invertAngleOnBottomDrag = true,
@@ -144,6 +154,7 @@ class AppinioSwiper extends StatefulWidget {
     this.onSwipeCancelled,
   })  : assert(maxAngle >= 0),
         assert(threshold > 0),
+        assert(initialIndex == null || initialIndex < cardCount),
         super(key: key);
 
   @override
@@ -177,6 +188,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     maxAngleRadians: widget.maxAngle,
     invertAngleOnBottomDrag: widget.invertAngleOnBottomDrag,
     loop: widget.loop,
+    initialIndex: widget.initialIndex,
   );
 
   // Keep track of the swiped items to unswipe from the same direction
@@ -690,12 +702,14 @@ class SwiperPosition with ChangeNotifier {
     required double maxAngleRadians,
     required bool invertAngleOnBottomDrag,
     required bool loop,
+    required int? initialIndex,
   })  : _cardSize = cardSize,
         _cardCount = cardCount,
         _threshold = threshold,
         _maxAngle = maxAngleRadians,
         _invertAngleOnBottomDrag = invertAngleOnBottomDrag,
-        _loop = loop;
+        _loop = loop,
+        _baseIndex = initialIndex ?? 0;
 
   set offset(Offset newOffset) {
     _offset = newOffset;
