@@ -55,6 +55,10 @@ class AppinioSwiper extends StatefulWidget {
   /// Changing the [initialIndex] to a swiper that is already built will have no
   /// effect.
   ///
+  /// If non-null, must be a value between 0 and [cardCount] (inclusive).
+  /// Note that an initial index of [cardCount] will start the swiper at the end
+  /// of the stack with no cards left to swipe.
+  ///
   /// Defaults to 0.
   final int? initialIndex;
 
@@ -154,7 +158,9 @@ class AppinioSwiper extends StatefulWidget {
     this.onSwipeCancelled,
   })  : assert(maxAngle >= 0),
         assert(threshold > 0),
-        assert(initialIndex == null || initialIndex <= cardCount),
+        assert(initialIndex == null ||
+            initialIndex >= 0 ||
+            initialIndex <= cardCount),
         super(key: key);
 
   @override
