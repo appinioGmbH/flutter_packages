@@ -237,13 +237,6 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       CancelSwipe() => _position._baseIndex,
       DrivenActivity() => _position._baseIndex,
     });
-    if (targetIndex >= widget.cardCount && newActivity is Swipe) {
-      // We reached the end, do not run the activity.
-      if (targetIndex > widget.cardCount && !widget.loop) {
-        return;
-      }
-      widget.onEnd?.call();
-    }
     _swipeActivity = newActivity;
     if (newActivity is Swipe) {
       _activityHistory.add(newActivity);
@@ -275,6 +268,15 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     });
     await _previousActivityFuture;
     widget.onSwipeEnd?.call(previousIndex, targetIndex, newActivity);
+
+    if (targetIndex >= widget.cardCount && newActivity is Swipe) {
+      // We reached the end, do not run the activity.
+      if (targetIndex > widget.cardCount && !widget.loop) {
+        return;
+      }
+      widget.onEnd?.call();
+    }
+
     setState(() {});
   }
 
