@@ -49,7 +49,6 @@ public class AppAuthCheckPlugin implements FlutterPlugin, MethodCallHandler, Act
           result.success(false);
         }
       } catch (final PackageManager.NameNotFoundException e) {
-        e.printStackTrace();
         result.success(false);
       }
     } {
