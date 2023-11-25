@@ -1,8 +1,8 @@
 package com.app_auth_check.app_auth_check;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
+import android.content.pm.InstallSourceInfo;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -38,21 +38,32 @@ public class AppAuthCheckPlugin implements FlutterPlugin, MethodCallHandler, Act
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     activeContext = (activity != null) ? activity.getApplicationContext() : context;
-    final PackageManager packageManager = activeContext.getPackageManager();
-
     if (call.method.equals(APP_AUTH_CHECK)) {
-      try {
-        final ApplicationInfo applicationInfo = packageManager.getApplicationInfo(activeContext.getPackageName(), 0);
-        if ("com.android.vending".equals(packageManager.getInstallerPackageName(applicationInfo.packageName))) {
-          result.success(true);
-        }else{
-          result.success(false);
-        }
-      } catch (final PackageManager.NameNotFoundException e) {
+      String pkgName = getInstallerPackageName(context,activeContext.getPackageName());
+      if ("com.android.vending".equals(pkgName)) {
+        result.success(true);
+      }else{
         result.success(false);
       }
     } {
       result.notImplemented();
+    }
+  }
+
+  public static String getInstallerPackageName(Context context, String packageName) {
+    try {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        InstallSourceInfo packageInfo = context.getPackageManager()
+                .getInstallSourceInfo(packageName);
+        return packageInfo.getInstallingPackageName();
+      }
+      // Suppress deprecation warning for getInstallerPackageName()
+      @SuppressWarnings("deprecation")
+      String installerPackageName = context.getPackageManager()
+              .getInstallerPackageName(packageName);
+      return installerPackageName;
+    } catch (Exception e) {
+      return null;
     }
   }
 
