@@ -188,6 +188,7 @@ public class SocialShareUtil {
 
     public void shareToFacebook(List<String> filePaths, String text, Activity activity, MethodChannel.Result result) {
         FacebookSdk.fullyInitialize();
+        FacebookSdk.setApplicationId(getFacebookAppId(activity));
         callbackManager = callbackManager == null ? CallbackManager.Factory.create() : callbackManager;
         ShareDialog shareDialog = new ShareDialog(activity);
         shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
@@ -210,7 +211,7 @@ public class SocialShareUtil {
         });
         List<SharePhoto> sharePhotos = new ArrayList<>();
         for (int i = 0; i < filePaths.size(); i++) {
-            Uri fileUri = FileProvider.getUriForFile(activity, "com.facebook.app.FacebookContentProvider" + getFacebookAppId(activity), new File(filePaths.get(i)));
+            Uri fileUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", new File(filePaths.get(i)));
             sharePhotos.add(new SharePhoto.Builder().setImageUrl(fileUri).build());
         }
         SharePhotoContent content = new SharePhotoContent.Builder()
