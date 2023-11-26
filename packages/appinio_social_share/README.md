@@ -133,6 +133,8 @@ After created your own file provider and define your own path paste them into th
          android:exported="true" />
      <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
      <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token" />
+     <meta-data android:name="com.facebook.sdk.ApplicationName" android:value="${applicationName}"/>
+     <activity android:name="com.facebook.FacebookActivity" android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="${applicationName}" />
 ```
 
 
