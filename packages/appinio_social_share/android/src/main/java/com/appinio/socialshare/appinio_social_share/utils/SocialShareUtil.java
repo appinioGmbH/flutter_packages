@@ -184,7 +184,9 @@ public class SocialShareUtil {
 
 
     public void shareToFacebook(String imagePath, String text, Activity activity, MethodChannel.Result result) {
-        FacebookSdk.sdkInitialize(activity.getApplicationContext());
+        final String appsID = getFacebookAppId(activity.getApplicationContext());
+        FacebookSdk.setApplicationId(appsID);
+
         callbackManager = callbackManager == null ? CallbackManager.Factory.create() : callbackManager;
         ShareDialog shareDialog = new ShareDialog(activity);
         shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
@@ -213,6 +215,7 @@ public class SocialShareUtil {
                 .setShareHashtag(new ShareHashtag.Builder().setHashtag(text).build())
                 .setPhotos(sharePhotos)
                 .build();
+
         if (ShareDialog.canShow(SharePhotoContent.class)) {
             shareDialog.show(content);
         }
@@ -373,6 +376,7 @@ public class SocialShareUtil {
             }
         } catch (PackageManager.NameNotFoundException e) {
             // Handle the exception if needed
+            return appId;
         }
 
         return appId;
