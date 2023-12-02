@@ -69,6 +69,8 @@ class _ExamplePageState extends State<Example> {
                   backgroundCardCount: 3,
                   swipeOptions: const SwipeOptions.all(),
                   controller: controller,
+                 // backgroundCardAngles: [1,-1, 2, -2],
+                  backgroundCardAngles: [1,-1],
                   onCardPositionChanged: (
                     SwiperPosition position,
                   ) {

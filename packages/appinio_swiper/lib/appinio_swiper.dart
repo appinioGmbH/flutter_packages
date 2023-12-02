@@ -31,6 +31,9 @@ class AppinioSwiper extends StatefulWidget {
   /// Background cards count
   final int backgroundCardCount;
 
+  /// Background cards angles
+  final List<double>? backgroundCardAngles;
+
   /// The amount to scale each successive background card down by,
   ///
   /// The difference in scale for each background card is a fixed amount
@@ -128,6 +131,7 @@ class AppinioSwiper extends StatefulWidget {
     this.threshold = 50,
     this.backgroundCardCount = 1,
     this.backgroundCardScale = .9,
+    this.backgroundCardAngles,
     this.backgroundCardOffset,
     this.isDisabled = false,
     this.loop = false,
@@ -173,6 +177,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   late final SwiperPosition _position = SwiperPosition(
     cardSize: MediaQuery.sizeOf(context),
     cardCount: widget.cardCount,
+    backgroundCardAngles: widget.backgroundCardAngles,
     threshold: widget.threshold,
     maxAngleRadians: widget.maxAngle,
     invertAngleOnBottomDrag: widget.invertAngleOnBottomDrag,
@@ -509,11 +514,15 @@ class _BackgroundCards extends StatelessWidget {
               .map(
                 (j, index) {
                   final double effectFactor = initialEffectFactor + j;
+
                   final Offset offset = offsetIncrement * effectFactor;
                   // The cards scale down by a fixed amount relative to the original
                   // size with each step so we need to subtract by the scale
                   // increment rather than multiply by the scale factor.
                   final double scale = 1 - (effectFactor * scaleIncrement);
+                  final isLastItem = j == indices.length - 1;
+
+
                   if (scale <= 0) {
                     // Don't render cards if they're too small to be visible.
                     return MapEntry(j, null);
@@ -521,14 +530,17 @@ class _BackgroundCards extends StatelessWidget {
                   return MapEntry(
                     j,
                     Opacity(
-                      opacity: fadeLastItem && j == indices.length - 1
+                      opacity: fadeLastItem && isLastItem
                           ? position.progress
                           : 1,
-                      child: Transform.translate(
-                        offset: offset,
-                        child: Transform.scale(
-                          scale: scale,
-                          child: builder(context, index),
+                      child: Transform.rotate(
+                        angle: position.getBackgroundAngle(j) * effectFactor,
+                        child: Transform.translate(
+                          offset: offset,
+                          child: Transform.scale(
+                            scale: scale,
+                            child: builder(context, index),
+                          ),
                         ),
                       ),
                     ),
@@ -689,6 +701,7 @@ class SwiperPosition with ChangeNotifier {
     required double threshold,
     required double maxAngleRadians,
     required bool invertAngleOnBottomDrag,
+    this.backgroundCardAngles,
     required bool loop,
   })  : _cardSize = cardSize,
         _cardCount = cardCount,
@@ -726,7 +739,10 @@ class SwiperPosition with ChangeNotifier {
   /// The rotation angle of the card in radians.
   ///
   /// See [angle].
-  double get angleRadians => angle * (pi / 180);
+  double get angleRadians => angleToRadians(angle);
+
+  /// angle to radians
+  double angleToRadians(double angle) => angle * (pi / 180);
 
   /// The current swiping progress of the top card.
   ///
@@ -777,6 +793,11 @@ class SwiperPosition with ChangeNotifier {
 
   Size _cardSize;
 
+  List<double>? backgroundCardAngles;
+
+  double getBackgroundAngle(int index) =>
+      backgroundCardAngles == null ? 0 : angleToRadians(backgroundCardAngles![index%backgroundCardAngles!.length]);
+
   int _cardCount;
 
   double _threshold;
@@ -804,6 +825,7 @@ class SwiperPosition with ChangeNotifier {
     _cardCount = widget.cardCount;
     _threshold = widget.threshold;
     _maxAngle = widget.maxAngle;
+    backgroundCardAngles = widget.backgroundCardAngles;
     _invertAngleOnBottomDrag = widget.invertAngleOnBottomDrag;
     _loop = widget.loop;
     notifyListeners();
