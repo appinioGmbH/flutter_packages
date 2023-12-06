@@ -212,7 +212,7 @@ FBSDKCoreKit.ApplicationDelegate.shared.application(
 
 <br />
 
-*** If you want to share files to tiktok (iOS), you can follow the steps below. For sharing to android you don't need these steps ***
+***If you want to share files to tiktok (iOS), you can follow the steps below. For sharing to android you don't need these steps.***
 
 Step 1 - Install Tiktok Sdk
 
@@ -289,10 +289,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 ```
 
-Step 3 - Create a tiktok app on tiktok developer portal and get a client key.
+Step 3 - Create a tiktok app on tiktok [developer portal] (https://developers.tiktok.com/apps/) and get a client key.
 
-'
+Obtain the [client_key](https://developers.tiktok.com/apps/) located in the Appdetails section of your app on the TikTok for Developers website. Then add Share Kit to your app by navigating to the Manage apps page, and clicking + Add products.
 
+<img width="862" alt="Screenshot 2023-12-06 at 09 55 38" src="https://github.com/appinioGmbH/flutter_packages/assets/58891556/9b1f4d00-96ca-4496-91e8-6aa2b5b6c992">
+
+Your app must have access to the user's photo library to successfully share videos to TikTok.
+
+Done ✅  - Now shareToTiktokPost will start working for IOS as well.
 
 ## Usage
 
