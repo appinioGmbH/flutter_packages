@@ -265,7 +265,6 @@ Step 3 - Add the following code to your app's AppDelegate:
 
 import UIKit
 import Flutter
-import Firebase  // For AppCheck.
 import TikTokOpenSDKCore
 import TikTokOpenShareSDK
 import Foundation
@@ -284,7 +283,6 @@ import Photos
       tiktok_channel.setMethodCallHandler(
         {
           (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
-            print("getting called")
           if call.method == "tiktok_post" {
               let args = call.arguments as? [String: Any?]
               self.shareVideoToTiktok(args: args!, result: result)
