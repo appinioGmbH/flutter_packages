@@ -238,7 +238,7 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                   child: Text("ShareToWhatsapp"),
                   onPressed: () {
-                    shareToWhatsApp("Message Text!!", file.getAbsolutePath());
+                    shareToWhatsApp("Message Text!!", filePaths: [file.getAbsolutePath()]);
                   },
               ),
             ],
@@ -264,21 +264,21 @@ class _MyAppState extends State<MyApp> {
 | Method        | iOS | Android | Parameters | Description
 |:-------------|:-------------:|:-------------:|:-------------|:-------------
 | getInstalledApps      |✔️| ✔️ |  -   | Get a Map of all the apps with a boolean value.
-| shareToWhatsapp      |✔️| ✔️ | String message, {String? filePath} | Share Image and text to Whatsapp. For Ios only text works.
-| shareToTelegram      |✔️| ✔️ | String message, {String? filePath} | Share Image and text to Telegram. For Ios only text works.
+| shareToWhatsapp      |✔️| ✔️ | String message, {List<String>? filePaths} | Share Image and text to Whatsapp. For Ios only text works.
+| shareToTelegram      |✔️| ✔️ | String message, {List<String>? filePaths} | Share Image and text to Telegram. For Ios only text works.
 | shareToInstagramDirect      |✔️| ✔️ | String message | Share text message to Instagram.
-| shareToInstagramFeed      |✔️| ✔️ | String imagePath | Share image to Instagram feed.
-| shareToInstagramReel      |✔️| ✔️ | String imagePath | Share video to Instagram Reel.
+| shareToInstagramFeed      |✔️| ✔️ | List<String> imagePaths | Share image to Instagram feed.
+| shareToInstagramReel      |✔️| ✔️ | List<String> videoPaths | Share video to Instagram Reel.
 | shareToInstagramStory      |✔️| ✔️ | String facebookAppId, String stickerImage,{String? backgroundImage,String? backgroundVideo,  String? backgroundTopColor,String? backgroundBottomColor,String? attributionURL} | Share background image, movable sticker, background colors to Instagram Story.
-| shareToFacebook      |✔️| ✔️ | String message, String filePath | Share text hashtag and image to Facebook.
+| shareToFacebook      |✔️| ✔️ | String message, List<String> filePaths | Share text hashtag and image to Facebook.
 | shareToFacebookStory      |✔️| ✔️ |String stickerImage,String appId,{String? backgroundImage, String? backgroundVideo, String? backgroundTopColor, String? backgroundBottomColor, String? attributionURL} | Share background image, movable sticker, background colors to Facebook Story.
 | shareToMessenger      |✔️| ✔️ | String message | Share text message to Messenger.
-| shareToTiktokStatus      |❌ |  ✔️  | String  filePath | ShaShare image to Tiktok Story.
+| shareToTiktokStatus      |❌ |  ✔️  | List<String> filePaths | ShaShare image to Tiktok Story.
 | shareToTiktokPost      |❌ |  ✔️  | String  videoPath | Share video to tiktok.
-| shareToTwitter      |  ✔️   |  ✔️ | String message, {String? filePath} | Share Image and text to Twitter.
-| shareToSMS      |✔️| ✔️ | String message, {String? filePath} | Share Image and text to default sms app.
+| shareToTwitter      |  ✔️   |  ✔️ | String message, {List<String>? filePaths} | Share Image and text to Twitter.
+| shareToSMS      |✔️| ✔️ | String message, {List<String>? filePaths} | Share Image and text to default sms app.
 | copyToClipBoard      |✔️| ✔️ | String message | To Copy text to clipboard.
-| shareToSystem      |✔️|  ✔️  | String title,String message, {String? filePath} | Open default System sheet, to share text and image.
+| shareToSystem      |✔️|  ✔️  | String title,String message, {List<String>? filePaths} | Open default System sheet, to share text and image.
 
 
 
