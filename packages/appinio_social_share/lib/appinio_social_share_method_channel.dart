@@ -41,11 +41,18 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToTiktokPost(String videoFile) async {
+  Future<String> shareToTiktokPost(String filePath, String redirectUrl, TiktokFileType tiktokFileType) async {
     if (Platform.isAndroid) return "Not implemented for android";
-    return ((await methodChannel
-            .invokeMethod<String>(tiktokPost, {"videoFile": videoFile})) ??
-        "");
+    String? resp;
+    try {
+      resp = (await const MethodChannel('appinio_social_share_tiktok').invokeMethod<String>(tiktokPost, {"videoFile": filePath, "redirectUrl" :redirectUrl , "fileType": tiktokFileType.value})) ??
+          "";
+      print(resp);
+    } catch (e) {
+      print(e.toString());
+      return e.toString();
+    }
+    return resp;
   }
 
   @override
