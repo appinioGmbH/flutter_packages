@@ -237,7 +237,7 @@ Step 2 - Configure your project
 3. snssdk1233 and snssdk1180 to check if TikTok is installed on your device.
 4. Add TikTokClientKey key with your app's client key, obtained from the TikTok for Developers website, as the value.
 5. Add your app's client key to CFBundleURLSchemes.
-```plist
+```
 <key>LSApplicationQueriesSchemes</key>
 <array>
     <string>tiktokopensdk</string>
