@@ -263,12 +263,48 @@ Step 3 - Add the following code to your app's AppDelegate:
 
 ```swift
 
+import UIKit
+import Flutter
+import Firebase  // For AppCheck.
 import TikTokOpenSDKCore
+import TikTokOpenShareSDK
+import Foundation
+import Photos
 
-@main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+@UIApplicationMain
+@objc class AppDelegate: FlutterAppDelegate {
 
-    func application(_ app: UIApplication,open url: URL, 
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+      let cntrl : FlutterViewController = self.window?.rootViewController as! FlutterViewController
+      let tiktok_channel = FlutterMethodChannel(name: "appinio_social_share_tiktok", binaryMessenger: cntrl.binaryMessenger)
+          
+      tiktok_channel.setMethodCallHandler(
+        {
+          (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+            print("getting called")
+          if call.method == "tiktok_post" {
+              let args = call.arguments as? [String: Any?]
+              self.shareVideoToTiktok(args: args!, result: result)
+          }else{
+               result("Not implemented!")
+          }
+        })
+      
+
+    GeneratedPluginRegistrant.register(with: self)
+    if #available(iOS 10.0, *) {
+      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+    }
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+
+
+    
+    override func application(_ app: UIApplication,open url: URL,
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         if (TikTokURLHandler.handleOpenURL(url)) {
             return true
@@ -276,20 +312,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return false
     }
     
-    func application(_ application: UIApplication, 
-                     continue userActivity: NSUserActivity, 
+    override func application(_ application: UIApplication,
+                     continue userActivity: NSUserActivity,
                      restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if (TikTokURLHandler.handleOpenURL(userActivity.webpageURL)) {
             return true
         }
         return false
     }
+    
+    
+    func shareVideoToTiktok(args : [String: Any?],result: @escaping FlutterResult) {
+        let videoFile = args["videoFile"] as? String
+        let redirectUrl = args["redirectUrl"] as? String
+        let fileType = args["fileType"] as? String
+        let videoData = try? Data(contentsOf:  URL(fileURLWithPath: videoFile!)) as NSData
+        
 
+        PHPhotoLibrary.shared().performChanges({
+
+            let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+            let filePath = "\(documentsPath)/\(Date().description)" + (fileType == "image" ? ".jpeg" : ".mp4")
+
+            videoData!.write(toFile: filePath, atomically: true)
+            if fileType == "image" {
+                PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(fileURLWithPath: filePath))
+
+            }else {
+                PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(fileURLWithPath: filePath))
+
+            }
+        },
+        completionHandler: { success, error in
+
+            if success {
+
+                let fetchOptions = PHFetchOptions()
+
+                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
+                let fetchResult = PHAsset.fetchAssets(with: fileType == "image" ? .image : .video, options: fetchOptions)
+
+                if let lastAsset = fetchResult.firstObject {
+                    let localIdentifier = lastAsset.localIdentifier
+                    let shareRequest = TikTokShareRequest(localIdentifiers: [localIdentifier], mediaType: fileType == "image" ? .image : .video, redirectURI: redirectUrl!)
+                    shareRequest.shareFormat = .normal
+                    DispatchQueue.main.async {
+                        shareRequest.send()
+                        result("success")
+                    }
+                }
+            }
+            else if let error = error {
+
+                print(error.localizedDescription)
+            }
+            else {
+
+                result("Error getting the files!")
+            }
+        })
+    }
+
+}
+
+private func registerPlugins(registry: FlutterPluginRegistry) {
 }
 
 ```
 
-Step 3 - Create a tiktok app on tiktok [developer portal] (https://developers.tiktok.com/apps/) and get a client key.
+Step 3 - Create a tiktok app on tiktok [developer portal] (https://developers.tiktok.com/apps/) and get a client key and add it in info.plist acc to step 2.
 
 Obtain the [client_key](https://developers.tiktok.com/apps/) located in the Appdetails section of your app on the TikTok for Developers website. Then add Share Kit to your app by navigating to the Manage apps page, and clicking + Add products.
 
