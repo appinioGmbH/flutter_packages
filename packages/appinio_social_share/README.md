@@ -248,7 +248,7 @@ class _MyAppState extends State<MyApp> {
   }
 
 
-  Future<void> shareToWhatsApp(String message, String filePath) async{
+  Future<void> shareToWhatsApp(String message, {List<String>? filePaths) async{
     String response = await appinioSocialShare.shareToWhatsapp(message,filePath: filePath);
     print(response);
   }
