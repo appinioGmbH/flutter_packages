@@ -1,7 +1,16 @@
+## [2.1.0] - 2023.11.21
+* Features:
+  - The controller now exposes all relevant card state (index, card offset+rotation, etc).
+  - The controller now has animateTo to arbitrarily animate the top card’s offset.
+  - Added onSwipeEnd, onSwipeBegin and onCardPositionChanged methods to give the swipe information.
+  - Added SwiperActivity class to give more information during card swipe.
+  - Better documentation, linting and code formatting.
+
 ## [2.0.3] - 2023.08.23
 * Features:
     - Custom background card spacing.
     - onSwipeCancelled event.
+
 
 
 ## [2.0.2] - 2023.06.19

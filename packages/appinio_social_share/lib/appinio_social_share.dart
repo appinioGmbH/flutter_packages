@@ -81,12 +81,13 @@ class AppinioSocialShare {
 
   ///works only for android
   Future<String> shareToTiktokStatus(List<String> filePaths) {
+    if (Platform.isIOS) return Future.value("Not implemented!");
     return AppinioSocialSharePlatform.instance.shareToTiktokStatus(filePaths);
   }
 
-  Future<String> shareToTiktokPost(String videoFile) {
+  Future<String> shareToTiktokPost(String videoFile, String redirectUrl, TiktokFileType tiktokFileType) {
     if (Platform.isAndroid) return shareToTiktokStatus([videoFile]);
-    return AppinioSocialSharePlatform.instance.shareToTiktokPost(videoFile);
+    return AppinioSocialSharePlatform.instance.shareToTiktokPost(videoFile,redirectUrl, tiktokFileType );
   }
 
   Future<String> shareToSystem(String title, String message,

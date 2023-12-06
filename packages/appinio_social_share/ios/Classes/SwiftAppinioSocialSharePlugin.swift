@@ -20,8 +20,6 @@ public class SwiftAppinioSocialSharePlugin: NSObject, FlutterPlugin, SharingDele
     private let SYSTEM_SHARE:String = "system_share";
     private let COPY_TO_CLIPBOARD:String = "copy_to_clipboard";
     private let TELEGRAM:String = "telegram";
-    private let TIKTOK_POST:String = "tiktok_post";
-    private let TIKTOK_STATUS:String = "tiktok_status";
     private let INSTALLED_APPS:String = "installed_apps";
 
 
@@ -42,12 +40,6 @@ public class SwiftAppinioSocialSharePlugin: NSObject, FlutterPlugin, SharingDele
       let args = call.arguments as? [String: Any?]
 
       switch (call.method) {
-      case TIKTOK_STATUS:
-          result(shareUtil.NOT_IMPLEMENTED)
-          break
-      case TIKTOK_POST:
-          result(shareUtil.NOT_IMPLEMENTED)
-          break
       case INSTALLED_APPS:
           shareUtil.getInstalledApps(result: result)
           break

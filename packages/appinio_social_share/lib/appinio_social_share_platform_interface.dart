@@ -55,7 +55,7 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   }
 
   ///This function only works for iOS
-  Future<String> shareToTiktokPost(String videoFile) {
+  Future<String> shareToTiktokPost(String filePath,String redirectUrl, TiktokFileType tiktokFileType) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
@@ -105,4 +105,13 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   Future<String> shareToSMS(String message, {List<String>? filePaths}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+}
+
+
+enum TiktokFileType{
+  image("image"),
+  video("video");
+
+  final String value;
+  const TiktokFileType(this.value);
 }
