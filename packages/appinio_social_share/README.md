@@ -212,6 +212,88 @@ FBSDKCoreKit.ApplicationDelegate.shared.application(
 
 <br />
 
+*** If you want to share files to tiktok (iOS), you can follow the steps below. For sharing to android you don't need these steps ***
+
+Step 1 - Install Tiktok Sdk
+
+```
+Add the library to your XCode project as a Swift Package:
+
+1- In XCode, click File -> Add Packages...
+2- Paste the repository URL: https://github.com/tiktok/tiktok-opensdk-ios
+3- Select Dependency Rule -> Up to Next Major Version and input the major version you want (i.e. 2.2.0 You can find the latest release here.)
+4- Select Add to Project -> Your project
+5- Click Copy Dependency and select the TikTokOpenShareSDK library.
+
+```
+
+Step 2 - Configure your project
+
+-Configure your Xcode project
+-Open your Info.plist file and add or update the following key-value pairs:
+-Add the following values to LSApplicationQueriesSchemes:
+1. tiktokopensdk for Login Kit.
+2. tiktoksharesdk for Share Kit.
+3. snssdk1233 and snssdk1180 to check if TikTok is installed on your device.
+4. Add TikTokClientKey key with your app's client key, obtained from the TikTok for Developers website, as the value.
+5. Add your app's client key to CFBundleURLSchemes.
+```plist
+<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>tiktokopensdk</string>
+    <string>tiktoksharesdk</string>
+    <string>snssdk1180</string>
+    <string>snssdk1233</string>
+</array>
+<key>TikTokClientKey</key>
+<string>$TikTokClientKey</string>
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>$TikTokClientKey</string>
+    </array>
+  </dict>
+</array>
+
+```
+
+Step 3 - Add the following code to your app's AppDelegate:
+
+```swift
+
+import TikTokOpenSDKCore
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    func application(_ app: UIApplication,open url: URL, 
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        if (TikTokURLHandler.handleOpenURL(url)) {
+            return true
+        }
+        return false
+    }
+    
+    func application(_ application: UIApplication, 
+                     continue userActivity: NSUserActivity, 
+                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if (TikTokURLHandler.handleOpenURL(userActivity.webpageURL)) {
+            return true
+        }
+        return false
+    }
+
+}
+
+```
+
+Step 3 - Create a tiktok app on tiktok developer portal and get a client key.
+
+'
+
+
 ## Usage
 
 ```dart
