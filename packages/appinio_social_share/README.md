@@ -212,7 +212,7 @@ FBSDKCoreKit.ApplicationDelegate.shared.application(
 
 <br />
 
-***If you want to share files to tiktok (iOS), you can follow the steps below. For sharing to android you don't need these steps.***
+## If you want to share files to tiktok (iOS), you can follow the steps below. For sharing to android you don't need these steps.
 
 Step 1 - Install Tiktok Sdk
 
