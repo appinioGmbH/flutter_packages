@@ -184,6 +184,12 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   bool get _canUnswipe => _activityHistory.isNotEmpty && widget.allowUnSwipe;
 
+  void _setCardIndex(int index){
+    setState(() {
+      _position._baseIndex = index;
+    });
+  }
+
   Future<void> _onSwipe(AxisDirection direction) async {
     _canUnSwipeOnce = true;
     final Swipe swipe = Swipe(
@@ -672,6 +678,13 @@ class AppinioSwiperController extends ChangeNotifier {
 
   void _assertIsAttached() {
     assert(_attachedSwiper != null, 'Controller must be attached.');
+  }
+
+
+  void setCardIndex(int index){
+    _assertIsAttached();
+    _attachedSwiper?._setCardIndex(index);
+    notifyListeners();
   }
 }
 
