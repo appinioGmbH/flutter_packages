@@ -10,15 +10,21 @@ import 'package:appinio_video_player/src/models/custom_video_player_settings.dar
 /// only the package can use these methods and not the public beacuse of the hide keyword in the package exports
 extension ProtectedCustomVideoPlayerController on CustomVideoPlayerController {
   Future<void> Function(String) get switchVideoSource => _switchVideoSource;
+
   ValueNotifier<Duration> get videoProgressNotifier => _videoProgressNotifier;
+
   ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
+
   ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
+
   bool get isFullscreen => _isFullscreen;
+
   set updateViewAfterFullscreen(Function updateViewAfterFullscreen) =>
       _updateViewAfterFullscreen = updateViewAfterFullscreen;
 }
 
 class CustomVideoPlayerController {
+  double _lastVolume = 0.5;
   final BuildContext context;
   VideoPlayerController videoPlayerController;
   final CustomVideoPlayerSettings customVideoPlayerSettings;
@@ -242,5 +248,14 @@ class CustomVideoPlayerController {
         }
       }
     }
+  }
+
+  void mute() {
+    _lastVolume = videoPlayerController.value.volume;
+    videoPlayerController.setVolume(0);
+  }
+
+  void unMute() {
+    videoPlayerController.setVolume(_lastVolume);
   }
 }
