@@ -9,7 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  video_player: ^2.4.6
+  video_player: ^2.8.1
   flutter:
     sdk: flutter
 
