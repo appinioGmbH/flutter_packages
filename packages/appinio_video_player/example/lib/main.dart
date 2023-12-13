@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       child: SafeArea(
         child: ListView(
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             kIsWeb
                 ? Expanded(
