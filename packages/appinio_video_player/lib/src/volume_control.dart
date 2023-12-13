@@ -1,6 +1,7 @@
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+
 class VolumeControls extends StatefulWidget {
   final CustomVideoPlayerController customVideoPlayerController;
 
@@ -23,6 +24,11 @@ class _VolumeControlsState extends State<VolumeControls> {
     return Align(
       alignment: Alignment.centerRight,
       child: GestureDetector(
+        onVerticalDragStart: (DragStartDetails details) {
+          setState(() {
+            _opacity = 1;
+          });
+        },
         onVerticalDragDown: (DragDownDetails details) {
           setState(() {
             _opacity = 1;
@@ -40,8 +46,8 @@ class _VolumeControlsState extends State<VolumeControls> {
           });
         },
         child: Container(
-          margin: const EdgeInsets.only(right: 10, bottom: 60),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          margin: const EdgeInsets.only(bottom: 60),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 500),
             opacity: _opacity,
