@@ -41,36 +41,43 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToTiktokPost(String filePath, String redirectUrl, TiktokFileType tiktokFileType) async {
+  Future<String> shareToTiktokPost(String filePath, String redirectUrl,
+      TiktokFileType tiktokFileType) async {
     if (Platform.isAndroid) return "Not implemented for android";
     String? resp;
     try {
-      resp = (await const MethodChannel('appinio_social_share_tiktok').invokeMethod<String>(tiktokPost, {"videoFile": filePath, "redirectUrl" :redirectUrl , "fileType": tiktokFileType.value})) ??
+      resp = (await const MethodChannel('appinio_social_share_tiktok')
+              .invokeMethod<String>(tiktokPost, {
+            "videoFile": filePath,
+            "redirectUrl": redirectUrl,
+            "fileType": tiktokFileType.value
+          })) ??
           "";
-      print(resp);
     } catch (e) {
-      print(e.toString());
       return e.toString();
     }
     return resp;
   }
 
   @override
-  Future<String> shareToTwitter(String message, {List<String>? filePaths}) async {
+  Future<String> shareToTwitter(String message,
+      {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(
             twitter, {"imagePaths": filePaths, "message": message})) ??
         "");
   }
 
   @override
-  Future<String> shareToTelegram(String message, {List<String>? filePaths}) async {
+  Future<String> shareToTelegram(String message,
+      {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(
             telegram, {"imagePaths": filePaths, "message": message})) ??
         "");
   }
 
   @override
-  Future<String> shareToWhatsapp(String message, {List<String>? filePaths}) async {
+  Future<String> shareToWhatsapp(String message,
+      {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(
             whatsapp, {"imagePaths": filePaths, "message": message})) ??
         "");

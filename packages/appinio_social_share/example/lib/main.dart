@@ -26,10 +26,12 @@ class _MyAppState extends State<MyApp> {
             children: [
               ElevatedButton(
                 child: const Text("ShareToWhatsapp"),
-                onPressed: () async{
-                  FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image,allowMultiple: true);
-                  if(result!=null){
-                    shareToWhatsApp("message", result.files.map((e) => e.path!).toList());
+                onPressed: () async {
+                  FilePickerResult? result = await FilePicker.platform
+                      .pickFiles(type: FileType.image, allowMultiple: true);
+                  if (result != null) {
+                    shareToWhatsApp(
+                        "message", result.files.map((e) => e.path!).toList());
                   }
                 },
               ),
@@ -39,7 +41,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   shareToWhatsApp(String message, List<String> filePaths) async {
-
     await appinioSocialShare.shareToSMS(message, filePaths: filePaths);
   }
 }

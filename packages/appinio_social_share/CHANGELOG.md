@@ -1,4 +1,4 @@
-## [---] - 2023.-.-
+## [0.3.0] - 2023.12.21
 * Enhancement:
   - Facebook Android Sdk updated to 16.0.0.  
 * Features:
