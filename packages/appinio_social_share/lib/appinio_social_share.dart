@@ -7,31 +7,31 @@ class AppinioSocialShare {
     return AppinioSocialSharePlatform.instance.getInstalledApps();
   }
 
-  Future<String> shareToWhatsapp(String message, {String? filePath}) {
+  Future<String> shareToWhatsapp(String message, {List<String>? filePaths}) {
     return AppinioSocialSharePlatform.instance
-        .shareToWhatsapp(message, filePath: filePath);
+        .shareToWhatsapp(message, filePaths: filePaths);
   }
 
-  Future<String> shareToTelegram(String message, {String? filePath}) {
+  Future<String> shareToTelegram(String message, {List<String>? filePaths}) {
     return AppinioSocialSharePlatform.instance
-        .shareToTelegram(message, filePath: filePath);
+        .shareToTelegram(message, filePaths: filePaths);
   }
 
-  Future<String> shareToTwitter(String message, {String? filePath}) {
+  Future<String> shareToTwitter(String message, {List<String>? filePaths}) {
     return AppinioSocialSharePlatform.instance
-        .shareToTwitter(message, filePath: filePath);
+        .shareToTwitter(message, filePaths: filePaths);
   }
 
   Future<String> shareToInstagramDirect(String message) {
     return AppinioSocialSharePlatform.instance.shareToInstagramDirect(message);
   }
 
-  Future<String> shareToInstagramFeed(String imagePath) {
-    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(imagePath);
+  Future<String> shareToInstagramFeed(List<String> imagePaths) {
+    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(imagePaths);
   }
 
-  Future<String> shareToInstagramReels(String videoPath) {
-    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(videoPath);
+  Future<String> shareToInstagramReels(List<String> videoPaths) {
+    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(videoPaths);
   }
 
   Future<String> shareToMessenger(String message) {
@@ -42,9 +42,9 @@ class AppinioSocialShare {
     return AppinioSocialSharePlatform.instance.copyToClipBoard(message);
   }
 
-  Future<String> shareToFacebook(String hashtag, String filePath) {
+  Future<String> shareToFacebook(String hashtag, List<String> filePaths) {
     return AppinioSocialSharePlatform.instance
-        .shareToFacebook(hashtag, filePath);
+        .shareToFacebook(hashtag, filePaths);
   }
 
   Future<String> shareToInstagramStory(String appId,
@@ -80,23 +80,26 @@ class AppinioSocialShare {
   }
 
   ///works only for android
-  Future<String> shareToTiktokStatus(String filePath) {
-    return AppinioSocialSharePlatform.instance.shareToTiktokStatus(filePath);
+  Future<String> shareToTiktokStatus(List<String> filePaths) {
+    if (Platform.isIOS) return Future.value("Not implemented!");
+    return AppinioSocialSharePlatform.instance.shareToTiktokStatus(filePaths);
   }
 
-  Future<String> shareToTiktokPost(String videoFile) {
-    if (Platform.isAndroid) return shareToTiktokStatus(videoFile);
-    return AppinioSocialSharePlatform.instance.shareToTiktokPost(videoFile);
+  Future<String> shareToTiktokPost(
+      String videoFile, String redirectUrl, TiktokFileType tiktokFileType) {
+    if (Platform.isAndroid) return shareToTiktokStatus([videoFile]);
+    return AppinioSocialSharePlatform.instance
+        .shareToTiktokPost(videoFile, redirectUrl, tiktokFileType);
   }
 
   Future<String> shareToSystem(String title, String message,
-      {String? filePath}) {
+      {List<String>? filePaths}) {
     return AppinioSocialSharePlatform.instance
-        .shareToSystem(title, message, filePath: filePath);
+        .shareToSystem(title, message, filePaths: filePaths);
   }
 
-  Future<String> shareToSMS(String message, {String? filePath}) {
+  Future<String> shareToSMS(String message, {List<String>? filePaths}) {
     return AppinioSocialSharePlatform.instance
-        .shareToSMS(message, filePath: filePath);
+        .shareToSMS(message, filePaths: filePaths);
   }
 }

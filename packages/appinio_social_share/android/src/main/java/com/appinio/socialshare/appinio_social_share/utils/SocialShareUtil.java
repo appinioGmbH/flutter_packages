@@ -62,8 +62,8 @@ public class SocialShareUtil {
     private static CallbackManager callbackManager;
 
 
-    public String shareToWhatsApp(String imagePath, String msg, Context context) {
-        return shareFileAndTextToPackage(imagePath, msg, context, WHATSAPP_PACKAGE);
+    public String shareToWhatsApp(ArrayList<String> imagePaths, String msg, Context context) {
+        return shareFileAndTextToPackage(imagePaths, msg, context, WHATSAPP_PACKAGE);
     }
 
 
@@ -71,31 +71,31 @@ public class SocialShareUtil {
         return shareTextToPackage(text, activity, INSTAGRAM_PACKAGE);
     }
 
-    public String shareToInstagramFeed(String imagePath, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, INSTAGRAM_PACKAGE);
+    public String shareToInstagramFeed(ArrayList<String> imagePaths, Context activity, String text) {
+        return shareFileAndTextToPackage(imagePaths, text, activity, INSTAGRAM_PACKAGE);
     }
 
-    public String shareToTikTok(String imagePath, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, TIKTOK_PACKAGE);
+    public String shareToTikTok(ArrayList<String> imagePaths, Context activity, String text) {
+        return shareFileAndTextToPackage(imagePaths, text, activity, TIKTOK_PACKAGE);
     }
 
-    public String shareToTwitter(String imagePath, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, TWITTER_PACKAGE);
+    public String shareToTwitter(ArrayList<String> imagePaths, Context activity, String text) {
+        return shareFileAndTextToPackage(imagePaths, text, activity, TWITTER_PACKAGE);
     }
 
-    public String shareToTelegram(String imagePath, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, TELEGRAM_PACKAGE);
+    public String shareToTelegram(ArrayList<String> imagePaths, Context activity, String text) {
+        return shareFileAndTextToPackage(imagePaths, text, activity, TELEGRAM_PACKAGE);
     }
 
 
     public String shareToMessenger(String text, Context activity) {
         Map<String, Boolean> apps = getInstalledApps(activity);
         String packageName;
-        if(apps.get("messenger")){
+        if (apps.get("messenger")) {
             packageName = FACEBOOK_MESSENGER_PACKAGE;
-        }else if(apps.get("messenger-lite")){
+        } else if (apps.get("messenger-lite")) {
             packageName = FACEBOOK_MESSENGER_LITE_PACKAGE;
-        }else{
+        } else {
             return ERROR_APP_NOT_AVAILABLE;
         }
         return shareTextToPackage(text, activity, packageName);
@@ -113,24 +113,27 @@ public class SocialShareUtil {
         }
     }
 
-    public String shareToSMS(String content, Context activity, String imagePath) {
+    public String shareToSMS(String content, Context activity, ArrayList<String> imagePaths) {
         String defaultApplication = Settings.Secure.getString(activity.getContentResolver(), SMS_DEFAULT_APPLICATION);
-        return shareFileAndTextToPackage(imagePath, content, activity, defaultApplication);
+        return shareFileAndTextToPackage(imagePaths, content, activity, defaultApplication);
     }
 
 
-    public String shareToSystem(String title, String text, String filePath, String fileType, String chooserTitle, Context activity) {
+    public String shareToSystem(String title, String text, ArrayList<String> filePaths, String fileType, String chooserTitle, Context activity) {
         try {
 
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setAction(Intent.ACTION_SEND);
-            if (filePath != null && !filePath.isEmpty()) {
-                File file = new File(filePath);
-                Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
+            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            ArrayList<Uri> files = new ArrayList<Uri>();
+            if (filePaths != null && !filePaths.isEmpty()) {
+                for (int i = 0; i < filePaths.size(); i++) {
+                    Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(filePaths.get(i)));
+                    files.add(fileUri);
+                }
                 intent.setType(fileType);
-                intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
             } else {
                 intent.setType("text/*");
             }
@@ -158,7 +161,7 @@ public class SocialShareUtil {
             shareIntent.setType("image/*");
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if(stickerImage!=null){
+            if (stickerImage != null) {
                 File file = new File(stickerImage);
                 Uri stickerImageUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
                 shareIntent.putExtra("interactive_asset_uri", stickerImageUri);
@@ -183,8 +186,9 @@ public class SocialShareUtil {
     }
 
 
-    public void shareToFacebook(String imagePath, String text, Activity activity, MethodChannel.Result result) {
-        FacebookSdk.sdkInitialize(activity.getApplicationContext());
+    public void shareToFacebook(List<String> filePaths, String text, Activity activity, MethodChannel.Result result) {
+        FacebookSdk.fullyInitialize();
+        FacebookSdk.setApplicationId(getFacebookAppId(activity));
         callbackManager = callbackManager == null ? CallbackManager.Factory.create() : callbackManager;
         ShareDialog shareDialog = new ShareDialog(activity);
         shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
@@ -205,10 +209,11 @@ public class SocialShareUtil {
                 result.success(error.getLocalizedMessage());
             }
         });
-        File file = new File(imagePath);
-        Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
         List<SharePhoto> sharePhotos = new ArrayList<>();
-        sharePhotos.add(new SharePhoto.Builder().setImageUrl(fileUri).build());
+        for (int i = 0; i < filePaths.size(); i++) {
+            Uri fileUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", new File(filePaths.get(i)));
+            sharePhotos.add(new SharePhoto.Builder().setImageUrl(fileUri).build());
+        }
         SharePhotoContent content = new SharePhotoContent.Builder()
                 .setShareHashtag(new ShareHashtag.Builder().setHashtag(text).build())
                 .setPhotos(sharePhotos)
@@ -222,11 +227,11 @@ public class SocialShareUtil {
         try {
             Map<String, Boolean> apps = getInstalledApps(activity);
             String packageName;
-            if(apps.get("facebook")){
+            if (apps.get("facebook")) {
                 packageName = FACEBOOK_PACKAGE;
-            }else if(apps.get("facebook-lite")){
+            } else if (apps.get("facebook-lite")) {
                 packageName = FACEBOOK_LITE_PACKAGE;
-            }else{
+            } else {
                 return ERROR_APP_NOT_AVAILABLE;
             }
 
@@ -237,7 +242,7 @@ public class SocialShareUtil {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("com.facebook.platform.extra.APPLICATION_ID", appId);
-            if(stickerImage!=null) {
+            if (stickerImage != null) {
                 File file = new File(stickerImage);
                 Uri stickerImageFile = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file);
                 intent.putExtra("interactive_asset_uri", stickerImageFile);
@@ -246,7 +251,7 @@ public class SocialShareUtil {
             intent.putExtra("content_url", attributionURL);
             intent.putExtra("top_background_color", backgroundTopColor);
             intent.putExtra("bottom_background_color", backgroundBottomColor);
-            if(backgroundImage!=null){
+            if (backgroundImage != null) {
                 File file1 = new File(backgroundImage);
                 Uri backgroundImageUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file1);
                 intent.setDataAndType(backgroundImageUri, getMimeTypeOfFile(backgroundImage));
@@ -283,22 +288,23 @@ public class SocialShareUtil {
     }
 
 
-    private String shareFileAndTextToPackage(String imagePath, String text, Context activity, String packageName) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-
-        if (imagePath != null) {
-            File file = new File(imagePath);
-            Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+    private String shareFileAndTextToPackage(List<String> imagePath, String text, Context activity, String packageName) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        ArrayList<Uri> files = new ArrayList<Uri>();
+        if (imagePath != null && !imagePath.isEmpty()) {
+            for (int i = 0; i < imagePath.size(); i++) {
+                Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(imagePath.get(i)));
+                files.add(fileUri);
+            }
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
         }
-
-        shareIntent.setType(imagePath == null ? "text/*" : getMimeTypeOfFile(imagePath));
+        shareIntent.setType(imagePath == null || imagePath.isEmpty() ? "text/*" : getMimeTypeOfFile(imagePath.get(0)));
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         shareIntent.setPackage(packageName);
         if (packageName.equals(INSTAGRAM_PACKAGE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            shareIntent.setComponent(ComponentName.createRelative(packageName,"com.instagram.share.handleractivity.ShareHandlerActivity")); //open instagram feed
+            shareIntent.setComponent(ComponentName.createRelative(packageName, "com.instagram.share.handleractivity.ShareHandlerActivity")); //open instagram feed
         }
         try {
             activity.startActivity(shareIntent);
@@ -332,7 +338,7 @@ public class SocialShareUtil {
         intent.setData(Uri.parse("sms:"));
         List<ResolveInfo> resolvedActivities = pm.queryIntentActivities(intent, 0);
         apps.put("message", !resolvedActivities.isEmpty());
-        String[] appNames = {"instagram", "facebook_stories", "whatsapp", "telegram", "messenger", "facebook","facebook-lite","messenger-lite", "instagram_stories", "twitter", "tiktok"};
+        String[] appNames = {"instagram", "facebook_stories", "whatsapp", "telegram", "messenger", "facebook", "facebook-lite", "messenger-lite", "instagram_stories", "twitter", "tiktok"};
 
         for (int i = 0; i < appNames.length; i++) {
             try {
@@ -346,7 +352,7 @@ public class SocialShareUtil {
     }
 
     private static String getMimeTypeOfFile(String pathName) {
-        try{
+        try {
             Path path;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 path = new File(pathName).toPath();
@@ -354,13 +360,13 @@ public class SocialShareUtil {
                 return mimeType;
             }
             return "*/*";
-        }catch (Exception e){
+        } catch (Exception e) {
             return "";
         }
     }
 
 
-    String getFacebookAppId(Context activity){
+    String getFacebookAppId(Context activity) {
         String appId = "";
         try {
             ApplicationInfo appInfo = activity.getPackageManager().getApplicationInfo(
