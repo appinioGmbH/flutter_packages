@@ -9,7 +9,7 @@ You can call `checkAppAuth` method to get the result as a boolean.
     bool? isInstalledByPlayStore = await AppAuthCheck().checkAppAuth();
     if (isInstalledByPlayStore != null) {
       setState(() {
-        showHelpOption = !isInstalledByPlayStore;
+        // do your action
       });
     }
   }
