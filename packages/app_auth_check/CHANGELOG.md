@@ -1,4 +1,4 @@
 ## 0.0.1
 
-* Feat:
+* Feature:
   - Check if the app is installed using Play Store.
