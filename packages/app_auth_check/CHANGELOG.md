@@ -1,3 +1,4 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Feat:
+  - Check if the app is installed using Play Store.
