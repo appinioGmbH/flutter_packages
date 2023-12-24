@@ -363,7 +363,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             position: _position,
             indices: List.generate(
               effectiveBackgroundCardCount,
-              (index) => (foregroundIndex + 1) % widget.cardCount,
+              (index) => (foregroundIndex + index + 1) % widget.cardCount,
             ),
             builder: widget.cardBuilder,
             scaleIncrement: _effectiveScaleIncrement,
