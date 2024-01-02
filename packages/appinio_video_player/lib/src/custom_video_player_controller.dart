@@ -25,6 +25,7 @@ extension ProtectedCustomVideoPlayerController on CustomVideoPlayerController {
 
 class CustomVideoPlayerController {
   double _lastVolume = 0.5;
+  Duration get getPosition => videoPlayerController.value.position;
   final BuildContext context;
   CachedVideoPlayerController videoPlayerController;
   final CustomVideoPlayerSettings customVideoPlayerSettings;
