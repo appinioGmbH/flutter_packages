@@ -32,6 +32,11 @@ class CustomVideoPlayerController {
   final Map<String, CachedVideoPlayerController>? additionalVideoSources;
   final ValueNotifier<bool> areControlsVisible = ValueNotifier<bool>(true);
 
+  Future<void> switchSource(String sourceKey) async{
+    assert(additionalVideoSources!=null && additionalVideoSources!.containsKey(sourceKey));
+    switchVideoSource(sourceKey);
+  }
+
   CustomVideoPlayerController({
     required this.context,
     required this.videoPlayerController,

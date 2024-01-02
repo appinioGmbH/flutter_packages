@@ -126,7 +126,7 @@ String video720 =
     "https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_10mb.mp4";
 
 String video480 =
-    "https://www.sample-videos.com/video123/mp4/480/big_buck_bunny_480p_10mb.mp4";
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
 
 String video240 =
-    "https://www.sample-videos.com/video123/mp4/240/big_buck_bunny_240p_10mb.mp4";
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
