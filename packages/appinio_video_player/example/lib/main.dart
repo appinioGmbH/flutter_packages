@@ -30,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late VideoPlayerController _videoPlayerController,
+  late CachedVideoPlayerController _videoPlayerController,
       _videoPlayerController2,
       _videoPlayerController3;
 
@@ -49,11 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _videoPlayerController = VideoPlayerController.network(
+    _videoPlayerController = CachedVideoPlayerController.network(
       longVideo,
     )..initialize().then((value) => setState(() {}));
-    _videoPlayerController2 = VideoPlayerController.network(video240);
-    _videoPlayerController3 = VideoPlayerController.network(video480);
+    _videoPlayerController2 = CachedVideoPlayerController.network(video240);
+    _videoPlayerController3 = CachedVideoPlayerController.network(video480);
     _customVideoPlayerController = CustomVideoPlayerController(
       context: context,
       videoPlayerController: _videoPlayerController,

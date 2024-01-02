@@ -3,7 +3,7 @@ import 'package:appinio_video_player/src/fullscreen_video_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_settings.dart';
 
 /// The extension on the class is able to call private methods
@@ -26,9 +26,9 @@ extension ProtectedCustomVideoPlayerController on CustomVideoPlayerController {
 class CustomVideoPlayerController {
   double _lastVolume = 0.5;
   final BuildContext context;
-  VideoPlayerController videoPlayerController;
+  CachedVideoPlayerController videoPlayerController;
   final CustomVideoPlayerSettings customVideoPlayerSettings;
-  final Map<String, VideoPlayerController>? additionalVideoSources;
+  final Map<String, CachedVideoPlayerController>? additionalVideoSources;
   final ValueNotifier<bool> areControlsVisible = ValueNotifier<bool>(true);
 
   CustomVideoPlayerController({
@@ -130,7 +130,7 @@ class CustomVideoPlayerController {
   }
 
   Future<void> _switchVideoSource(String selectedSource) async {
-    VideoPlayerController? newSource = additionalVideoSources![selectedSource];
+    CachedVideoPlayerController? newSource = additionalVideoSources![selectedSource];
     if (newSource != null) {
       Duration _playedDuration = videoPlayerController.value.position;
       double _playbackSpeed = videoPlayerController.value.playbackSpeed;
@@ -242,7 +242,7 @@ class CustomVideoPlayerController {
     videoPlayerController.dispose();
     if (additionalVideoSources != null) {
       if (additionalVideoSources!.isNotEmpty) {
-        for (MapEntry<String, VideoPlayerController> videoSource
+        for (MapEntry<String, CachedVideoPlayerController> videoSource
             in additionalVideoSources!.entries) {
           videoSource.value.dispose();
         }
