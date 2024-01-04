@@ -120,8 +120,7 @@ class _AppinioAnimatedToggleTabState extends State<AppinioAnimatedToggleTab> {
       child: Expanded(
         child: Container(
             alignment: Alignment.center,
-            width: (MediaQuery.of(context).size.width - 40) /
-                widget.tabTexts.length,
+            width: widget.width / widget.tabTexts.length,
             height: widget.height,
             child: Text(
               title,
