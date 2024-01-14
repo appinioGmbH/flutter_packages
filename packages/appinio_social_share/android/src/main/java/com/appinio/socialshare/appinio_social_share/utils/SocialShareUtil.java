@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.provider.Telephony;
 
 import androidx.core.content.FileProvider;
 
@@ -114,7 +115,12 @@ public class SocialShareUtil {
     }
 
     public String shareToSMS(String content, Context activity, ArrayList<String> imagePaths) {
-        String defaultApplication = Settings.Secure.getString(activity.getContentResolver(), SMS_DEFAULT_APPLICATION);
+        String defaultApplication;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            defaultApplication = Telephony.Sms.getDefaultSmsPackage(activity);
+        } else {
+            defaultApplication = Settings.Secure.getString(activity.getContentResolver(), SMS_DEFAULT_APPLICATION);
+        }
         return shareFileAndTextToPackage(imagePaths, content, activity, defaultApplication);
     }
 
