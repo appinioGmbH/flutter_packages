@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:appinio_swiper/types.dart';
 import 'package:flutter/material.dart';
@@ -317,7 +318,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       // cause of newActivity.animation.dispose(); down in the code and it sayed
       // that the animation was already disposed. so try catch is ugly but should
       // work
-      log('Appinio Error: $e');
+      dev.log('Appinio Error: $e');
     }
     super.dispose();
   }
