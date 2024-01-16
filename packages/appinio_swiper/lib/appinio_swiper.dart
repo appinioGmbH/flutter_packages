@@ -310,6 +310,17 @@ class _AppinioSwiperState extends State<AppinioSwiper>
   void dispose() {
     widget.controller?.dispose();
     widget.controller?._detach();
+    try {
+      _swipeActivity?.animation.dispose();
+    } catch (e) {
+      // I had with quick reload a problem cant reproduce ther error but it was 
+      // cause of newActivity.animation.dispose(); down in the code and it sayed
+      // that the animation was already disposed. so try catch is ugly but should
+      // work
+      log('Appinio Error: $e');
+    }
+    super.dispose();
+  }
     _swipeActivity?.animation.dispose();
     super.dispose();
   }
