@@ -1,3 +1,4 @@
+import 'package:appinio_video_player/src/controls/mute_button.dart';
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
@@ -26,6 +27,12 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
           .customVideoPlayerSettings.controlBarDecoration,
       child: Row(
         children: [
+          if (customVideoPlayerController
+              .customVideoPlayerSettings.showMuteButton)
+            CustomVideoPlayerMuteButton(
+              customVideoPlayerController: customVideoPlayerController,
+              fadeOutOnPlay: fadeOutOnPlay,
+            ),
           if (customVideoPlayerController
               .customVideoPlayerSettings.showPlayButton)
             CustomVideoPlayerPlayPauseButton(

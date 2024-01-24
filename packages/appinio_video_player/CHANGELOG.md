@@ -1,3 +1,10 @@
+## [1.3.0] - 2024.01.24
+
+- Feat: Cache Network Videos
+- Feat: Mute or Change volume with swiping on right side of screen.
+- Feat: Hide Picture in Picture Mode
+- Many other Bug Fixes
+
 ## [1.2.2] - 2023.08.23
 
 - Feat: Jump forward and backward like youtube.

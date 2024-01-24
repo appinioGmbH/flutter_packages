@@ -2,8 +2,9 @@ import 'package:appinio_video_player/src/controls/all_controls_overlay.dart';
 import 'package:appinio_video_player/src/custom_video_player_controller.dart';
 import 'package:appinio_video_player/src/seek_buttons.dart';
 import 'package:appinio_video_player/src/thumbnail.dart';
+import 'package:appinio_video_player/src/volume_control.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:video_player/video_player.dart';
+import 'package:cached_video_player/cached_video_player.dart';
 
 class EmbeddedVideoPlayer extends StatefulWidget {
   final CustomVideoPlayerController customVideoPlayerController;
@@ -52,7 +53,7 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
                 aspectRatio: widget.customVideoPlayerController
                     .videoPlayerController.value.aspectRatio,
                 child: IgnorePointer(
-                  child: VideoPlayer(
+                  child: CachedVideoPlayer(
                     widget.customVideoPlayerController.videoPlayerController,
                   ),
                 ),
@@ -69,7 +70,10 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
                 .showSeekButtons)
               SeekButtons(
                 customVideoPlayerController: widget.customVideoPlayerController,
-              )
+              ),
+            VolumeControls(
+              customVideoPlayerController: widget.customVideoPlayerController,
+            ),
           ],
         ),
       );

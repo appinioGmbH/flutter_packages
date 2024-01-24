@@ -56,7 +56,11 @@ class _NativeWebVideoPlayerState extends State<NativeWebVideoPlayer> {
       if (_videoPlayerSettings.thumbnailPath != null) {
         _video.poster = _videoPlayerSettings.thumbnailPath!;
       }
-
+      _video.setAttribute(
+        'disablePictureInPicture',
+        widget.customVideoPlayerWebController.webVideoPlayerSettings
+            .disablePictureInPicture,
+      );
       if (_videoPlayerSettings.hideDownloadButton) {
         _video.setAttribute('controlsList', 'nodownload');
       }
