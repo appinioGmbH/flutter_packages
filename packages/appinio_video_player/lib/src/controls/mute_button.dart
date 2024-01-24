@@ -12,10 +12,12 @@ class CustomVideoPlayerMuteButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CustomVideoPlayerMuteButton> createState() => _CustomVideoPlayerMuteButtonState();
+  State<CustomVideoPlayerMuteButton> createState() =>
+      _CustomVideoPlayerMuteButtonState();
 }
 
-class _CustomVideoPlayerMuteButtonState extends State<CustomVideoPlayerMuteButton> {
+class _CustomVideoPlayerMuteButtonState
+    extends State<CustomVideoPlayerMuteButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

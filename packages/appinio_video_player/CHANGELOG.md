@@ -1,4 +1,5 @@
-## [1.3.0] - 2024.01.23
+## [1.3.0] - 2024.01.24
+
 - Feat: Cache Network Videos
 - Feat: Mute or Change volume with swiping on right side of screen.
 - Feat: Hide Picture in Picture Mode

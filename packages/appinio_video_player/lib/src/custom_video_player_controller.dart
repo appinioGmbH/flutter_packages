@@ -32,8 +32,9 @@ class CustomVideoPlayerController {
   final Map<String, CachedVideoPlayerController>? additionalVideoSources;
   final ValueNotifier<bool> areControlsVisible = ValueNotifier<bool>(true);
 
-  Future<void> switchSource(String sourceKey) async{
-    assert(additionalVideoSources!=null && additionalVideoSources!.containsKey(sourceKey));
+  Future<void> switchSource(String sourceKey) async {
+    assert(additionalVideoSources != null &&
+        additionalVideoSources!.containsKey(sourceKey));
     switchVideoSource(sourceKey);
   }
 
@@ -136,7 +137,8 @@ class CustomVideoPlayerController {
   }
 
   Future<void> _switchVideoSource(String selectedSource) async {
-    CachedVideoPlayerController? newSource = additionalVideoSources![selectedSource];
+    CachedVideoPlayerController? newSource =
+        additionalVideoSources![selectedSource];
     if (newSource != null) {
       Duration _playedDuration = videoPlayerController.value.position;
       double _playbackSpeed = videoPlayerController.value.playbackSpeed;
