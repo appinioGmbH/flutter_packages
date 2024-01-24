@@ -1,3 +1,7 @@
+## [1.0.3] - 2024.01.25
+
+* Added initial index for AppinioAnimatedToggleTab.
+
 ## [1.0.2] - 2022.09.25
 
 * Updating Readme.

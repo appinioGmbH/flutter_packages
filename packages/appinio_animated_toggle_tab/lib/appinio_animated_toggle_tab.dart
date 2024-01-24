@@ -1,6 +1,6 @@
 library appinio_animated_toggle_tab;
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class AppinioAnimatedToggleTab extends StatefulWidget {
   /// function(int) for call back and control the view of tabs
@@ -33,6 +33,8 @@ class AppinioAnimatedToggleTab extends StatefulWidget {
   /// animation duration for the toggling
   final Duration duration;
 
+  final int initialIndex;
+
   const AppinioAnimatedToggleTab({
     Key? key,
     required this.callback,
@@ -45,6 +47,7 @@ class AppinioAnimatedToggleTab extends StatefulWidget {
     required this.width,
     this.offset = 0.02,
     this.duration = const Duration(milliseconds: 300),
+    this.initialIndex = 0,
   }) : super(key: key);
 
   @override
@@ -52,7 +55,16 @@ class AppinioAnimatedToggleTab extends StatefulWidget {
 }
 
 class _AppinioAnimatedToggleTabState extends State<AppinioAnimatedToggleTab> {
-  int index = 0;
+  late int index;
+
+  _AppinioAnimatedToggleTabState() : super();
+
+  @override
+  void initState() {
+    super.initState();
+
+    index = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +81,7 @@ class _AppinioAnimatedToggleTabState extends State<AppinioAnimatedToggleTab> {
               0),
           duration: widget.duration,
           child: Container(
-            width: (widget.width / 3),
+            width: (widget.width / widget.tabTexts.length),
             height: widget.height * 0.9,
             decoration: widget.animatedBoxDecoration,
           ),
@@ -105,15 +117,16 @@ class _AppinioAnimatedToggleTabState extends State<AppinioAnimatedToggleTab> {
           widget.callback(i);
         });
       },
-      child: Container(
-        alignment: Alignment.center,
-        width: widget.width / widget.tabTexts.length,
-        height: widget.height,
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: style,
-        ),
+      child: Expanded(
+        child: Container(
+            alignment: Alignment.center,
+            width: widget.width / widget.tabTexts.length,
+            height: widget.height,
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: style,
+            )),
       ),
     );
   }
