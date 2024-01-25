@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
     package="com.example.example">
    <application
         android:label="example"
@@ -31,4 +32,24 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+<queries>
+    <!-- Explicit apps you know in advance about: -->
+          
+    <package android:name="com.instagram.android" />
+    <package android:name="com.zhiliaoapp.musically" />
+    <package android:name="com.facebook.katana" />
+    <package android:name="com.facebook.orca" />
+    <package android:name="org.telegram.messenger" />
+    <package android:name="com.whatsapp" />
+    <package android:name="com.twitter.android" />
+  
+    <provider android:authorities="com.facebook.katana.provider.PlatformProvider" /> <!-- allows app to access Facebook app features -->
+    <provider android:authorities="com.facebook.orca.provider.PlatformProvider" /> <!-- allows sharing to Messenger app -->
+</queries>
+
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>
