@@ -6,10 +6,13 @@ enum TimerState {
   pause,
   resume,
   stop,
-  reset,
 }
 
 class TimerCountdownController extends ValueNotifier<TimerState> {
+  /// Handle the timer countdown functionality.
+  /// Eg. start, pause, resume, stop, reset.
+  ///
+  /// The [duration] is the total time of the countdown.
   TimerCountdownController({
     required final Duration duration,
   })  : _duration = duration,
@@ -19,8 +22,15 @@ class TimerCountdownController extends ValueNotifier<TimerState> {
   Duration get duration => _duration;
 
   /// Starts the timer.
+  ///
+  /// Restarts the timer if it was already started.
   void start() {
     value = TimerState.start;
+  }
+
+  /// Stops the timer.
+  void stop() {
+    value = TimerState.stop;
   }
 
   /// Pauses the timer.
@@ -31,15 +41,5 @@ class TimerCountdownController extends ValueNotifier<TimerState> {
   /// Resumes the timer.
   void resume() {
     value = TimerState.resume;
-  }
-
-  /// Stops the timer.
-  void stop() {
-    value = TimerState.stop;
-  }
-
-  /// Resets the timer.
-  void reset() {
-    value = TimerState.reset;
   }
 }

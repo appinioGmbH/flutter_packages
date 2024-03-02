@@ -88,11 +88,14 @@ class _TimerCountdownState extends State<TimerCountdown> {
   late String countdownMinutes;
   late String countdownSeconds;
 
+  late Duration durationRemaining;
+
   @override
   void initState() {
     super.initState();
 
     // initialize the UI values with the total duration
+    durationRemaining = widget.controller.duration;
     countdownDays = _durationToStringDays(widget.controller.duration);
     countdownHours = _durationToStringHours(widget.controller.duration);
     countdownMinutes = _durationToStringMinutes(widget.controller.duration);
@@ -104,6 +107,10 @@ class _TimerCountdownState extends State<TimerCountdown> {
         _startTimer();
       } else if (widget.controller.value == TimerState.stop) {
         _stopTimer();
+      } else if (widget.controller.value == TimerState.pause) {
+        _pauseTimer();
+      } else if (widget.controller.value == TimerState.resume) {
+        _resumeTimer();
       }
     });
   }
@@ -116,7 +123,11 @@ class _TimerCountdownState extends State<TimerCountdown> {
 
   /// Creates a periodic `Timer` which updates all fields every second depending on the time difference which is getting smaller.
   /// When this difference reached `Duration.zero` the `Timer` is stopped and the [onEnd] callback is invoked.
-  void _startTimer() {
+  ///
+  /// If resume is `true`, the timer will continue from the [durationRemaining] without resetting it to total duration.
+  void _startTimer({
+    final bool resume = false,
+  }) {
     final totalDuration = widget.controller.duration;
 
     if (totalDuration == Duration.zero) {
@@ -124,7 +135,11 @@ class _TimerCountdownState extends State<TimerCountdown> {
         widget.onEnd!();
       }
     } else {
-      var durationRemaining = totalDuration;
+      if (!resume) {
+        // only resetting the remaining time to totalDuration if the timer is not resumed
+        durationRemaining = totalDuration;
+      }
+
       timer = Timer.periodic(Duration(seconds: 1), (timer) {
         durationRemaining = durationRemaining - Duration(seconds: 1);
         widget.onTick?.call(durationRemaining);
@@ -146,9 +161,28 @@ class _TimerCountdownState extends State<TimerCountdown> {
     }
   }
 
+  /// Stops the timer and resets the [durationRemaining] to the total duration.
   void _stopTimer() {
     timer?.cancel();
     timer = null;
+
+    durationRemaining = widget.controller.duration;
+  }
+
+  /// Pauses the timer.
+  ///
+  /// Pause is just a stop function but without resetting the remaining time to the total duration.
+  /// i.e the [durationRemaining] is preserved.
+  void _pauseTimer() {
+    timer?.cancel();
+    timer = null;
+  }
+
+  /// Resumes the timer.
+  ///
+  /// Resume is just a start function but with out resetting [durationRemaining] to the total duration.
+  void _resumeTimer() {
+    _startTimer(resume: true);
   }
 
   @override

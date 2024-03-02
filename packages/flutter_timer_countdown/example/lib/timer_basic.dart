@@ -35,6 +35,25 @@ class _TimerBasicState extends State<TimerBasic> {
       ),
     );
     _controller.start();
+
+    Future.delayed(const Duration(seconds: 5), () {
+      _controller.pause();
+    });
+    Future.delayed(const Duration(seconds: 10), () {
+      _controller.resume();
+    });
+    Future.delayed(const Duration(seconds: 15), () {
+      _controller.pause();
+    });
+    Future.delayed(const Duration(seconds: 20), () {
+      _controller.resume();
+    });
+    Future.delayed(const Duration(seconds: 25), () {
+      _controller.stop();
+    });
+    Future.delayed(const Duration(seconds: 30), () {
+      _controller.start();
+    });
   }
 
   @override
