@@ -4,8 +4,9 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:example/timer_frame.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:flutter_timer_countdown/timer_countdown_controller.dart';
 
-class TimerBasic extends StatelessWidget {
+class TimerBasic extends StatefulWidget {
   final CountDownTimerFormat format;
   final bool inverted;
 
@@ -16,22 +17,42 @@ class TimerBasic extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<TimerBasic> createState() => _TimerBasicState();
+}
+
+class _TimerBasicState extends State<TimerBasic> {
+  late TimerCountdownController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TimerCountdownController(
+      duration: const Duration(
+        days: 15,
+        hours: 20,
+        minutes: 47,
+        seconds: 45,
+      ),
+    );
+    _controller.start();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TimerCountdown(
-      format: format,
-      endTime: DateTime.now().add(
-        Duration(
-          days: 15,
-          hours: 20,
-          minutes: 47,
-          seconds: 45,
-        ),
-      ),
+      format: widget.format,
+      controller: _controller,
       onEnd: () {
         print("Timer finished");
       },
       timeTextStyle: TextStyle(
-        color: (inverted) ? purple : CupertinoColors.white,
+        color: (widget.inverted) ? purple : CupertinoColors.white,
         fontWeight: FontWeight.w300,
         fontSize: 40,
         fontFeatures: <FontFeature>[
@@ -39,7 +60,7 @@ class TimerBasic extends StatelessWidget {
         ],
       ),
       colonsTextStyle: TextStyle(
-        color: (inverted) ? purple : CupertinoColors.white,
+        color: (widget.inverted) ? purple : CupertinoColors.white,
         fontWeight: FontWeight.w300,
         fontSize: 40,
         fontFeatures: <FontFeature>[
@@ -47,7 +68,7 @@ class TimerBasic extends StatelessWidget {
         ],
       ),
       descriptionTextStyle: TextStyle(
-        color: (inverted) ? purple : CupertinoColors.white,
+        color: (widget.inverted) ? purple : CupertinoColors.white,
         fontSize: 10,
         fontFeatures: <FontFeature>[
           FontFeature.tabularFigures(),
