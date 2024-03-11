@@ -1,3 +1,7 @@
+## [0.0.4] - 2024.03.07
+
+- Added `closeFullScreenImageOnDispose` option to `WidgetZoom`.
+
 ## [0.0.3] - 2023.12.21
 
 - Updated readme.
