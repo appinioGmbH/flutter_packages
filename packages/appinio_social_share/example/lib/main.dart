@@ -41,6 +41,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   shareToWhatsApp(String message, List<String> filePaths) async {
-    await appinioSocialShare.android.shareToSMS(message, filePaths: filePaths);
+    // await appinioSocialShare.android.shareToSMS(message, filePaths: filePaths);
   }
 }

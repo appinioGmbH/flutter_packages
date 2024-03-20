@@ -45,6 +45,10 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
+  Future<String> shareToInstagramFeedAndroid(String message, String? filePath) {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
   Future<String> shareToMessenger(String message) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
@@ -106,6 +110,52 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
   Future<String> shareToSMS(String message, {List<String>? filePaths}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  Future<String> shareToWhatsappAndroid(
+      String message, String? filePath) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToWhatsappAndroidMultiFiles(
+      List<String> filePaths) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToTelegramAndroid(
+      String message, String? filePath) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToTelegramAndroidMultiFiles(
+      List<String> filePaths) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToTwitterAndroid(String message, String? filePath) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToTwitterAndroidMultifiles(List<String> filePaths) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToSMSAndroid(String message, String? filePath) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToSMSAndroidMultifiles(List<String> filePaths) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToSystemAndroid(
+      String title, String message, String? filePath) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String> shareToSystemAndroidMultifiles(
+      String title, List<String> filePaths) async {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
 }
 
 enum TiktokFileType {
@@ -113,5 +163,6 @@ enum TiktokFileType {
   video("video");
 
   final String value;
+
   const TiktokFileType(this.value);
 }

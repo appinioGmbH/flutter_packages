@@ -14,13 +14,24 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   final String messenger = "messenger";
   final String facebookStories = "facebook_stories";
   final String whatsapp = "whatsapp";
+  final String whatsapp_android = "whatsapp_android";
+  final String whatsapp_android_multifiles = "whatsapp_android_multifiles";
   final String twitter = "twitter";
+  final String twitter_android = "twitter_android";
+  final String twitter_android_multifiles = "twitter_android_multifiles";
   final String sms = "sms";
+  final String sms_android = "sms_android";
+  final String sms_android_multifiles = "sms_android_multifiles";
   final String tiktokStatus = "tiktok_status";
   final String tiktokPost = "tiktok_post";
   final String systemShare = "system_share";
+  final String system_share_android = "system_share_android";
+  final String system_share_android_multifiles =
+      "system_share_android_multifiles";
   final String copyToClipboard = "copy_to_clipboard";
   final String telegram = "telegram";
+  final String telegram_android = "telegram_android";
+  final String telegram_android_multifiles = "telegram_android_multifiles";
   final String installedApps = "installed_apps";
 
   /// The method channel used to interact with the native platform.
@@ -68,6 +79,20 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
+  Future<String> shareToTwitterAndroid(String message, String? filePath) async {
+    return ((await methodChannel.invokeMethod<String>(
+            twitter_android, {"imagePath": filePath, "message": message})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToTwitterAndroidMultifiles(List<String> filePaths) async {
+    return ((await methodChannel.invokeMethod<String>(
+            twitter_android_multifiles, {"imagePaths": filePaths})) ??
+        "");
+  }
+
+  @override
   Future<String> shareToTelegram(String message,
       {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(
@@ -75,6 +100,27 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
         "");
   }
 
+  @override
+  Future<String> shareToTelegramAndroid(
+      String message, String? filePath) async {
+    return ((await methodChannel.invokeMethod<String>(telegram_android, {
+          "imagePath": filePath,
+          "message": message,
+        })) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToTelegramAndroidMultiFiles(
+      List<String> filePaths) async {
+    return ((await methodChannel
+            .invokeMethod<String>(telegram_android_multifiles, {
+          "imagePaths": filePaths,
+        })) ??
+        "");
+  }
+
+  ///for iOS only
   @override
   Future<String> shareToWhatsapp(String message,
       {List<String>? filePaths}) async {
@@ -84,9 +130,39 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
+  Future<String> shareToWhatsappAndroid(
+      String message, String? filePath) async {
+    return ((await methodChannel.invokeMethod<String>(
+            whatsapp_android, {"imagePath": filePath, "message": message})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToWhatsappAndroidMultiFiles(
+      List<String> filePaths) async {
+    return ((await methodChannel.invokeMethod<String>(
+            whatsapp_android_multifiles, {"imagePaths": filePaths})) ??
+        "");
+  }
+
+  @override
   Future<String> shareToSMS(String message, {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(
             sms, {"message": message, "imagePaths": filePaths})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToSMSAndroid(String message, String? filePath) async {
+    return ((await methodChannel.invokeMethod<String>(
+            sms_android, {"message": message, "imagePath": filePath})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToSMSAndroidMultifiles(List<String> filePaths) async {
+    return ((await methodChannel.invokeMethod<String>(
+            sms_android_multifiles, {"imagePaths": filePaths})) ??
         "");
   }
 
@@ -102,6 +178,23 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
       {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(systemShare,
             {"message": message, "title": title, "imagePaths": filePaths})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToSystemAndroid(
+      String title, String message, String? filePath) async {
+    return ((await methodChannel.invokeMethod<String>(system_share_android,
+            {"message": message, "title": title, "imagePath": filePath})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToSystemAndroidMultifiles(
+      String title, List<String> filePaths) async {
+    return ((await methodChannel.invokeMethod<String>(
+            system_Share_android_multifiles,
+            {"title": title, "imagePaths": filePaths})) ??
         "");
   }
 

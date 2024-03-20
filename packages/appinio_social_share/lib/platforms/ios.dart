@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:appinio_social_share/appinio_social_share_platform_interface.dart';
 
 class IOS {
@@ -49,11 +47,11 @@ class IOS {
 
   Future<String> shareToInstagramStory(String appId,
       {String? stickerImage,
-        String? backgroundImage,
-        String? backgroundVideo,
-        String? backgroundTopColor,
-        String? backgroundBottomColor,
-        String? attributionURL}) {
+      String? backgroundImage,
+      String? backgroundVideo,
+      String? backgroundTopColor,
+      String? backgroundBottomColor,
+      String? attributionURL}) {
     return AppinioSocialSharePlatform.instance.shareToInstagramStory(appId,
         stickerImage: stickerImage,
         backgroundImage: backgroundImage,
@@ -65,11 +63,11 @@ class IOS {
 
   Future<String> shareToFacebookStory(String appId,
       {String? stickerImage,
-        String? backgroundImage,
-        String? backgroundVideo,
-        String? backgroundTopColor,
-        String? backgroundBottomColor,
-        String? attributionURL}) {
+      String? backgroundImage,
+      String? backgroundVideo,
+      String? backgroundTopColor,
+      String? backgroundBottomColor,
+      String? attributionURL}) {
     return AppinioSocialSharePlatform.instance.shareToFacebookStory(appId,
         stickerImage: stickerImage,
         backgroundImage: backgroundImage,
@@ -79,15 +77,8 @@ class IOS {
         attributionURL: attributionURL);
   }
 
-  ///works only for android
-  Future<String> shareToTiktokStatus(List<String> filePaths) {
-    if (Platform.isIOS) return Future.value("Not implemented!");
-    return AppinioSocialSharePlatform.instance.shareToTiktokStatus(filePaths);
-  }
-
   Future<String> shareToTiktokPost(
       String videoFile, String redirectUrl, TiktokFileType tiktokFileType) {
-    if (Platform.isAndroid) return shareToTiktokStatus([videoFile]);
     return AppinioSocialSharePlatform.instance
         .shareToTiktokPost(videoFile, redirectUrl, tiktokFileType);
   }
