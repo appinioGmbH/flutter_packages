@@ -193,7 +193,7 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   Future<String> shareToSystemAndroidMultifiles(
       String title, List<String> filePaths) async {
     return ((await methodChannel.invokeMethod<String>(
-            system_Share_android_multifiles,
+            system_share_android_multifiles,
             {"title": title, "imagePaths": filePaths})) ??
         "");
   }
