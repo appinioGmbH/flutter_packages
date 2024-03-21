@@ -1,10 +1,6 @@
 import 'package:appinio_social_share/appinio_social_share_platform_interface.dart';
 
 class IOS {
-  Future<Map> getInstalledApps() async {
-    return AppinioSocialSharePlatform.instance.getInstalledApps();
-  }
-
   Future<String> shareToWhatsapp(String message, {List<String>? filePaths}) {
     return AppinioSocialSharePlatform.instance
         .shareToWhatsapp(message, filePaths: filePaths);
