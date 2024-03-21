@@ -96,7 +96,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
             case INSTAGRAM_FEED:
                 return socialShareUtil.shareToInstagramFeed(imagePath, message, activeContext, message);
             case INSTAGRAM_FEED_FILES:
-                return socialShareUtil.shareToInstagramFeedFiles(imagePaths, activeContext, message);
+                return socialShareUtil.shareToInstagramFeedFiles(imagePaths, activeContext,message);
             case INSTAGRAM_STORIES:
                 return socialShareUtil.shareToInstagramStory(appId, stickerImage, backgroundImage, backgroundTopColor, backgroundBottomColor, attributionURL, activeContext);
             case FACEBOOK_STORIES:
