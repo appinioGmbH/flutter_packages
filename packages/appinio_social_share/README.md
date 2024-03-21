@@ -88,7 +88,7 @@ Add these permissions and queries to your AndroidManifest.xml
 </manifest>
 ```
 
-##NOTE: 
+## NOTE: 
 
 MANAGE_EXTERNAL_STORAGE requires additional permissions from google. So do not add it if you are not planning to access external storage.
 Check this for more info. https://support.google.com/googleplay/android-developer/answer/10467955?hl=en
