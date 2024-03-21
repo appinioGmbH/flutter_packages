@@ -28,7 +28,7 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<Map> getInstalledApps() {
+  Future<Map<String, bool>> getInstalledApps() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 

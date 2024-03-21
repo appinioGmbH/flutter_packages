@@ -40,7 +40,7 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   final methodChannel = const MethodChannel('appinio_social_share');
 
   @override
-  Future<Map> getInstalledApps() async {
+  Future<Map<String, bool>> getInstalledApps() async {
     return await methodChannel.invokeMethod(installedApps);
   }
 
@@ -215,8 +215,9 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
 
   @override
   Future<String> shareToInstagramFeedAndroid(List<String> filePaths) async {
-    return ((await methodChannel.invokeMethod<String>(
-            instagramFeedFiles, {"imagePaths": filePaths,})) ??
+    return ((await methodChannel.invokeMethod<String>(instagramFeedFiles, {
+          "imagePaths": filePaths,
+        })) ??
         "");
   }
 

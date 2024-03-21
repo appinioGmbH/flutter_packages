@@ -6,7 +6,7 @@ class AppinioSocialShare {
   Android android = Android();
   IOS iOS = IOS();
 
-  Future<Map> getInstalledApps() async {
+  Future<Map<String, bool>> getInstalledApps() async {
     return AppinioSocialSharePlatform.instance.getInstalledApps();
   }
 }
