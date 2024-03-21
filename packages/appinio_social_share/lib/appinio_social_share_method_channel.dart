@@ -9,6 +9,7 @@ import 'appinio_social_share_platform_interface.dart';
 class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   final String instagramDirect = "instagram_direct";
   final String instagramFeed = "instagram_post";
+  final String instagramFeedFiles = "instagram_post_files";
   final String instagramStories = "instagram_stories";
   final String facebook = "facebook";
   final String messenger = "messenger";
@@ -206,9 +207,16 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToInstagramFeed(List<String> filePaths) async {
+  Future<String> shareToInstagramFeed(String message, String? filePath) async {
     return ((await methodChannel.invokeMethod<String>(
-            instagramFeed, {"imagePaths": filePaths, "message": ""})) ??
+            instagramFeed, {"imagePath": filePath, "message": message})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareToInstagramFeedAndroid(List<String> filePaths) async {
+    return ((await methodChannel.invokeMethod<String>(
+            instagramFeedFiles, {"imagePaths": filePaths,})) ??
         "");
   }
 

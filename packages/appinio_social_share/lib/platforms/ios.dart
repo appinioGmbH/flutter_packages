@@ -24,12 +24,14 @@ class IOS {
     return AppinioSocialSharePlatform.instance.shareToInstagramDirect(message);
   }
 
-  Future<String> shareToInstagramFeed(List<String> imagePaths) {
-    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(imagePaths);
+  Future<String> shareToInstagramFeed(String imagePaths) {
+    return AppinioSocialSharePlatform.instance
+        .shareToInstagramFeed("", imagePaths);
   }
 
-  Future<String> shareToInstagramReels(List<String> videoPaths) {
-    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(videoPaths);
+  Future<String> shareToInstagramReels(String videoPaths) {
+    return AppinioSocialSharePlatform.instance
+        .shareToInstagramFeed("", videoPaths);
   }
 
   Future<String> shareToMessenger(String message) {

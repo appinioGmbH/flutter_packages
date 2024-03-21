@@ -41,15 +41,15 @@ class Android {
 
   Future<String> shareToInstagramFeed(String message, String? filePath) {
     return AppinioSocialSharePlatform.instance
-        .shareToInstagramFeedAndroid(message, filePath);
+        .shareToInstagramFeed(message, filePath);
   }
 
   Future<String> shareFilesToInstagramFeed(List<String> imagePaths) {
-    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(imagePaths);
+    return AppinioSocialSharePlatform.instance.shareToInstagramFeedAndroid(imagePaths);
   }
 
   Future<String> shareToInstagramReels(List<String> videoPaths) {
-    return AppinioSocialSharePlatform.instance.shareToInstagramFeed(videoPaths);
+    return AppinioSocialSharePlatform.instance.shareToInstagramFeedAndroid(videoPaths);
   }
 
   Future<String> shareToMessenger(String message) {
