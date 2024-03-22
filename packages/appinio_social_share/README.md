@@ -88,6 +88,12 @@ Add these permissions and queries to your AndroidManifest.xml
 </manifest>
 ```
 
+## NOTE: 
+
+MANAGE_EXTERNAL_STORAGE requires additional permissions from google. So do not add it if you are not planning to access external storage.
+Check this for more info. https://support.google.com/googleplay/android-developer/answer/10467955?hl=en
+
+
 Create xml folder and add a provider path file to it (for example: provider_paths_app.xml) in android/app/src/main/res and 
 add the lines below to the created xml file
 
