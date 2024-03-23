@@ -102,6 +102,7 @@ class TabsViewer extends StatelessWidget {
 | animatedBoxDecoration | - | the decoration of animated box used to toggle | true
 | activeStyle | - | style of text when active | true
 | inactiveStyle | - | style of text when inactive | true
+| initialIndex | 0 | initial tabbar index | false
 
 
 <hr/>

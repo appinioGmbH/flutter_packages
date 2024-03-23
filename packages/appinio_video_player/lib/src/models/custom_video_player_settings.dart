@@ -12,6 +12,12 @@ class CustomVideoPlayerSettings {
   /// Define a custom aspect ratio for the video.
   final double? customAspectRatio;
 
+  /// Show or hide mute button
+  final bool showMuteButton;
+
+  /// Allow volume change on sliding right part of screen
+  final bool? allowVolumeOnSlide;
+
   /// Define a custom aspect ratio for the video.
   final Duration seekDuration;
 
@@ -117,6 +123,8 @@ class CustomVideoPlayerSettings {
   final CustomVideoPlayerPopupSettings customVideoPlayerPopupSettings;
 
   const CustomVideoPlayerSettings({
+    this.showMuteButton = true,
+    this.allowVolumeOnSlide = true,
     this.customAspectRatio,
     this.placeholderWidget,
     this.thumbnailWidget,

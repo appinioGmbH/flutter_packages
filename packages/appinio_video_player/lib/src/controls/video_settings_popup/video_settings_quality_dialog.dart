@@ -60,7 +60,7 @@ class _VideoSettingsQualityDialogState
                 padding: const EdgeInsets.all(0),
                 shrinkWrap: true,
                 children: [
-                  for (MapEntry<String, VideoPlayerController> videoSource
+                  for (MapEntry<String, CachedVideoPlayerController> videoSource
                       in widget.customVideoPlayerController
                           .additionalVideoSources!.entries)
                     VideoSettingsDialogItem(

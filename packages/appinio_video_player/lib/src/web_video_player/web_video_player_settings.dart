@@ -25,6 +25,9 @@ class CustomVideoPlayerWebSettings {
   /// set if video should enter fullscreen on start
   final bool enterFullscreenOnStart;
 
+  /// It will disable PIP Mode
+  final bool disablePictureInPicture;
+
   /// set if video should exit fullscreen on end
   final bool exitFullscreenOnEnd;
 
@@ -49,6 +52,7 @@ class CustomVideoPlayerWebSettings {
     this.exitFullscreenOnEnd = false,
     this.preventSeeking = false,
     this.hideDownloadButton = false,
+    this.disablePictureInPicture = false,
     this.thumbnailPath,
   });
 }

@@ -30,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late VideoPlayerController _videoPlayerController,
+  late CachedVideoPlayerController _videoPlayerController,
       _videoPlayerController2,
       _videoPlayerController3;
 
@@ -49,11 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _videoPlayerController = VideoPlayerController.network(
+    _videoPlayerController = CachedVideoPlayerController.network(
       longVideo,
     )..initialize().then((value) => setState(() {}));
-    _videoPlayerController2 = VideoPlayerController.network(video240);
-    _videoPlayerController3 = VideoPlayerController.network(video480);
+    _videoPlayerController2 = CachedVideoPlayerController.network(video240);
+    _videoPlayerController3 = CachedVideoPlayerController.network(video480);
     _customVideoPlayerController = CustomVideoPlayerController(
       context: context,
       videoPlayerController: _videoPlayerController,
@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       child: SafeArea(
         child: ListView(
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             kIsWeb
                 ? Expanded(
@@ -125,7 +126,7 @@ String video720 =
     "https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_10mb.mp4";
 
 String video480 =
-    "https://www.sample-videos.com/video123/mp4/480/big_buck_bunny_480p_10mb.mp4";
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
 
 String video240 =
-    "https://www.sample-videos.com/video123/mp4/240/big_buck_bunny_240p_10mb.mp4";
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";

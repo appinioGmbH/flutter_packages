@@ -6,6 +6,10 @@ This package wraps the official video_player package by flutter and extends it w
 
 ## Top Features
 
+-  [ NEW ] Change voluming with swiping on right side of screen.
+-  [ NEW ] Mute/Unmute video
+-  [ NEW ] Hide Picture in Picture Mode on Web
+-  [ NEW ] Cache Network Video
 - Seek forward and backward
 - Fullscreen Mode
 - Native controls and fullscreen for web apps

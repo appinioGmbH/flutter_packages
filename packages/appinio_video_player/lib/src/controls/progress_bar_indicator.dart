@@ -105,8 +105,7 @@ class _WidgetSizeState extends State<WidgetSize> {
 
   void postFrameCallback(_) {
     BuildContext? context = widgetKey.currentContext;
-    if (context == null) return;
-
+    if (context == null || context.size == null) return;
     Size newSize = context.size!;
     if (oldSize == newSize) return;
 

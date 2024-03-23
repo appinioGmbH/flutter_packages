@@ -22,6 +22,10 @@ class WidgetZoom extends StatefulWidget {
 
   /// provide custom hero animation tag and make sure every [WidgetZoom] in your subtree uses a different tag. otherwise the animation doesnt work
   final Object heroAnimationTag;
+
+  /// Controls whether the full screen image will be closed once the widget is disposed.
+  final bool closeFullScreenImageOnDispose;
+
   const WidgetZoom({
     Key? key,
     this.minScaleEmbeddedView = 1,
@@ -29,6 +33,7 @@ class WidgetZoom extends StatefulWidget {
     this.minScaleFullscreen = 1,
     this.maxScaleFullscreen = 4,
     this.fullScreenDoubleTapZoomScale,
+    this.closeFullScreenImageOnDispose = false,
     required this.heroAnimationTag,
     required this.zoomWidget,
   }) : super(key: key);
@@ -46,6 +51,9 @@ class _WidgetZoomState extends State<WidgetZoom>
   Animation<Matrix4>? _animation;
   OverlayEntry? _entry;
   Duration _opcaityBackgroundDuration = Duration.zero;
+  bool _isFullScreenImageOpened = false;
+
+  late NavigatorState _rootNavigator;
 
   @override
   void initState() {
@@ -63,10 +71,17 @@ class _WidgetZoomState extends State<WidgetZoom>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _rootNavigator = Navigator.of(context, rootNavigator: true);
+  }
+
+  @override
   void dispose() {
     _transformationController.dispose();
     _animationController.dispose();
     _removeOverlay();
+    _closeFullScreenImage();
     super.dispose();
   }
 
@@ -162,8 +177,9 @@ class _WidgetZoomState extends State<WidgetZoom>
     _animationController.forward(from: 0);
   }
 
-  void _openImageFullscreen() {
-    Navigator.of(context, rootNavigator: true).push(
+  Future<void> _openImageFullscreen() async {
+    _isFullScreenImageOpened = true;
+    await _rootNavigator.push(
       PageRouteBuilder(
         opaque: false,
         pageBuilder: (context, animation1, animation2) => FadeTransition(
@@ -185,5 +201,12 @@ class _WidgetZoomState extends State<WidgetZoom>
         reverseTransitionDuration: const Duration(milliseconds: 300),
       ),
     );
+    _isFullScreenImageOpened = false;
+  }
+
+  void _closeFullScreenImage() {
+    if (_isFullScreenImageOpened && _rootNavigator.canPop()) {
+      _rootNavigator.pop();
+    }
   }
 }

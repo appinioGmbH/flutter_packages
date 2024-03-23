@@ -42,7 +42,7 @@ Just wrap your image widget that should be zoomable with the `WidgetZoom` and pa
 It doesn't need more setup than this:
 
 ```dart
- ZoomWidget(
+ WidgetZoom(
     heroAnimationTag: 'tag',
     zoomWidget: Image.network(
         'https://i.picsum.photos/id/1076/1000/800.jpg?hmac=Dlz3UOB04NkIUuAcoyNPNP_uRbjWK9FSoHfy4i04yWI',
@@ -61,5 +61,7 @@ It doesn't need more setup than this:
 | minScaleFullscreen           | 1                  | The smallest allowed scale when zooming the widget in fullscreen             |  false   |
 | maxScaleFullscreen           | 4                  | The highest allowed scale when zooming the widget in fullscreen              |  false   |
 | fullScreenDoubleTapZoomScale | maxScaleFullscreen | The zoom scale when double tapping the zoomable widget in fullscreen         |  false   |
+| closeFullScreenImageOnDispose | false | Controls whether the full screen image will be closed once the widget is disposed. | false |
+
 
 <hr/>Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>
