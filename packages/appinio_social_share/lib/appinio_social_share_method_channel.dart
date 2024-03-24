@@ -41,7 +41,8 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
 
   @override
   Future<Map<String, bool>> getInstalledApps() async {
-    return Map<String, bool>.from((await methodChannel.invokeMethod(installedApps)));
+    return Map<String, bool>.from(
+        (await methodChannel.invokeMethod(installedApps)));
   }
 
   @override
@@ -72,10 +73,11 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToTwitter(String message,
-      {List<String>? filePaths}) async {
-    return ((await methodChannel.invokeMethod<String>(
-            twitter, {"imagePaths": filePaths, "message": message})) ??
+  Future<String> shareToTwitter(String message, String? filePath) async {
+    return ((await methodChannel.invokeMethod<String>(twitter, {
+          "imagePaths": filePath == null ? [] : [filePath],
+          "message": message
+        })) ??
         "");
   }
 
