@@ -409,7 +409,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  AppinioSocialShare appinioSocialShare =  AppinioSocialShare();
+  AppinioSocialShare appinioSocialShare = AppinioSocialShare();
 
   @override
   Widget build(BuildContext context) {
@@ -417,26 +417,29 @@ class _MyAppState extends State<MyApp> {
         title: "Share Feature",
         home: Scaffold(
           body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                  child: Text("ShareToWhatsapp"),
-                  onPressed: () {
-                    shareToWhatsApp("Message Text!!", filePaths: [file.getAbsolutePath()]);
-                  },
+                child: const Text("ShareToWhatsapp"),
+                onPressed: () async {
+                  FilePickerResult? result = await FilePicker.platform
+                      .pickFiles(type: FileType.image, allowMultiple: false);
+                  if (result != null && result.paths.isNotEmpty) {
+                    shareToWhatsApp(
+                        "message", result.paths[0]!);
+                  }
+                },
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 
-
-  Future<void> shareToWhatsApp(String message, {List<String>? filePaths) async{
-    String response = await appinioSocialShare.shareToWhatsapp(message,filePath: filePath);
-    print(response);
+  shareToWhatsApp(String message, String filePath) async {
+    await appinioSocialShare.android.shareToSMS(message, filePath);
   }
-
 }
+
 
 
 ```
