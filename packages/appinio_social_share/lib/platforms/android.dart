@@ -27,11 +27,6 @@ class Android {
         .shareToTwitterAndroid(message, filePath);
   }
 
-  Future<String> shareFilesToTwitter(List<String> filePaths) {
-    return AppinioSocialSharePlatform.instance
-        .shareToTwitterAndroidMultifiles(filePaths);
-  }
-
   Future<String> shareToInstagramDirect(String message) {
     return AppinioSocialSharePlatform.instance.shareToInstagramDirect(message);
   }
