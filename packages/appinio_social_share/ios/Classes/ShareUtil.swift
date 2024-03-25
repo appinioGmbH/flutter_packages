@@ -16,6 +16,7 @@ public class ShareUtil{
 
     let argAttributionURL: String  = "attributionURL";
     let argImagePaths: String  = "imagePaths";
+    let argImagePath: String  = "imagePath";
     let argbackgroundImage: String  = "backgroundImage";
     let argMessage: String  = "message";
     let argTitle: String  = "title";
@@ -52,8 +53,8 @@ public class ShareUtil{
 
 
     public func shareToInstagramFeed(args : [String: Any?],result: @escaping FlutterResult) {
-        let filePaths = args[argImagePaths] as? [String]
-        if(!isImage(filePath: filePaths![0])) {
+        let filePath = args[argImagePath] as? String
+        if(!isImage(filePath: filePath!)) {
             return shareVideoToInstagramFeed(args: args, result:result)
         } else{
             return shareImageToInstagramFeed(args: args, result:result)
@@ -74,8 +75,8 @@ public class ShareUtil{
 
 
     func shareVideoToInstagramFeed(args : [String: Any?],result: @escaping FlutterResult) {
-        let videoFiles = args[argImagePaths] as? [String]
-        let backgroundVideoUrl = URL(fileURLWithPath: videoFiles![0])
+        let videoFile = args[argImagePath] as? String
+        let backgroundVideoUrl = URL(fileURLWithPath: videoFile!)
         let videoData = try? Data(contentsOf: backgroundVideoUrl) as NSData
 
         getLibraryPermissionIfNecessary { granted in
@@ -151,8 +152,8 @@ public class ShareUtil{
     }
 
     func shareImageToInstagramFeed(args : [String: Any?],result: @escaping FlutterResult) {
-            let videoFiles = args[argImagePaths] as? [String]
-            let backgroundVideoUrl = URL(fileURLWithPath: videoFiles![0])
+            let videoFile = args[argImagePath] as? String
+            let backgroundVideoUrl = URL(fileURLWithPath: videoFile!)
             let videoData = try? Data(contentsOf: backgroundVideoUrl) as NSData
 
             getLibraryPermissionIfNecessary { granted in
