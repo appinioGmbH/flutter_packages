@@ -522,7 +522,7 @@ class _BackgroundCards extends StatelessWidget {
                     j,
                     Opacity(
                       opacity: fadeLastItem && j == indices.length - 1
-                          ? position.progress
+                          ? min(1, position.progress)
                           : 1,
                       child: Transform.translate(
                         offset: offset,
