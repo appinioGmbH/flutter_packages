@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.appinio.socialshare.appinio_social_share.utils.SocialShareUtil;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -72,7 +73,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
         String title = call.argument("title");
         String message = call.argument("message");
         String appId = call.argument("appId");
-        String imagePath = call.argument("imagePath");
+        ArrayList<String> imagePaths = call.argument("imagePaths");
         String stickerImage = call.argument("stickerImage");
         String attributionURL = call.argument("attributionURL");
         String backgroundImage = call.argument("backgroundImage");
@@ -86,7 +87,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
             case INSTAGRAM_DIRECT:
                 return socialShareUtil.shareToInstagramDirect(message,activeContext);
             case INSTAGRAM_FEED:
-                return socialShareUtil.shareToInstagramFeed(imagePath, activeContext, message);
+                return socialShareUtil.shareToInstagramFeed(imagePaths, activeContext, message);
             case INSTAGRAM_STORIES:
                 return socialShareUtil.shareToInstagramStory(appId, stickerImage, backgroundImage, backgroundTopColor, backgroundBottomColor, attributionURL, activeContext);
             case FACEBOOK_STORIES:
@@ -95,22 +96,22 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
                 return socialShareUtil.shareToMessenger(message, activeContext);
             case FACEBOOK:
                 if (activity == null) return SocialShareUtil.UNKNOWN_ERROR;
-                socialShareUtil.shareToFacebook(imagePath, message, activity, result);
+                socialShareUtil.shareToFacebook(imagePaths, message, activity, result);
                 return null;
             case WHATSAPP:
-                return socialShareUtil.shareToWhatsApp(imagePath, message, activeContext);
+                return socialShareUtil.shareToWhatsApp(imagePaths, message, activeContext);
             case TELEGRAM:
-                return socialShareUtil.shareToTelegram(imagePath, activeContext, message);
+                return socialShareUtil.shareToTelegram(imagePaths, activeContext, message);
             case TWITTER:
-                return socialShareUtil.shareToTwitter(imagePath, activeContext, message);
+                return socialShareUtil.shareToTwitter(imagePaths, activeContext, message);
             case COPY_TO_CLIPBOARD:
                 return socialShareUtil.copyToClipBoard(message, activeContext);
             case SYSTEM_SHARE:
-                return socialShareUtil.shareToSystem(title, message, imagePath, "image/*", title, context);
+                return socialShareUtil.shareToSystem(title, message, imagePaths, "image/*", title, context);
             case TIKTOK:
-                return socialShareUtil.shareToTikTok(imagePath, activeContext, message);
+                return socialShareUtil.shareToTikTok(imagePaths, activeContext, message);
             case SMS:
-                return socialShareUtil.shareToSMS(message, activeContext,imagePath);
+                return socialShareUtil.shareToSMS(message, activeContext,imagePaths);
             default:
                 return null;
         }

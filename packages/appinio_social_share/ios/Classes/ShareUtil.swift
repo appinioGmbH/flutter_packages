@@ -2,13 +2,12 @@ import Photos
 import FBSDKCoreKit
 import FBSDKShareKit
 import Social
-import TikTokOpenSDK
 import MobileCoreServices
 
 
 
 public class ShareUtil{
-    
+
     public let SUCCESS: String = "SUCCESS"
     public let ERROR_APP_NOT_AVAILABLE: String = "ERROR_APP_NOT_AVAILABLE"
     public let ERROR_FEATURE_NOT_AVAILABLE_FOR_THIS_VERSON: String = "ERROR_FEATURE_NOT_AVAILABLE_FOR_THIS_VERSON"
@@ -16,7 +15,7 @@ public class ShareUtil{
     public let NOT_IMPLEMENTED: String = "NOT_IMPLEMENTED"
 
     let argAttributionURL: String  = "attributionURL";
-    let argImagePath: String  = "imagePath";
+    let argImagePaths: String  = "imagePaths";
     let argbackgroundImage: String  = "backgroundImage";
     let argMessage: String  = "message";
     let argTitle: String  = "title";
@@ -30,7 +29,7 @@ public class ShareUtil{
 
     
     public func getInstalledApps(result: @escaping FlutterResult){
-        let apps = [["instagram","instagram"],["facebook-stories","facebook_stories"],["whatsapp","whatsapp"],["tg","telegram"],["fb-messenger","messenger"],["tiktok","tiktok"],["instagram-stories","instagram_stories"],["twitter","twitter"],["sms","message"]]
+        let apps = [["instagram","instagram"],["facebook-stories","facebook_stories"],["whatsapp","whatsapp"],["tg","telegram"],["fb-messenger","messenger"],["tiktok","snssdk1233"],["instagram-stories","instagram_stories"],["twitter","twitter"],["sms","message"]]
         var output:[String: Bool] = [:]
         for app in apps {
             if(UIApplication.shared.canOpenURL(URL(string:(app[0])+"://")!)){
@@ -53,8 +52,8 @@ public class ShareUtil{
 
 
     public func shareToInstagramFeed(args : [String: Any?],result: @escaping FlutterResult) {
-        let filePath = args[argImagePath] as? String
-        if(!isImage(filePath: filePath!)) {
+        let filePaths = args[argImagePaths] as? [String]
+        if(!isImage(filePath: filePaths![0])) {
             return shareVideoToInstagramFeed(args: args, result:result)
         } else{
             return shareImageToInstagramFeed(args: args, result:result)
@@ -74,39 +73,9 @@ public class ShareUtil{
     }
 
 
-
-    public func shareToTiktok(args : [String: Any?],result: @escaping FlutterResult){
-        let images = args[argImages] as? [String]
-        let videoFile = args[argVideoFile] as? String
-
-
-        let request = TikTokOpenSDKShareRequest()
-
-        request.mediaType = images == nil ? TikTokOpenSDKShareMediaType.video : TikTokOpenSDKShareMediaType.image
-        var mediaLocalIdentifiers: [String] = []
-
-
-        if(videoFile==nil){
-            mediaLocalIdentifiers.append(contentsOf: images!)
-        }else{
-            mediaLocalIdentifiers.append(videoFile!)
-        }
-
-              request.localIdentifiers = mediaLocalIdentifiers
-              DispatchQueue.main.async {
-                let a = request.send(completionBlock: { response in
-                  print("Response from TikTok")
-                  print(response.errCode.rawValue)
-                  print(response.shareState.rawValue)
-                })
-              }
-        result(SUCCESS)
-    }
-
-
     func shareVideoToInstagramFeed(args : [String: Any?],result: @escaping FlutterResult) {
-        let videoFile = args[argImagePath] as? String
-        let backgroundVideoUrl = URL(fileURLWithPath: videoFile!)
+        let videoFiles = args[argImagePaths] as? [String]
+        let backgroundVideoUrl = URL(fileURLWithPath: videoFiles![0])
         let videoData = try? Data(contentsOf: backgroundVideoUrl) as NSData
 
         getLibraryPermissionIfNecessary { granted in
@@ -182,8 +151,8 @@ public class ShareUtil{
     }
 
     func shareImageToInstagramFeed(args : [String: Any?],result: @escaping FlutterResult) {
-            let videoFile = args[argImagePath] as? String
-            let backgroundVideoUrl = URL(fileURLWithPath: videoFile!)
+            let videoFiles = args[argImagePaths] as? [String]
+            let backgroundVideoUrl = URL(fileURLWithPath: videoFiles![0])
             let videoData = try? Data(contentsOf: backgroundVideoUrl) as NSData
 
             getLibraryPermissionIfNecessary { granted in
@@ -280,10 +249,12 @@ public class ShareUtil{
 
     public func shareToSystem(args : [String: Any?],result: @escaping FlutterResult) {
         let text = args[argMessage] as? String
-        let filePath = args[argImagePath] as? String
+        let filePaths = args[argImagePaths] as? [String]
         var data : [Any] = [text!];
-        if(!(filePath == nil)){
-            data.append(URL(fileURLWithPath: filePath!))
+        if filePaths != nil{
+            for filePath in filePaths!{
+                data.append(URL(fileURLWithPath: filePath))
+            }
         }
         let activityViewController = UIActivityViewController(activityItems: data, applicationActivities: nil)
         UIApplication.topViewController()?.present(activityViewController, animated: true, completion: nil)
@@ -308,7 +279,7 @@ public class ShareUtil{
         let whatsAppURL  = NSURL(string: whatsURL.addingPercentEncoding(withAllowedCharacters: characterSet)!)
         if UIApplication.shared.canOpenURL(whatsAppURL! as URL)
         {
-            UIApplication.shared.openURL(whatsAppURL! as URL)
+            UIApplication.shared.open(whatsAppURL! as URL)
             result(SUCCESS);
         }
         else
@@ -321,11 +292,15 @@ public class ShareUtil{
     
     func shareToFacebookPost(args : [String: Any?],result: @escaping FlutterResult, delegate: SharingDelegate) {
         let message = args[self.argMessage] as? String
-        let imagePath = args[self.argImagePath] as? String
+        let imagePaths = args[self.argImagePaths] as? [String]
         
-        let photo = SharePhoto(image: UIImage.init(contentsOfFile: imagePath!)!, isUserGenerated: true)
         let content = SharePhotoContent()
-        content.photos = [photo]
+        var photos : [SharePhoto] = []
+        for image in imagePaths! {
+            let photo = SharePhoto(image: UIImage.init(contentsOfFile: image)!, isUserGenerated: true)
+            photos.append(photo)
+        }
+        content.photos = photos
         content.hashtag = Hashtag(message!)
         let dialog = ShareDialog(
             viewController: UIApplication.shared.windows.first!.rootViewController,
@@ -361,7 +336,7 @@ public class ShareUtil{
             let tgUrl = URL.init(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!)
             
             if UIApplication.shared.canOpenURL(tgUrl!) {
-                UIApplication.shared.openURL(tgUrl!)
+                UIApplication.shared.open(tgUrl!)
                 result(SUCCESS)
             } else {
                 result(ERROR_APP_NOT_AVAILABLE)
@@ -492,7 +467,7 @@ public class ShareUtil{
     
     func shareToTwitter(args : [String: Any?],result: @escaping FlutterResult) {
         let title = args[self.argMessage] as? String
-        let image = args[self.argImagePath] as? String
+        let images = args[self.argImagePaths] as? [String]
         if(!canOpenUrl(appName: "twitter")){
             result(ERROR_APP_NOT_AVAILABLE)
             return
@@ -501,8 +476,10 @@ public class ShareUtil{
         
         let composeCtl = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
         composeCtl?.add(URL(string: title!))
-        if(!(image==nil)){
-            composeCtl?.add(UIImage.init(contentsOfFile: image!))
+        if(!(images==nil)){
+            for image in images! {
+                composeCtl?.add(UIImage.init(contentsOfFile: image))
+            }
         }
         composeCtl?.setInitialText(title!)
         UIApplication.topViewController()?.present(composeCtl!,animated:true,completion:nil);

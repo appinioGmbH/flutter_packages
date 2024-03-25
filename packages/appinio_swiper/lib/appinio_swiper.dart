@@ -392,7 +392,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             position: _position,
             indices: List.generate(
               effectiveBackgroundCardCount,
-                  (index) => (foregroundIndex + 1) % widget.cardCount,
+              (index) => (foregroundIndex + index + 1) % widget.cardCount,
             ),
             builder: widget.cardBuilder,
             scaleIncrement: _effectiveScaleIncrement,
@@ -537,27 +537,29 @@ class _BackgroundCards extends StatelessWidget {
               .asMap()
               .map(
                 (j, index) {
-              final double effectFactor = initialEffectFactor + j;
-              final Offset offset = offsetIncrement * effectFactor;
-              // The cards scale down by a fixed amount relative to the original
-              // size with each step so we need to subtract by the scale
-              // increment rather than multiply by the scale factor.
-              final double scale = 1 - (effectFactor * scaleIncrement);
-              if (scale <= 0) {
-                // Don't render cards if they're too small to be visible.
-                return MapEntry(j, null);
-              }
-              return MapEntry(
-                j,
-                Opacity(
-                  opacity: fadeLastItem && j == indices.length - 1
-                      ? position.progress
-                      : 1,
-                  child: Transform.translate(
-                    offset: offset,
-                    child: Transform.scale(
-                      scale: scale,
-                      child: builder(context, index),
+                  final double effectFactor = initialEffectFactor + j;
+                  final Offset offset = offsetIncrement * effectFactor;
+                  // The cards scale down by a fixed amount relative to the original
+                  // size with each step so we need to subtract by the scale
+                  // increment rather than multiply by the scale factor.
+                  final double scale = 1 - (effectFactor * scaleIncrement);
+                  if (scale <= 0) {
+                    // Don't render cards if they're too small to be visible.
+                    return MapEntry(j, null);
+                  }
+                  return MapEntry(
+                    j,
+                    Opacity(
+                      opacity: fadeLastItem && j == indices.length - 1
+                          ? min(1, position.progress)
+                          : 1,
+                      child: Transform.translate(
+                        offset: offset,
+                        child: Transform.scale(
+                          scale: scale,
+                          child: builder(context, index),
+                        ),
+                      ),
                     ),
                   ),
                 ),

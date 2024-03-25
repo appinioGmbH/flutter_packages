@@ -33,46 +33,60 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToTiktokStatus(String filePath) async {
+  Future<String> shareToTiktokStatus(List<String> filePaths) async {
     if (Platform.isIOS) return "Not implemented for iOS";
     return ((await methodChannel.invokeMethod<String>(
-            tiktokStatus, {"imagePath": filePath, "message": ""})) ??
+            tiktokStatus, {"imagePaths": filePaths, "message": ""})) ??
         "");
   }
 
   @override
-  Future<String> shareToTiktokPost(String videoFile) async {
+  Future<String> shareToTiktokPost(String filePath, String redirectUrl,
+      TiktokFileType tiktokFileType) async {
     if (Platform.isAndroid) return "Not implemented for android";
-    return ((await methodChannel
-            .invokeMethod<String>(tiktokPost, {"videoFile": videoFile})) ??
+    String? resp;
+    try {
+      resp = (await const MethodChannel('appinio_social_share_tiktok')
+              .invokeMethod<String>(tiktokPost, {
+            "videoFile": filePath,
+            "redirectUrl": redirectUrl,
+            "fileType": tiktokFileType.value
+          })) ??
+          "";
+    } catch (e) {
+      return e.toString();
+    }
+    return resp;
+  }
+
+  @override
+  Future<String> shareToTwitter(String message,
+      {List<String>? filePaths}) async {
+    return ((await methodChannel.invokeMethod<String>(
+            twitter, {"imagePaths": filePaths, "message": message})) ??
         "");
   }
 
   @override
-  Future<String> shareToTwitter(String message, {String? filePath}) async {
+  Future<String> shareToTelegram(String message,
+      {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(
-            twitter, {"imagePath": filePath, "message": message})) ??
+            telegram, {"imagePaths": filePaths, "message": message})) ??
         "");
   }
 
   @override
-  Future<String> shareToTelegram(String message, {String? filePath}) async {
+  Future<String> shareToWhatsapp(String message,
+      {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(
-            telegram, {"imagePath": filePath, "message": message})) ??
+            whatsapp, {"imagePaths": filePaths, "message": message})) ??
         "");
   }
 
   @override
-  Future<String> shareToWhatsapp(String message, {String? filePath}) async {
+  Future<String> shareToSMS(String message, {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(
-            whatsapp, {"imagePath": filePath, "message": message})) ??
-        "");
-  }
-
-  @override
-  Future<String> shareToSMS(String message, {String? filePath}) async {
-    return ((await methodChannel.invokeMethod<String>(
-            sms, {"message": message, "imagePath": filePath})) ??
+            sms, {"message": message, "imagePaths": filePaths})) ??
         "");
   }
 
@@ -85,9 +99,9 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
 
   @override
   Future<String> shareToSystem(String title, String message,
-      {String? filePath}) async {
+      {List<String>? filePaths}) async {
     return ((await methodChannel.invokeMethod<String>(systemShare,
-            {"message": message, "title": title, "imagePath": filePath})) ??
+            {"message": message, "title": title, "imagePaths": filePaths})) ??
         "");
   }
 
@@ -99,9 +113,9 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToInstagramFeed(String filePath) async {
+  Future<String> shareToInstagramFeed(List<String> filePaths) async {
     return ((await methodChannel.invokeMethod<String>(
-            instagramFeed, {"imagePath": filePath, "message": ""})) ??
+            instagramFeed, {"imagePaths": filePaths, "message": ""})) ??
         "");
   }
 
@@ -155,9 +169,9 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareToFacebook(String hashtag, String filePath) async {
+  Future<String> shareToFacebook(String hashtag, List<String> filePaths) async {
     return ((await methodChannel.invokeMethod<String>(
-            facebook, {"imagePath": filePath, "message": hashtag})) ??
+            facebook, {"imagePaths": filePaths, "message": hashtag})) ??
         "");
   }
 }

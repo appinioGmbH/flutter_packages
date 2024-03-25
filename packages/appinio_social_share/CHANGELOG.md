@@ -1,3 +1,9 @@
+## [0.3.0] - 2023.12.21
+* Enhancement:
+  - Facebook Android Sdk updated to 16.0.0.  
+* Features:
+  - Now you can share multiple files to whatsapp, telegram, facebook and other apps.
+
 ## [0.2.6] - 2023.09.25
 
 * Enhancements:
