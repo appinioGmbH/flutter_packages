@@ -49,6 +49,19 @@ class AppinioSwiper extends StatefulWidget {
   /// on swiper state changes.
   final AppinioSwiperController? controller;
 
+  /// The card index to start the swiper at.
+  ///
+  /// This field is only considered when initializing an [AppinioSwiper].
+  /// Changing the [initialIndex] to a swiper that is already built will have no
+  /// effect.
+  ///
+  /// If non-null, must be a value between 0 and [cardCount] (inclusive).
+  /// Note that an initial index of [cardCount] will start the swiper at the end
+  /// of the stack with no cards left to swipe.
+  ///
+  /// Defaults to 0.
+  final int? initialIndex;
+
   /// The duration of swipe animations.
   ///
   /// Swipe animations start after the user lifts their finger or when a drag
@@ -122,6 +135,7 @@ class AppinioSwiper extends StatefulWidget {
     required this.cardBuilder,
     required this.cardCount,
     this.controller,
+    this.initialIndex,
     this.duration = const Duration(milliseconds: 200),
     this.maxAngle = 15,
     this.invertAngleOnBottomDrag = true,
@@ -144,6 +158,8 @@ class AppinioSwiper extends StatefulWidget {
     this.onSwipeCancelled,
   })  : assert(maxAngle >= 0),
         assert(threshold > 0),
+        assert(initialIndex == null ||
+            (initialIndex >= 0 && initialIndex <= cardCount)),
         super(key: key);
 
   @override
@@ -177,12 +193,19 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     maxAngleRadians: widget.maxAngle,
     invertAngleOnBottomDrag: widget.invertAngleOnBottomDrag,
     loop: widget.loop,
+    initialIndex: widget.initialIndex,
   );
 
   // Keep track of the swiped items to unswipe from the same direction
   final Queue<Swipe> _activityHistory = Queue();
 
   bool get _canUnswipe => _activityHistory.isNotEmpty && widget.allowUnSwipe;
+
+  void _setCardIndex(int index) {
+    setState(() {
+      _position._baseIndex = index;
+    });
+  }
 
   Future<void> _onSwipe(AxisDirection direction) async {
     _canUnSwipeOnce = true;
@@ -237,13 +260,6 @@ class _AppinioSwiperState extends State<AppinioSwiper>
       CancelSwipe() => _position._baseIndex,
       DrivenActivity() => _position._baseIndex,
     });
-    if (targetIndex >= widget.cardCount && newActivity is Swipe) {
-      // We reached the end, do not run the activity.
-      if (targetIndex > widget.cardCount && !widget.loop) {
-        return;
-      }
-      widget.onEnd?.call();
-    }
     _swipeActivity = newActivity;
     if (newActivity is Swipe) {
       _activityHistory.add(newActivity);
@@ -275,6 +291,15 @@ class _AppinioSwiperState extends State<AppinioSwiper>
     });
     await _previousActivityFuture;
     widget.onSwipeEnd?.call(previousIndex, targetIndex, newActivity);
+
+    if (targetIndex >= widget.cardCount && newActivity is Swipe) {
+      // We reached the end, do not run the activity.
+      if (targetIndex > widget.cardCount && !widget.loop) {
+        return;
+      }
+      widget.onEnd?.call();
+    }
+
     setState(() {});
   }
 
@@ -308,9 +333,9 @@ class _AppinioSwiperState extends State<AppinioSwiper>
 
   @override
   void dispose() {
-    super.dispose();
     widget.controller?._detach();
     _swipeActivity?.animation.dispose();
+    super.dispose();
   }
 
   @override
@@ -363,7 +388,7 @@ class _AppinioSwiperState extends State<AppinioSwiper>
             position: _position,
             indices: List.generate(
               effectiveBackgroundCardCount,
-              (index) => (foregroundIndex + 1) % widget.cardCount,
+              (index) => (foregroundIndex + index + 1) % widget.cardCount,
             ),
             builder: widget.cardBuilder,
             scaleIncrement: _effectiveScaleIncrement,
@@ -503,26 +528,20 @@ class _BackgroundCards extends StatelessWidget {
       builder: (context, child) {
         return Stack(
           children: indices
-              // Convert to a map so we can get the position of the index within the
-              // list of indices.
               .asMap()
               .map(
                 (j, index) {
                   final double effectFactor = initialEffectFactor + j;
                   final Offset offset = offsetIncrement * effectFactor;
-                  // The cards scale down by a fixed amount relative to the original
-                  // size with each step so we need to subtract by the scale
-                  // increment rather than multiply by the scale factor.
                   final double scale = 1 - (effectFactor * scaleIncrement);
                   if (scale <= 0) {
-                    // Don't render cards if they're too small to be visible.
                     return MapEntry(j, null);
                   }
                   return MapEntry(
                     j,
                     Opacity(
                       opacity: fadeLastItem && j == indices.length - 1
-                          ? position.progress
+                          ? min(1, position.progress)
                           : 1,
                       child: Transform.translate(
                         offset: offset,
@@ -538,8 +557,6 @@ class _BackgroundCards extends StatelessWidget {
               .values
               .nonNulls
               .toList()
-              // We need to reverse the list to get the cards to stack in descending
-              // order.
               .reversed
               .toList(),
         );
@@ -673,6 +690,12 @@ class AppinioSwiperController extends ChangeNotifier {
   void _assertIsAttached() {
     assert(_attachedSwiper != null, 'Controller must be attached.');
   }
+
+  void setCardIndex(int index) {
+    _assertIsAttached();
+    _attachedSwiper?._setCardIndex(index);
+    notifyListeners();
+  }
 }
 
 /// The position of the swiper.
@@ -690,12 +713,14 @@ class SwiperPosition with ChangeNotifier {
     required double maxAngleRadians,
     required bool invertAngleOnBottomDrag,
     required bool loop,
+    required int? initialIndex,
   })  : _cardSize = cardSize,
         _cardCount = cardCount,
         _threshold = threshold,
         _maxAngle = maxAngleRadians,
         _invertAngleOnBottomDrag = invertAngleOnBottomDrag,
-        _loop = loop;
+        _loop = loop,
+        _baseIndex = initialIndex ?? 0;
 
   set offset(Offset newOffset) {
     _offset = newOffset;
