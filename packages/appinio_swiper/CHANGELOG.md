@@ -1,4 +1,4 @@
-## [2.1.1] - 2024.04.05
+## [2.1.1] - 2024.04.15
 * Bug fixes:
   - Swiper renders the topmost background card for all background positions Appinio swiper
   - _AppinioSwiperState#b3f89(tickers: tracking 1 ticker) was disposed with an active Ticker.
