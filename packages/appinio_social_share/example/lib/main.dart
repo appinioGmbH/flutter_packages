@@ -28,10 +28,9 @@ class _MyAppState extends State<MyApp> {
                 child: const Text("ShareToWhatsapp"),
                 onPressed: () async {
                   FilePickerResult? result = await FilePicker.platform
-                      .pickFiles(type: FileType.image, allowMultiple: true);
-                  if (result != null) {
-                    shareToWhatsApp(
-                        "message", result.files.map((e) => e.path!).toList());
+                      .pickFiles(type: FileType.image, allowMultiple: false);
+                  if (result != null && result.paths.isNotEmpty) {
+                    shareToWhatsApp("message", result.paths[0]!);
                   }
                 },
               ),
@@ -40,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         ));
   }
 
-  shareToWhatsApp(String message, List<String> filePaths) async {
-    await appinioSocialShare.shareToSMS(message, filePaths: filePaths);
+  shareToWhatsApp(String message, String filePath) async {
+    await appinioSocialShare.android.shareToSMS(message, filePath);
   }
 }

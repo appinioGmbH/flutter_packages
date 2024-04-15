@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.provider.Telephony;
 
 import androidx.core.content.FileProvider;
 
@@ -62,8 +63,12 @@ public class SocialShareUtil {
     private static CallbackManager callbackManager;
 
 
-    public String shareToWhatsApp(ArrayList<String> imagePaths, String msg, Context context) {
-        return shareFileAndTextToPackage(imagePaths, msg, context, WHATSAPP_PACKAGE);
+    public String shareToWhatsApp(String imagePath, String msg, Context context) {
+        return shareFileAndTextToPackage(imagePath, msg, context, WHATSAPP_PACKAGE);
+    }
+
+    public String shareToWhatsAppFiles(ArrayList<String> imagePaths, Context context) {
+        return shareFilesToPackage(imagePaths, context, WHATSAPP_PACKAGE);
     }
 
 
@@ -71,20 +76,32 @@ public class SocialShareUtil {
         return shareTextToPackage(text, activity, INSTAGRAM_PACKAGE);
     }
 
-    public String shareToInstagramFeed(ArrayList<String> imagePaths, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePaths, text, activity, INSTAGRAM_PACKAGE);
+    public String shareToInstagramFeed(String imagePath, String message, Context activity, String text) {
+        return shareFileAndTextToPackage(imagePath, text, activity, INSTAGRAM_PACKAGE);
     }
 
-    public String shareToTikTok(ArrayList<String> imagePaths, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePaths, text, activity, TIKTOK_PACKAGE);
+    public String shareToInstagramFeedFiles(ArrayList<String> imagePaths, Context activity, String text) {
+        return shareFilesToPackage(imagePaths, activity, INSTAGRAM_PACKAGE);
     }
 
-    public String shareToTwitter(ArrayList<String> imagePaths, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePaths, text, activity, TWITTER_PACKAGE);
+    public String shareToTikTok(ArrayList<String> imagePaths, Context activity) {
+        return shareFilesToPackage(imagePaths, activity, TIKTOK_PACKAGE);
     }
 
-    public String shareToTelegram(ArrayList<String> imagePaths, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePaths, text, activity, TELEGRAM_PACKAGE);
+    public String shareToTwitter(String imagePath, Context activity, String text) {
+        return shareFileAndTextToPackage(imagePath, text, activity, TWITTER_PACKAGE);
+    }
+
+    public String shareToTwitterFiles(ArrayList<String> imagePaths, Context activity) {
+        return shareFilesToPackage(imagePaths, activity, TWITTER_PACKAGE);
+    }
+
+    public String shareToTelegram(String imagePath, Context activity, String text) {
+        return shareFileAndTextToPackage(imagePath, text, activity, TELEGRAM_PACKAGE);
+    }
+
+    public String shareToTelegramFiles(ArrayList<String> imagePaths, Context activity) {
+        return shareFilesToPackage(imagePaths, activity, TELEGRAM_PACKAGE);
     }
 
 
@@ -113,34 +130,69 @@ public class SocialShareUtil {
         }
     }
 
-    public String shareToSMS(String content, Context activity, ArrayList<String> imagePaths) {
-        String defaultApplication = Settings.Secure.getString(activity.getContentResolver(), SMS_DEFAULT_APPLICATION);
-        return shareFileAndTextToPackage(imagePaths, content, activity, defaultApplication);
+    public String shareToSMS(String content, Context activity, String imagePath) {
+        String defaultApplication;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            defaultApplication = Telephony.Sms.getDefaultSmsPackage(activity);
+        } else {
+            defaultApplication = Settings.Secure.getString(activity.getContentResolver(), SMS_DEFAULT_APPLICATION);
+        }
+        return shareFileAndTextToPackage(imagePath, content, activity, defaultApplication);
+    }
+    public String shareToSMSFiles( Context activity, ArrayList<String> imagePaths) {
+        String defaultApplication;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            defaultApplication = Telephony.Sms.getDefaultSmsPackage(activity);
+        } else {
+            defaultApplication = Settings.Secure.getString(activity.getContentResolver(), SMS_DEFAULT_APPLICATION);
+        }
+        return shareFilesToPackage(imagePaths, activity, defaultApplication);
     }
 
 
-    public String shareToSystem(String title, String text, ArrayList<String> filePaths, String fileType, String chooserTitle, Context activity) {
+    public String shareToSystemFiles(String title, ArrayList<String> filePaths, String chooserTitle, Context activity) {
         try {
-
+            if (filePaths == null || filePaths.isEmpty()) return "No files to share";
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setAction(Intent.ACTION_SEND_MULTIPLE);
             ArrayList<Uri> files = new ArrayList<Uri>();
-            if (filePaths != null && !filePaths.isEmpty()) {
-                for (int i = 0; i < filePaths.size(); i++) {
-                    Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(filePaths.get(i)));
-                    files.add(fileUri);
-                }
-                intent.setType(fileType);
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+            for (int i = 0; i < filePaths.size(); i++) {
+                Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(filePaths.get(i)));
+                files.add(fileUri);
+            }
+            intent.setType(getMimeTypeOfFile(filePaths.get(0)));
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+            intent.putExtra(Intent.EXTRA_SUBJECT, title);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Intent chooserIntent = Intent.createChooser(intent, chooserTitle);
+            chooserIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(chooserIntent);
+            return SUCCESS;
+        } catch (Exception e) {
+            return e.getLocalizedMessage();
+        }
+    }
+
+
+    public String shareToSystem(String title, String message, String filePath, String chooserTitle, Context activity) {
+        try {
+            Intent intent = new Intent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setAction(Intent.ACTION_SEND);
+            if (filePath != null) {
+                Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(filePath));
+                intent.setType(getMimeTypeOfFile(filePath));
+                intent.putExtra(Intent.EXTRA_STREAM, fileUri);
             } else {
-                intent.setType("text/*");
+                intent.setType("text/plain");
             }
 
-
+            intent.putExtra(Intent.EXTRA_TEXT, message);
             intent.putExtra(Intent.EXTRA_SUBJECT, title);
-            intent.putExtra(Intent.EXTRA_TEXT, text);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Intent chooserIntent = Intent.createChooser(intent, chooserTitle);
             chooserIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -288,18 +340,41 @@ public class SocialShareUtil {
     }
 
 
-    private String shareFileAndTextToPackage(List<String> imagePath, String text, Context activity, String packageName) {
+    private String shareFilesToPackage(List<String> imagePaths, Context activity, String packageName) {
+        if (imagePaths == null || imagePaths.isEmpty()) return "No files to share";
         Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         ArrayList<Uri> files = new ArrayList<Uri>();
-        if (imagePath != null && !imagePath.isEmpty()) {
-            for (int i = 0; i < imagePath.size(); i++) {
-                Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(imagePath.get(i)));
-                files.add(fileUri);
-            }
-            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+        for (int i = 0; i < imagePaths.size(); i++) {
+            Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(imagePaths.get(i)));
+            files.add(fileUri);
         }
-        shareIntent.setType(imagePath == null || imagePath.isEmpty() ? "text/*" : getMimeTypeOfFile(imagePath.get(0)));
-        shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+        shareIntent.setType(getMimeTypeOfFile(imagePaths.get(0)));
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        shareIntent.setPackage(packageName);
+//        if (packageName.equals(INSTAGRAM_PACKAGE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            shareIntent.setComponent(ComponentName.createRelative(packageName, "com.instagram.share.handleractivity.ShareHandlerActivity")); //open instagram feed
+//        }
+        try {
+            activity.startActivity(shareIntent);
+            return SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getLocalizedMessage();
+        }
+    }
+
+    private String shareFileAndTextToPackage(String imagePath, String message, Context activity, String packageName) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        if (imagePath != null) {
+            Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", new File(imagePath));
+            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            shareIntent.setType(getMimeTypeOfFile(imagePath));
+        } else {
+            shareIntent.setType("text/plain");
+        }
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         shareIntent.setPackage(packageName);
@@ -375,7 +450,7 @@ public class SocialShareUtil {
             Bundle metaData = appInfo.metaData;
             if (metaData != null) {
                 appId = metaData.getString("com.facebook.sdk.ApplicationId");
-                Log.d("FB_APP_ID",appId);
+                Log.d("FB_APP_ID", appId);
             }
         } catch (PackageManager.NameNotFoundException e) {
             // Handle the exception if needed
