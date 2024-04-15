@@ -30,8 +30,7 @@ class _MyAppState extends State<MyApp> {
                   FilePickerResult? result = await FilePicker.platform
                       .pickFiles(type: FileType.image, allowMultiple: false);
                   if (result != null && result.paths.isNotEmpty) {
-                    shareToWhatsApp(
-                        "message", result.paths[0]!);
+                    shareToWhatsApp("message", result.paths[0]!);
                   }
                 },
               ),

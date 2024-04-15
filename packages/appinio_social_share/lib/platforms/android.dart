@@ -1,7 +1,6 @@
 import 'package:appinio_social_share/appinio_social_share_platform_interface.dart';
 
 class Android {
-
   Future<String> shareToWhatsapp(String message, String? filePath) {
     return AppinioSocialSharePlatform.instance
         .shareToWhatsappAndroid(message, filePath);
@@ -37,11 +36,13 @@ class Android {
   }
 
   Future<String> shareFilesToInstagramFeed(List<String> imagePaths) {
-    return AppinioSocialSharePlatform.instance.shareToInstagramFeedAndroid(imagePaths);
+    return AppinioSocialSharePlatform.instance
+        .shareToInstagramFeedAndroid(imagePaths);
   }
 
   Future<String> shareToInstagramReels(List<String> videoPaths) {
-    return AppinioSocialSharePlatform.instance.shareToInstagramFeedAndroid(videoPaths);
+    return AppinioSocialSharePlatform.instance
+        .shareToInstagramFeedAndroid(videoPaths);
   }
 
   Future<String> shareToMessenger(String message) {

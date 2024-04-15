@@ -2,13 +2,11 @@ import 'package:appinio_social_share/appinio_social_share_platform_interface.dar
 
 class IOS {
   Future<String> shareToWhatsapp(String message) {
-    return AppinioSocialSharePlatform.instance
-        .shareToWhatsapp(message);
+    return AppinioSocialSharePlatform.instance.shareToWhatsapp(message);
   }
 
   Future<String> shareToTelegram(String message) {
-    return AppinioSocialSharePlatform.instance
-        .shareToTelegram(message);
+    return AppinioSocialSharePlatform.instance.shareToTelegram(message);
   }
 
   Future<String> shareToTwitter(String message, String? filePath) {
@@ -82,8 +80,7 @@ class IOS {
         .shareToTiktokPost(videoFile, redirectUrl, tiktokFileType);
   }
 
-  Future<String> shareToSystem(String message,
-      {List<String>? filePaths}) {
+  Future<String> shareToSystem(String message, {List<String>? filePaths}) {
     return AppinioSocialSharePlatform.instance
         .shareToSystem("", message, filePaths: filePaths);
   }

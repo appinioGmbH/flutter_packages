@@ -1,4 +1,4 @@
-## [0.3.1] - 2024.03.25
+## [0.3.1] - 2024.04.15
 * Many bug fixes and improvements.
 * Refactoring:
   - Now you will have to choose platform while sharing.
