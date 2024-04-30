@@ -155,7 +155,7 @@ public class SocialShareUtil {
             if (filePaths == null || filePaths.isEmpty()) return "No files to share";
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setAction(Intent.ACTION_SEND_MULTIPLE);
             ArrayList<Uri> files = new ArrayList<Uri>();
             for (int i = 0; i < filePaths.size(); i++) {
@@ -196,7 +196,7 @@ public class SocialShareUtil {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Intent chooserIntent = Intent.createChooser(intent, chooserTitle);
             chooserIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(chooserIntent);
             return SUCCESS;
         } catch (Exception e) {
