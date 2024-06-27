@@ -1,3 +1,9 @@
+## [0.3.1] - 2024.04.15
+* Many bug fixes and improvements.
+* Refactoring:
+  - Now you will have to choose platform while sharing.
+  - For example: AppinioSocialShare().android.shareToWhatsapp(message, file)
+
 ## [0.3.0] - 2023.12.21
 * Enhancement:
   - Facebook Android Sdk updated to 16.0.0.  

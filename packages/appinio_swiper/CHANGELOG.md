@@ -1,3 +1,10 @@
+## [2.1.1] - 2024.04.15
+* Bug fixes:
+  - Swiper renders the topmost background card for all background positions Appinio swiper
+  - _AppinioSwiperState#b3f89(tickers: tracking 1 ticker) was disposed with an active Ticker.
+  - Failed assertion: line 314 pos 15: 'opacity >= 0.0 && opacity <= 1.0': is not true Appinio swiper
+  - All background cards have the same style
+
 ## [2.1.0] - 2023.11.21
 * Features:
   - The controller now exposes all relevant card state (index, card offset+rotation, etc).
