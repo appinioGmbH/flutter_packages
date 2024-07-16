@@ -474,9 +474,7 @@ public class ShareUtil{
             return
         }
         
-        
         let composeCtl = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
-        composeCtl?.add(URL(string: title!))
         if(!(images==nil)){
             for image in images! {
                 composeCtl?.add(UIImage.init(contentsOfFile: image))
