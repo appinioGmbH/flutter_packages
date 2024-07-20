@@ -40,5 +40,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.facebook.android:facebook-share:16.0.0'
+    implementation 'com.facebook.android:facebook-android-sdk:[16.0,17.0)'
+    implementation 'com.facebook.android:facebook-share:[16.0,17.0)'
 }
