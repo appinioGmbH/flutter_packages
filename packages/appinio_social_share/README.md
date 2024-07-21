@@ -80,8 +80,22 @@ Add these permissions and queries to your AndroidManifest.xml
     <provider android:authorities="com.facebook.orca.provider.PlatformProvider" /> <!-- allows sharing to Messenger app -->
 </queries>
 
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <!-- Required only if your app needs to access images or photos
+       that other apps created. -->
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+  <!-- Required only if your app needs to access videos
+       that other apps created. -->
+<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+  <!-- Required only if your app needs to access audio files
+       that other apps created. -->
+<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+          android:maxSdkVersion="29" />
 <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.INTERNET" />
 
