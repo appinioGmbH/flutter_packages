@@ -9,6 +9,10 @@ class IOS {
     return AppinioSocialSharePlatform.instance.shareToTelegram(message);
   }
 
+  Future<String> shareImageToWhatsApp(String filePath) {
+    return AppinioSocialSharePlatform.instance.shareImageToWhatsApp(filePath);
+  }
+
   Future<String> shareToTwitter(String message, String? filePath) {
     return AppinioSocialSharePlatform.instance
         .shareToTwitter(message, filePath);
