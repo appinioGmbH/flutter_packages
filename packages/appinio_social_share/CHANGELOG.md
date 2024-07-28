@@ -1,3 +1,7 @@
+## [0.3.2] - 2024.07.29
+* Many bug fixes and improvements.
+* Version upgrades for dependencies.
+
 ## [0.3.1] - 2024.04.15
 * Many bug fixes and improvements.
 * Refactoring:
