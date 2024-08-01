@@ -1,4 +1,4 @@
-## [0.3.2] - 2024.07.29
+## [0.3.2] - 2024.08.01
 * Many bug fixes and improvements.
 * Version upgrades for dependencies.
 

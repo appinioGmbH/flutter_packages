@@ -231,7 +231,9 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   }
 
   @override
-  Future<String> shareImageToWhatsApp(String filePath,) async {
+  Future<String> shareImageToWhatsApp(
+    String filePath,
+  ) async {
     return ((await methodChannel
             .invokeMethod<String>(whatsappImgIos, {"imagePath": filePath})) ??
         "");
