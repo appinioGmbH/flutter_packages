@@ -33,6 +33,7 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   final String telegramAndroid = "telegram_android";
   final String telegramAndroidMultiFiles = "telegram_android_multifiles";
   final String installedApps = "installed_apps";
+  final String whatsappImgIos = "whatsapp_img_ios";
 
   /// The method channel used to interact with the native platform.
   @visibleForTesting
@@ -226,6 +227,15 @@ class MethodChannelAppinioSocialShare extends AppinioSocialSharePlatform {
   Future<String> shareToMessenger(String message) async {
     return ((await methodChannel
             .invokeMethod<String>(messenger, {"message": message})) ??
+        "");
+  }
+
+  @override
+  Future<String> shareImageToWhatsApp(
+    String filePath,
+  ) async {
+    return ((await methodChannel
+            .invokeMethod<String>(whatsappImgIos, {"imagePath": filePath})) ??
         "");
   }
 

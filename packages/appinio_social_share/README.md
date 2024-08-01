@@ -80,8 +80,22 @@ Add these permissions and queries to your AndroidManifest.xml
     <provider android:authorities="com.facebook.orca.provider.PlatformProvider" /> <!-- allows sharing to Messenger app -->
 </queries>
 
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <!-- Required only if your app needs to access images or photos
+       that other apps created. -->
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+  <!-- Required only if your app needs to access videos
+       that other apps created. -->
+<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+  <!-- Required only if your app needs to access audio files
+       that other apps created. -->
+<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+          android:maxSdkVersion="29" />
 <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.INTERNET" />
 
@@ -447,24 +461,25 @@ class _MyAppState extends State<MyApp> {
 <br />
 
 
-| Method        | iOS | Android | Parameters | Description
-|:-------------|:-------------:|:-------------:|:-------------|:-------------
-| getInstalledApps      |✔️| ✔️ |  -   | Get a Map of all the apps with a boolean value.
-| shareToWhatsapp      |✔️| ✔️ | String message, {List<String>? filePaths} | Share Image and text to Whatsapp. For Ios only text works.
-| shareToTelegram      |✔️| ✔️ | String message, {List<String>? filePaths} | Share Image and text to Telegram. For Ios only text works.
-| shareToInstagramDirect      |✔️| ✔️ | String message | Share text message to Instagram.
-| shareToInstagramFeed      |✔️| ✔️ | List<String> imagePaths | Share image to Instagram feed.
-| shareToInstagramReel      |✔️| ✔️ | List<String> videoPaths | Share video to Instagram Reel.
-| shareToInstagramStory      |✔️| ✔️ | String facebookAppId, String stickerImage,{String? backgroundImage,String? backgroundVideo,  String? backgroundTopColor,String? backgroundBottomColor,String? attributionURL} | Share background image, movable sticker, background colors to Instagram Story.
-| shareToFacebook      |✔️| ✔️ | String message, List<String> filePaths | Share text hashtag and image to Facebook.
-| shareToFacebookStory      |✔️| ✔️ |String stickerImage,String appId,{String? backgroundImage, String? backgroundVideo, String? backgroundTopColor, String? backgroundBottomColor, String? attributionURL} | Share background image, movable sticker, background colors to Facebook Story.
-| shareToMessenger      |✔️| ✔️ | String message | Share text message to Messenger.
-| shareToTiktokStatus      |❌ |  ✔️  | List<String> filePaths | ShaShare image to Tiktok Story.
-| shareToTiktokPost      |❌ |  ✔️  | String  videoPath | Share video to tiktok.
-| shareToTwitter      |  ✔️   |  ✔️ | String message, {List<String>? filePaths} | Share Image and text to Twitter.
-| shareToSMS      |✔️| ✔️ | String message, {List<String>? filePaths} | Share Image and text to default sms app.
-| copyToClipBoard      |✔️| ✔️ | String message | To Copy text to clipboard.
-| shareToSystem      |✔️|  ✔️  | String title,String message, {List<String>? filePaths} | Open default System sheet, to share text and image.
+| Method        | iOS | Android | Parameters                                                                                                                                                                    | Description
+|:-------------|:-------------:|:-------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------
+| getInstalledApps      |✔️|   ✔️    | -                                                                                                                                                                             | Get a Map of all the apps with a boolean value.
+| shareToWhatsapp      |✔️|   ✔️    | String message, {List<String>? filePaths}                                                                                                                                     | Share Image and text to Whatsapp. For Ios only text works.
+| shareToTelegram      |✔️|   ✔️    | String message, {List<String>? filePaths}                                                                                                                                     | Share Image and text to Telegram. For Ios only text works.
+| shareToInstagramDirect      |✔️|   ✔️    | String message                                                                                                                                                                | Share text message to Instagram.
+| shareToInstagramFeed      |✔️|   ✔️    | List<String> imagePaths                                                                                                                                                       | Share image to Instagram feed.
+| shareToInstagramReel      |✔️|   ✔️    | List<String> videoPaths                                                                                                                                                       | Share video to Instagram Reel.
+| shareToInstagramStory      |✔️|   ✔️    | String facebookAppId, String stickerImage,{String? backgroundImage,String? backgroundVideo,  String? backgroundTopColor,String? backgroundBottomColor,String? attributionURL} | Share background image, movable sticker, background colors to Instagram Story.
+| shareToFacebook      |✔️|   ✔️    | String message, List<String> filePaths                                                                                                                                        | Share text hashtag and image to Facebook.
+| shareToFacebookStory      |✔️|   ✔️    | String stickerImage,String appId,{String? backgroundImage, String? backgroundVideo, String? backgroundTopColor, String? backgroundBottomColor, String? attributionURL}        | Share background image, movable sticker, background colors to Facebook Story.
+| shareToMessenger      |✔️|   ✔️    | String message                                                                                                                                                                | Share text message to Messenger.
+| shareToTiktokStatus      |❌ |   ✔️    | List<String> filePaths                                                                                                                                                        | ShaShare image to Tiktok Story.
+| shareToTiktokPost      |❌ |   ✔️    | String  videoPath                                                                                                                                                             | Share video to tiktok.
+| shareToTwitter      |  ✔️   |   ✔️    | String message, {List<String>? filePaths}                                                                                                                                     | Share Image and text to Twitter.
+| shareToSMS      |✔️|   ✔️    | String message, {List<String>? filePaths}                                                                                                                                     | Share Image and text to default sms app.
+| copyToClipBoard      |✔️|   ✔️    | String message                                                                                                                                                                | To Copy text to clipboard.
+| shareToSystem      |✔️|   ✔️    | String title,String message, {List<String>? filePaths}                                                                                                                        | Open default System sheet, to share text and image.
+| shareImageToWhatsApp      |✔️|   ❌     | String filePaths                                                                                                                           | Share image to whatsapp
 
 
 
