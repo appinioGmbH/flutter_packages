@@ -100,19 +100,16 @@ class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
 
     final RenderRepaintBoundary repaintBoundary = RenderRepaintBoundary();
 
-    Size logicalSize =
-        View.of(context!).physicalSize / View.of(context).devicePixelRatio;
-    Size imageSize = View.of(context).physicalSize;
-
-    assert(logicalSize.aspectRatio.toPrecision(5) ==
-        imageSize.aspectRatio.toPrecision(5));
+    final contextViewConfiguration =
+        ViewConfiguration.fromView(View.of(context!));
 
     final RenderView renderView = RenderView(
       view: View.of(context),
       child: RenderPositionedBox(
           alignment: Alignment.center, child: repaintBoundary),
       configuration: ViewConfiguration(
-        size: logicalSize,
+        logicalConstraints: contextViewConfiguration.logicalConstraints,
+        physicalConstraints: contextViewConfiguration.physicalConstraints,
         devicePixelRatio: pixelRatio ?? 1.0,
       ),
     );
@@ -163,7 +160,8 @@ class MethodChannelDisableScreenshot extends DisableScreenshotPlatform {
       isDirty = false;
 
       image = await repaintBoundary.toImage(
-          pixelRatio: pixelRatio ?? (imageSize.width / logicalSize.width));
+        pixelRatio: pixelRatio ?? contextViewConfiguration.devicePixelRatio,
+      );
 
       ///
       ///This delay shoud inceases with Widget tree Size
