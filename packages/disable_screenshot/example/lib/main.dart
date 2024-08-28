@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:disable_screenshot/disable_screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,6 +44,20 @@ class RootAppState extends State<RootApp> {
     });
   }
 
+  Future<void> _onCaptureScreenshotTap() async {
+    final fileName = await _plugin.captureScreenShotFromWidget(
+      Container(
+        color: Colors.red,
+        child: Container(
+          margin: const EdgeInsets.all(30),
+          color: Colors.green,
+        ),
+      ),
+      context: context,
+    );
+    Share.shareXFiles([XFile(fileName!)]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,6 +85,10 @@ class RootAppState extends State<RootApp> {
                   ? "allow screenshot"
                   : "disable screenshot")),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onCaptureScreenshotTap,
+        child: const Icon(Icons.image_outlined),
       ),
     );
   }
