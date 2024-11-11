@@ -105,7 +105,9 @@ class CustomVideoPlayerController {
     await SystemChrome.setPreferredOrientations(customVideoPlayerSettings
         .deviceOrientationsAfterFullscreen); // reset device orientation values
     _isFullscreen = false;
-    Navigator.of(context).pop();
+    if(context.mounted){
+      Navigator.of(context).pop();
+    }
   }
 
   void _setOrientationForVideo() {
