@@ -1,6 +1,6 @@
 name: appinio_video_player
-description: A custom video player that builds on top of the official video_player package by flutter and adds many functionalities.
-version: 1.3.0
+description: A custom video player that builds on top of the cached_video_player_plus package and adds many functionalities.
+version: 1.3.1
 homepage: https://github.com/appinioGmbH/flutter_packages
 repository: https://github.com/appinioGmbH/flutter_packages
 
@@ -9,7 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  cached_video_player: ^2.0.4
+  cached_video_player_plus: ^3.0.2
   flutter:
     sdk: flutter
 
