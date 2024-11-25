@@ -89,8 +89,8 @@ class _VideoSettingsQualityDialogState
     return widget.customVideoPlayerController.additionalVideoSources!.entries
         .toList()
         .firstWhere((element) =>
-            element.value ==
-            widget.customVideoPlayerController.videoPlayerController)
+            element.value.dataSource ==
+            widget.customVideoPlayerController.videoPlayerController.dataSource)
         .key;
   }
 
