@@ -427,19 +427,36 @@ class _AppinioSwiperState extends State<AppinioSwiper>
                 setState(() {
                   final swipeOption = widget.swipeOptions;
 
+                  final canMoveDown =
+                      (swipeOption.down || _position.offset.dy < 0) &&
+                          tapInfo.delta.dy > 0;
+                  final canMoveUp =
+                      (swipeOption.up || _position.offset.dy > 0) &&
+                          tapInfo.delta.dy < 0;
+                  final canMoveLeft =
+                      (swipeOption.left || _position.offset.dx > 0) &&
+                          tapInfo.delta.dx < 0;
+                  final canMoveRight =
+                      (swipeOption.right || _position.offset.dx < 0) &&
+                          tapInfo.delta.dx > 0;
+
                   final Offset tapDelta = tapInfo.delta;
+
                   double dx = 0;
                   double dy = 0;
-                  if (swipeOption.up && tapDelta.dy < 0) {
+
+                  if (canMoveUp) {
                     dy = tapDelta.dy;
-                  } else if (swipeOption.down && tapInfo.delta.dy > 0) {
+                  } else if (canMoveDown) {
                     dy = tapDelta.dy;
                   }
-                  if (swipeOption.left && tapDelta.dx < 0) {
+
+                  if (canMoveLeft) {
                     dx = tapDelta.dx;
-                  } else if (swipeOption.right && tapInfo.delta.dx > 0) {
+                  } else if (canMoveRight) {
                     dx = tapDelta.dx;
                   }
+
                   _position.offset += Offset(dx, dy);
                 });
                 _onSwiping();
