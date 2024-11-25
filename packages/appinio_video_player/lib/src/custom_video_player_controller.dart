@@ -94,7 +94,9 @@ class CustomVideoPlayerController {
     _setOrientationForVideo();
     SystemChrome.setEnabledSystemUIMode(
         customVideoPlayerSettings.systemUIModeInsideFullscreen);
-    await Navigator.of(context).push(route);
+    if(context.mounted){
+      await Navigator.of(context).push(route);
+    }
   }
 
   Future<void> _exitFullscreen() async {
