@@ -15,8 +15,8 @@ A new Flutter project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'FBSDKCoreKit', '17.0.2'
-  s.dependency 'FBSDKShareKit', '17.0.2'
+  s.dependency 'FBSDKCoreKit', '17.1.0'
+  s.dependency 'FBSDKShareKit', '17.1.0'
   s.static_framework = true
 
   s.platform = :ios, '9.0'
