@@ -25,6 +25,7 @@ extension ProtectedCustomVideoPlayerController on CustomVideoPlayerController {
 
 class CustomVideoPlayerController {
   double _lastVolume = 0.5;
+
   Duration get getPosition => videoPlayerController.value.position;
   final BuildContext context;
   CachedVideoPlayerController videoPlayerController;
@@ -93,7 +94,9 @@ class CustomVideoPlayerController {
     _setOrientationForVideo();
     SystemChrome.setEnabledSystemUIMode(
         customVideoPlayerSettings.systemUIModeInsideFullscreen);
-    await Navigator.of(context).push(route);
+    if(context.mounted){
+      await Navigator.of(context).push(route);
+    }
   }
 
   Future<void> _exitFullscreen() async {
@@ -105,7 +108,9 @@ class CustomVideoPlayerController {
     await SystemChrome.setPreferredOrientations(customVideoPlayerSettings
         .deviceOrientationsAfterFullscreen); // reset device orientation values
     _isFullscreen = false;
-    Navigator.of(context).pop();
+    if (context.mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _setOrientationForVideo() {
