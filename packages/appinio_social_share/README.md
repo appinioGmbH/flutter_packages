@@ -182,6 +182,7 @@ Add these lines to your Info.plist file
   <key>LSApplicationQueriesSchemes</key>
   <array>
   <string>instagram</string>
+  <string>instagram-stories</string>
   <string>fb</string>
   <string>fbauth2</string>
   <string>fbshareextension</string>
