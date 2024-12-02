@@ -443,12 +443,7 @@ public class SocialShareUtil {
                                               || isPackageInstalled(TELEGRAM_WEB_PACKAGE, pm);
                 apps.put(telegramApp, isTelegramInstalled);
             } else {
-                try {
-                    isPackageInstalled(appsMap.get(appName), pm);
-                    apps.put(appName, true);
-                } catch (Exception e) {
-                    apps.put(appName, false);
-                }
+                apps.put(appName, isPackageInstalled(appsMap.get(appName), pm));
             }
         }
         return apps;
