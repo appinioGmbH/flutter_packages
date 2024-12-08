@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:appinio_video_player/src/fullscreen_video_player.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_settings.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:video_player/video_player.dart';
 
 /// The extension on the class is able to call private methods
 /// only the package can use these methods and not the public beacuse of the hide keyword in the package exports
@@ -14,8 +15,7 @@ extension ProtectedCustomVideoPlayerController on CustomVideoPlayerController {
   ValueNotifier<double> get playbackSpeedNotifier => _playbackSpeedNotifier;
   ValueNotifier<bool> get isPlayingNotifier => _isPlayingNotifier;
   bool get isFullscreen => _isFullscreen;
-  set updateViewAfterFullscreen(Function updateViewAfterFullscreen) =>
-      _updateViewAfterFullscreen = updateViewAfterFullscreen;
+  set updateViewAfterFullscreen(Function updateViewAfterFullscreen) => _updateViewAfterFullscreen = updateViewAfterFullscreen;
 }
 
 class CustomVideoPlayerController {
@@ -24,12 +24,14 @@ class CustomVideoPlayerController {
   final CustomVideoPlayerSettings customVideoPlayerSettings;
   final Map<String, VideoPlayerController>? additionalVideoSources;
   final ValueNotifier<bool> areControlsVisible = ValueNotifier<bool>(true);
+  Widget? watermarkWidget;
 
   CustomVideoPlayerController({
     required this.context,
     required this.videoPlayerController,
     this.customVideoPlayerSettings = const CustomVideoPlayerSettings(),
     this.additionalVideoSources,
+    this.watermarkWidget,
   }) {
     videoPlayerController.addListener(_videoListeners);
   }
@@ -41,8 +43,7 @@ class CustomVideoPlayerController {
     bool fullscreen,
   ) async {
     if (kIsWeb) {
-      debugPrint(
-          "Web doesn't support fullscreen properly. When exiting fullscreen the video will be black. Audio still works.");
+      debugPrint("Web doesn't support fullscreen properly. When exiting fullscreen the video will be black. Audio still works.");
     }
     if (fullscreen) {
       await _enterFullscreen();
@@ -58,8 +59,7 @@ class CustomVideoPlayerController {
 
   bool _isFullscreen = false;
   Timer? _timer;
-  final ValueNotifier<Duration> _videoProgressNotifier =
-      ValueNotifier(Duration.zero);
+  final ValueNotifier<Duration> _videoProgressNotifier = ValueNotifier(Duration.zero);
   final ValueNotifier<double> _playbackSpeedNotifier = ValueNotifier(1.0);
   final ValueNotifier<bool> _isPlayingNotifier = ValueNotifier(false);
 
@@ -78,8 +78,7 @@ class CustomVideoPlayerController {
     );
     _isFullscreen = true;
     _setOrientationForVideo();
-    SystemChrome.setEnabledSystemUIMode(
-        customVideoPlayerSettings.systemUIModeInsideFullscreen);
+    SystemChrome.setEnabledSystemUIMode(customVideoPlayerSettings.systemUIModeInsideFullscreen);
     await Navigator.of(context).push(route);
   }
 
@@ -89,8 +88,7 @@ class CustomVideoPlayerController {
       customVideoPlayerSettings.systemUIModeAfterFullscreen,
       overlays: customVideoPlayerSettings.systemUIOverlaysAfterFullscreen,
     );
-    await SystemChrome.setPreferredOrientations(customVideoPlayerSettings
-        .deviceOrientationsAfterFullscreen); // reset device orientation values
+    await SystemChrome.setPreferredOrientations(customVideoPlayerSettings.deviceOrientationsAfterFullscreen); // reset device orientation values
     _isFullscreen = false;
     Navigator.of(context).pop();
   }
@@ -133,8 +131,7 @@ class CustomVideoPlayerController {
       videoPlayerController.removeListener(_videoListeners);
       videoPlayerController = newSource;
       await videoPlayerController.initialize();
-      videoPlayerController.addListener(
-          _videoListeners); // add listeners to new video controller
+      videoPlayerController.addListener(_videoListeners); // add listeners to new video controller
       if (isFullscreen) {
         _setOrientationForVideo(); // if video changed completely
       }
@@ -142,8 +139,7 @@ class CustomVideoPlayerController {
       if (Theme.of(context).platform != TargetPlatform.iOS) {
         await videoPlayerController.setPlaybackSpeed(_playbackSpeed);
       } else {
-        await videoPlayerController.setPlaybackSpeed(
-            1); // resetting to 1 because its not working on iOS. open issue on github
+        await videoPlayerController.setPlaybackSpeed(1); // resetting to 1 because its not working on iOS. open issue on github
       }
       if (_wasPlaying) {
         await videoPlayerController.play();
@@ -164,11 +160,9 @@ class CustomVideoPlayerController {
   /// used to make progress more fluid
   Future<void> _fluidVideoProgressListener() async {
     if (videoPlayerController.value.isPlaying) {
-      _timer ??= Timer.periodic(const Duration(milliseconds: 100),
-          (Timer timer) async {
+      _timer ??= Timer.periodic(const Duration(milliseconds: 100), (Timer timer) async {
         if (videoPlayerController.value.isInitialized) {
-          _videoProgressNotifier.value = await videoPlayerController.position ??
-              _videoProgressNotifier.value;
+          _videoProgressNotifier.value = await videoPlayerController.position ?? _videoProgressNotifier.value;
         }
       });
     } else {
@@ -176,8 +170,7 @@ class CustomVideoPlayerController {
         _timer?.cancel();
         _timer = null;
         if (videoPlayerController.value.isInitialized) {
-          _videoProgressNotifier.value =
-              (await videoPlayerController.position)!;
+          _videoProgressNotifier.value = (await videoPlayerController.position)!;
         }
       }
     }
@@ -186,8 +179,7 @@ class CustomVideoPlayerController {
   /// save that the video is played once
   void _onVideoEndListener() {
     if (videoPlayerController.value.position > Duration.zero) {
-      if (videoPlayerController.value.duration ==
-          videoPlayerController.value.position) {
+      if (videoPlayerController.value.duration == videoPlayerController.value.position) {
         playedOnceNotifier.value = true;
       }
     }
@@ -195,19 +187,12 @@ class CustomVideoPlayerController {
 
   void _fullscreenFunctionalityListener() {
     // exit fullscreen on end
-    if (videoPlayerController.value.duration ==
-            videoPlayerController.value.position &&
-        !videoPlayerController.value.isPlaying &&
-        customVideoPlayerSettings.exitFullscreenOnEnd &&
-        _isFullscreen) {
+    if (videoPlayerController.value.duration == videoPlayerController.value.position && !videoPlayerController.value.isPlaying && customVideoPlayerSettings.exitFullscreenOnEnd && _isFullscreen) {
       setFullscreen(false);
     }
 
     // enter fullscreen on start
-    if (videoPlayerController.value.position == Duration.zero &&
-        videoPlayerController.value.isPlaying &&
-        customVideoPlayerSettings.enterFullscreenOnStart &&
-        !_isFullscreen) {
+    if (videoPlayerController.value.position == Duration.zero && videoPlayerController.value.isPlaying && customVideoPlayerSettings.enterFullscreenOnStart && !_isFullscreen) {
       setFullscreen(true);
     }
   }
@@ -236,8 +221,7 @@ class CustomVideoPlayerController {
     videoPlayerController.dispose();
     if (additionalVideoSources != null) {
       if (additionalVideoSources!.isNotEmpty) {
-        for (MapEntry<String, VideoPlayerController> videoSource
-            in additionalVideoSources!.entries) {
+        for (MapEntry<String, VideoPlayerController> videoSource in additionalVideoSources!.entries) {
           videoSource.value.dispose();
         }
       }

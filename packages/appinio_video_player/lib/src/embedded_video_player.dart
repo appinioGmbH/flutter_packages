@@ -25,23 +25,17 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
     super.initState();
 
     if (!widget.isFullscreen) {
-      widget.customVideoPlayerController.updateViewAfterFullscreen =
-          _updateVideoState;
+      widget.customVideoPlayerController.updateViewAfterFullscreen = _updateVideoState;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.customVideoPlayerController.videoPlayerController.value
-        .isInitialized) {
+    if (widget.customVideoPlayerController.videoPlayerController.value.isInitialized) {
       return AspectRatio(
         aspectRatio: widget.isFullscreen
-            ? widget.customVideoPlayerController.videoPlayerController.value
-                .aspectRatio
-            : widget.customVideoPlayerController.customVideoPlayerSettings
-                    .customAspectRatio ??
-                widget.customVideoPlayerController.videoPlayerController.value
-                    .aspectRatio,
+            ? widget.customVideoPlayerController.videoPlayerController.value.aspectRatio
+            : widget.customVideoPlayerController.customVideoPlayerSettings.customAspectRatio ?? widget.customVideoPlayerController.videoPlayerController.value.aspectRatio,
         child: Stack(
           children: [
             Container(
@@ -49,8 +43,7 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
             ),
             Center(
               child: AspectRatio(
-                aspectRatio: widget.customVideoPlayerController
-                    .videoPlayerController.value.aspectRatio,
+                aspectRatio: widget.customVideoPlayerController.videoPlayerController.value.aspectRatio,
                 child: IgnorePointer(
                   child: VideoPlayer(
                     widget.customVideoPlayerController.videoPlayerController,
@@ -58,6 +51,7 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
                 ),
               ),
             ),
+            widget.customVideoPlayerController.watermarkWidget ?? SizedBox(height: 0),
             Thumbnail(
               customVideoPlayerController: widget.customVideoPlayerController,
             ),
@@ -65,8 +59,7 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
               customVideoPlayerController: widget.customVideoPlayerController,
               updateVideoState: _updateVideoState,
             ),
-            if (widget.customVideoPlayerController.customVideoPlayerSettings
-                .showSeekButtons)
+            if (widget.customVideoPlayerController.customVideoPlayerSettings.showSeekButtons)
               SeekButtons(
                 customVideoPlayerController: widget.customVideoPlayerController,
               )
@@ -74,9 +67,7 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
         ),
       );
     } else {
-      return widget.customVideoPlayerController.customVideoPlayerSettings
-              .placeholderWidget ??
-          const SizedBox.shrink();
+      return widget.customVideoPlayerController.customVideoPlayerSettings.placeholderWidget ?? const SizedBox.shrink();
     }
   }
 
