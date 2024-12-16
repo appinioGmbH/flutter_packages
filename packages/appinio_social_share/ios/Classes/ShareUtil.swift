@@ -26,6 +26,8 @@ public class ShareUtil{
     let argBackgroundBottomColor: String  = "backgroundBottomColor";
     let argImages: String  = "images";
     let argVideoFile: String  = "videoFile";
+    let argLinkText: String = "linkText";
+    let argLinkUrl: String = "linkUrl";
 
 
     
@@ -499,7 +501,9 @@ public class ShareUtil{
             let backgroundTopColor = args[self.argBackgroundTopColor] as? String
             let backgroundBottomColor =  args[self.argBackgroundBottomColor] as? String
             let attributionURL =  args[self.argAttributionURL] as? String
-
+            let linkText =  args[self.argLinkText] as? String
+            let linkUrl =  args[self.argLinkUrl] as? String
+            
             
             guard let instagramURL = URL(string: "instagram-stories://share?source_application=\(appId!)") else {
                 result(ERROR_APP_NOT_AVAILABLE)
@@ -529,6 +533,8 @@ public class ShareUtil{
                         "com.instagram.sharedSticker.backgroundImage": backgroundImage ?? "",
                         "com.instagram.sharedSticker.backgroundTopColor": backgroundTopColor ?? "",
                         "com.instagram.sharedSticker.backgroundBottomColor": backgroundBottomColor ?? "",
+                        "com.instagram.sharedSticker.linkText": linkText ?? "",
+                        "com.instagram.sharedSticker.linkURL": linkUrl ?? "",
                     ]
                 ]
                 let pasteboardOptions = [
