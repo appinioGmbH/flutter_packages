@@ -86,6 +86,8 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
         String backgroundImage = call.argument("backgroundImage");
         String backgroundTopColor = call.argument("backgroundTopColor");
         String backgroundBottomColor = call.argument("backgroundBottomColor");
+        String linkText = call.argument("linkText");
+        String linkUrl = call.argument("linkUrl");
         switch (call.method) {
             case INSTALLED_APPS:
                 Map<String, Boolean> response = socialShareUtil.getInstalledApps(activeContext);
@@ -98,7 +100,7 @@ public class AppinioSocialSharePlugin implements FlutterPlugin, MethodCallHandle
             case INSTAGRAM_FEED_FILES:
                 return socialShareUtil.shareToInstagramFeedFiles(imagePaths, activeContext,message);
             case INSTAGRAM_STORIES:
-                return socialShareUtil.shareToInstagramStory(appId, stickerImage, backgroundImage, backgroundTopColor, backgroundBottomColor, attributionURL, activeContext);
+                return socialShareUtil.shareToInstagramStory(appId, stickerImage, backgroundImage, backgroundTopColor, backgroundBottomColor, attributionURL, linkText, linkUrl, activeContext);
             case FACEBOOK_STORIES:
                 return socialShareUtil.shareToFaceBookStory(appId, stickerImage, backgroundImage, backgroundTopColor, backgroundBottomColor, attributionURL, activeContext);
             case MESSENGER:

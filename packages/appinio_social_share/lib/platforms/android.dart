@@ -64,14 +64,18 @@ class Android {
       String? backgroundVideo,
       String? backgroundTopColor,
       String? backgroundBottomColor,
-      String? attributionURL}) {
+      String? attributionURL,
+      String? linkText,
+      String? linkUrl}) {
     return AppinioSocialSharePlatform.instance.shareToInstagramStory(appId,
         stickerImage: stickerImage,
         backgroundImage: backgroundImage,
         backgroundVideo: backgroundVideo,
         backgroundTopColor: backgroundTopColor,
         backgroundBottomColor: backgroundBottomColor,
-        attributionURL: attributionURL);
+        attributionURL: attributionURL,
+        linkText: linkText,
+        linkUrl: linkUrl);
   }
 
   Future<String> shareToFacebookStory(String appId,
