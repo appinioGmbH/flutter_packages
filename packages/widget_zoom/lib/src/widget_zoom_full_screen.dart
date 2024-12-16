@@ -7,6 +7,7 @@ class WidgetZoomFullscreen extends StatefulWidget {
   final double maxScale;
   final Object heroAnimationTag;
   final double? fullScreenDoubleTapZoomScale;
+  final Widget? closeIcon;
   const WidgetZoomFullscreen({
     Key? key,
     required this.zoomWidget,
@@ -14,6 +15,7 @@ class WidgetZoomFullscreen extends StatefulWidget {
     required this.maxScale,
     required this.heroAnimationTag,
     this.fullScreenDoubleTapZoomScale,
+    this.closeIcon,
   }) : super(key: key);
 
   @override
@@ -54,6 +56,12 @@ class _ImageZoomFullscreenState extends State<WidgetZoomFullscreen>
 
   @override
   Widget build(BuildContext context) {
+    final closeIcon = widget.closeIcon ??
+        const Icon(
+          CupertinoIcons.xmark,
+          color: Colors.white,
+          size: 30,
+        );
     return Stack(
       children: [
         Positioned.fill(
@@ -101,16 +109,12 @@ class _ImageZoomFullscreenState extends State<WidgetZoomFullscreen>
               child: AnimatedOpacity(
                 duration: _opacityDuration,
                 opacity: _opacity,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 5,
                   ),
-                  child: Icon(
-                    CupertinoIcons.xmark,
-                    color: Colors.white,
-                    size: 30,
-                  ),
+                  child: closeIcon,
                 ),
               ),
             ),

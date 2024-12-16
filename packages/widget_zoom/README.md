@@ -52,16 +52,17 @@ It doesn't need more setup than this:
 
 ## Constructor
 
-| Parameter                    | Default            | Description                                                                  | Required |
-| ---------------------------- | :----------------- | :--------------------------------------------------------------------------- | :------: |
-| zoomWidget                   | -                  | The widget that should be zoomable                                           |   true   |
-| heroAnimationTag             | -                  | An object used for the Hero animation when navigating to and from fullscreen |   true   |
-| minScaleEmbeddedView         | 1                  | The smallest allowed scale when zooming the widget not in fullscreen         |  false   |
-| maxScaleEmbeddedView         | 4                  | The highest allowed scale when zooming the widget not in fullscreen          |  false   |
-| minScaleFullscreen           | 1                  | The smallest allowed scale when zooming the widget in fullscreen             |  false   |
-| maxScaleFullscreen           | 4                  | The highest allowed scale when zooming the widget in fullscreen              |  false   |
-| fullScreenDoubleTapZoomScale | maxScaleFullscreen | The zoom scale when double tapping the zoomable widget in fullscreen         |  false   |
-| closeFullScreenImageOnDispose | false | Controls whether the full screen image will be closed once the widget is disposed. | false |
+| Parameter                     | Default              | Description                                                                        | Required |
+| ----------------------------  | :------------------- | :--------------------------------------------------------------------------------- | :------: |
+| zoomWidget                    | -                    | The widget that should be zoomable                                                 |   true   |
+| heroAnimationTag              | -                    | An object used for the Hero animation when navigating to and from fullscreen       |   true   |
+| minScaleEmbeddedView          | 1                    | The smallest allowed scale when zooming the widget not in fullscreen               |  false   |
+| maxScaleEmbeddedView          | 4                    | The highest allowed scale when zooming the widget not in fullscreen                |  false   |
+| minScaleFullscreen            | 1                    | The smallest allowed scale when zooming the widget in fullscreen                   |  false   |
+| maxScaleFullscreen            | 4                    | The highest allowed scale when zooming the widget in fullscreen                    |  false   |
+| fullScreenDoubleTapZoomScale  | maxScaleFullscreen   | The zoom scale when double tapping the zoomable widget in fullscreen               |  false   |
+| closeFullScreenImageOnDispose | false                | Controls whether the full screen image will be closed once the widget is disposed. |  false   |
+| closeIcon                     | CupertinoIcons.xmark | Widget displayed at the top right corner of the full screen image that closes it.  |  false   |
 
 
 <hr/>Made with ❤ by Flutter team at <a href="https://appinio.com">Appinio GmbH</a>

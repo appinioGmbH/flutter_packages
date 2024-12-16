@@ -1,6 +1,6 @@
 name: widget_zoom
 description: A widget to zoom another widget either directly in an overlay or in fullscreen.
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/appinioGmbH/flutter_packages
 repository: https://github.com/appinioGmbH/flutter_packages/tree/main/packages/widget_zoom
 
