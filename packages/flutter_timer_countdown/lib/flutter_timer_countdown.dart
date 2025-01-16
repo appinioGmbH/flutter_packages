@@ -58,7 +58,7 @@ class TimerCountdown extends StatefulWidget {
   /// Defines the width between the colons and the units.
   final double spacerWidth;
 
-  /// Defines the width between the colons and the units.
+  /// Defines the height between the colons and the units.
   final double spacerHeight;
 
   TimerCountdown({
@@ -167,7 +167,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
             ),
             if (widget.enableDescriptions)
               SizedBox(
-                height: spacerHeight,
+                height: widget.spacerHeight,
               ),
             if (widget.enableDescriptions)
               Text(
@@ -195,7 +195,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
         ),
         if (widget.enableDescriptions)
           SizedBox(
-            height: spacerHeight,
+            height: widget.spacerHeight,
           ),
         if (widget.enableDescriptions)
           Text(
@@ -218,7 +218,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
         ),
         if (widget.enableDescriptions)
           SizedBox(
-            height: spacerHeight,
+            height: widget.spacerHeight,
           ),
         if (widget.enableDescriptions)
           Text(
@@ -241,7 +241,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
         ),
         if (widget.enableDescriptions)
           SizedBox(
-            height: spacerHeight,
+            height: widget.spacerHeight,
           ),
         if (widget.enableDescriptions)
           Text(
@@ -264,7 +264,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
         ),
         if (widget.enableDescriptions)
           SizedBox(
-            height: spacerHeight,
+            height: widget.spacerHeight,
           ),
         if (widget.enableDescriptions)
           Text(
