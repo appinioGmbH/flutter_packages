@@ -58,6 +58,9 @@ class TimerCountdown extends StatefulWidget {
   /// Defines the width between the colons and the units.
   final double spacerWidth;
 
+  /// Defines the width between the colons and the units.
+  final double spacerHeight;
+
   TimerCountdown({
     required this.endTime,
     this.format = CountDownTimerFormat.daysHoursMinutesSeconds,
@@ -72,6 +75,8 @@ class TimerCountdown extends StatefulWidget {
     this.minutesDescription = "Minutes",
     this.secondsDescription = "Seconds",
     this.spacerWidth = 10,
+    this.spacerHeight = 5,
+
   });
 
   @override
@@ -162,7 +167,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
             ),
             if (widget.enableDescriptions)
               SizedBox(
-                height: 5,
+                height: spacerHeight,
               ),
             if (widget.enableDescriptions)
               Text(
@@ -190,7 +195,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
         ),
         if (widget.enableDescriptions)
           SizedBox(
-            height: 5,
+            height: spacerHeight,
           ),
         if (widget.enableDescriptions)
           Text(
@@ -213,7 +218,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
         ),
         if (widget.enableDescriptions)
           SizedBox(
-            height: 5,
+            height: spacerHeight,
           ),
         if (widget.enableDescriptions)
           Text(
@@ -236,7 +241,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
         ),
         if (widget.enableDescriptions)
           SizedBox(
-            height: 5,
+            height: spacerHeight,
           ),
         if (widget.enableDescriptions)
           Text(
@@ -259,7 +264,7 @@ class _TimerCountdownState extends State<TimerCountdown> {
         ),
         if (widget.enableDescriptions)
           SizedBox(
-            height: 5,
+            height: spacerHeight,
           ),
         if (widget.enableDescriptions)
           Text(
