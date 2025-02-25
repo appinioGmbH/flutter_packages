@@ -26,6 +26,10 @@ class WidgetZoom extends StatefulWidget {
   /// Controls whether the full screen image will be closed once the widget is disposed.
   final bool closeFullScreenImageOnDispose;
 
+  /// Widget displayed at the top right corner of the full screen image. Closes the overlay when tapped.
+  /// If not specified, [CupertinoIcons.xmark] will be displayed in white color.
+  final Widget? closeIcon;
+
   const WidgetZoom({
     Key? key,
     this.minScaleEmbeddedView = 1,
@@ -36,6 +40,7 @@ class WidgetZoom extends StatefulWidget {
     this.closeFullScreenImageOnDispose = false,
     required this.heroAnimationTag,
     required this.zoomWidget,
+    this.closeIcon,
   }) : super(key: key);
 
   @override
@@ -195,6 +200,7 @@ class _WidgetZoomState extends State<WidgetZoom>
             maxScale: widget.maxScaleFullscreen,
             heroAnimationTag: widget.heroAnimationTag,
             fullScreenDoubleTapZoomScale: widget.fullScreenDoubleTapZoomScale,
+            closeIcon: widget.closeIcon,
           ),
         ),
         transitionDuration: const Duration(milliseconds: 300),
