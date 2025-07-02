@@ -1,6 +1,6 @@
 name: appinio_video_player
 description: A custom video player that builds on top of the official video_player package by flutter and adds many functionalities.
-version: 1.2.3
+version: 1.2.4
 homepage: https://github.com/appinioGmbH/flutter_packages
 repository: https://github.com/appinioGmbH/flutter_packages
 
