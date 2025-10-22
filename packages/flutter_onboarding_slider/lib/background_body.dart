@@ -6,7 +6,8 @@ class BackgroundBody extends StatelessWidget {
   final int totalPage;
   final List<Widget> bodies;
 
-  BackgroundBody({
+  const BackgroundBody({
+    super.key,
     required this.controller,
     required this.function,
     required this.totalPage,

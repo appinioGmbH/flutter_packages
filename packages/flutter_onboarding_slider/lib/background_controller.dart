@@ -7,20 +7,24 @@ class BackgroundController extends StatelessWidget {
   final bool indicatorAbove;
   final double indicatorPosition;
   final bool hasFloatingButton;
+  final Color backgroundColor;
 
-  BackgroundController({
+  const BackgroundController({
+    super.key,
     required this.currentPage,
     required this.totalPage,
     required this.controllerColor,
     required this.indicatorAbove,
     required this.hasFloatingButton,
     required this.indicatorPosition,
+    required this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return indicatorAbove
         ? Container(
+            color: backgroundColor,
             padding: EdgeInsets.only(bottom: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -30,6 +34,7 @@ class BackgroundController extends StatelessWidget {
         : (currentPage == totalPage - 1) && hasFloatingButton
             ? SizedBox.shrink()
             : Container(
+                color: backgroundColor,
                 padding: EdgeInsets.only(bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +67,7 @@ class BackgroundController extends StatelessWidget {
       decoration: BoxDecoration(
         color: isActive
             ? controllerColor ?? Colors.white
-            : (controllerColor ?? Colors.white).withOpacity(0.5),
+            : (controllerColor ?? Colors.white).withValues(alpha: .5),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
