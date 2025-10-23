@@ -1,3 +1,6 @@
+## [1.2.5] - 2025.10.23
+- Fix: Abrupt full screen exit after Video ends
+
 ## [1.2.3] - 2025.05.06
 - Fix: Bad state error on exit full screen
 
