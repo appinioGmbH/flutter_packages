@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:appinio_video_player/src/fullscreen_video_player.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_settings.dart';
+import 'package:appinio_video_player/src/helpers/platform_helper.dart';
 
 /// The extension on the class is able to call private methods
 /// only the package can use these methods and not the public beacuse of the hide keyword in the package exports
@@ -24,6 +24,7 @@ class CustomVideoPlayerController {
   final CustomVideoPlayerSettings customVideoPlayerSettings;
   final Map<String, VideoPlayerController>? additionalVideoSources;
   final ValueNotifier<bool> areControlsVisible = ValueNotifier<bool>(true);
+  final PlatformHelper _platformHelper = const PlatformHelper();
 
   bool _isDisposed = false;
   bool _isDisposing = false;
@@ -47,7 +48,7 @@ class CustomVideoPlayerController {
       return;
     }
 
-    if (kIsWeb) {
+    if (_platformHelper.isWeb) {
       debugPrint(
         "Web doesn't support fullscreen properly. When exiting fullscreen the video will be black. Audio still works.",
       );
@@ -187,7 +188,7 @@ class CustomVideoPlayerController {
           _setOrientationForVideo(); // if video changed completely
         }
         await videoPlayerController.seekTo(_playedDuration);
-        if (Theme.of(context).platform != TargetPlatform.iOS) {
+        if (_platformHelper.supportsPlaybackSpeedChange(context)) {
           await videoPlayerController.setPlaybackSpeed(_playbackSpeed);
         } else {
           await videoPlayerController.setPlaybackSpeed(
@@ -250,7 +251,6 @@ class CustomVideoPlayerController {
     }
   }
 
-
   Future<void> _safelyCleanupSurface() async {
     try {
       if (videoPlayerController.value.isInitialized) {
@@ -306,7 +306,7 @@ class CustomVideoPlayerController {
     _checkDisposalStatus();
 
     if (videoPlayerController.value.isPlaying) {
-      _timer  = Timer.periodic(const Duration(milliseconds: 100), (
+      _timer = Timer.periodic(const Duration(milliseconds: 100), (
         Timer timer,
       ) async {
         try {
@@ -327,7 +327,8 @@ class CustomVideoPlayerController {
           }
 
           if (videoPlayerController.value.isInitialized) {
-            _videoProgressNotifier.value = await videoPlayerController.position ??
+            _videoProgressNotifier.value =
+                await videoPlayerController.position ??
                 _videoProgressNotifier.value;
           }
         } catch (e) {
@@ -341,7 +342,7 @@ class CustomVideoPlayerController {
         _timer = null;
         if (videoPlayerController.value.isInitialized) {
           _videoProgressNotifier.value =
-          (await videoPlayerController.position)!;
+              (await videoPlayerController.position)!;
         }
       }
     }
