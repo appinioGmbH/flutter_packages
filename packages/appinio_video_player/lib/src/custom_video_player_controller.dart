@@ -67,6 +67,11 @@ class CustomVideoPlayerController {
   /// Check if currently exiting fullscreen
   bool get isExitingFullscreen => _isExitingFullscreen;
 
+  /// Check if video player is in a valid state for operations
+  bool get _isVideoPlayerValid =>
+      videoPlayerController.value.isInitialized && 
+      !videoPlayerController.value.hasError;
+
   /// private fields
 
   Function? _updateViewAfterFullscreen;
@@ -226,8 +231,7 @@ class CustomVideoPlayerController {
     }
 
     try {
-      if (videoPlayerController.value.isInitialized &&
-          !videoPlayerController.value.hasError) {
+      if (_isVideoPlayerValid) {
         await videoPlayerController.pause();
       }
     } catch (e) {
@@ -242,8 +246,7 @@ class CustomVideoPlayerController {
     }
 
     try {
-      if (videoPlayerController.value.isInitialized &&
-          !videoPlayerController.value.hasError) {
+      if (_isVideoPlayerValid) {
         await videoPlayerController.play();
       }
     } catch (e) {
