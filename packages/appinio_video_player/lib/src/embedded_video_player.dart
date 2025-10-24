@@ -32,25 +32,37 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.customVideoPlayerController.videoPlayerController.value
+    if (widget
+        .customVideoPlayerController
+        .videoPlayerController
+        .value
         .isInitialized) {
       return AspectRatio(
         aspectRatio: widget.isFullscreen
-            ? widget.customVideoPlayerController.videoPlayerController.value
-                .aspectRatio
-            : widget.customVideoPlayerController.customVideoPlayerSettings
-                    .customAspectRatio ??
-                widget.customVideoPlayerController.videoPlayerController.value
-                    .aspectRatio,
+            ? widget
+                  .customVideoPlayerController
+                  .videoPlayerController
+                  .value
+                  .aspectRatio
+            : widget
+                      .customVideoPlayerController
+                      .customVideoPlayerSettings
+                      .customAspectRatio ??
+                  widget
+                      .customVideoPlayerController
+                      .videoPlayerController
+                      .value
+                      .aspectRatio,
         child: Stack(
           children: [
-            Container(
-              color: CupertinoColors.black,
-            ),
+            Container(color: CupertinoColors.black),
             Center(
               child: AspectRatio(
-                aspectRatio: widget.customVideoPlayerController
-                    .videoPlayerController.value.aspectRatio,
+                aspectRatio: widget
+                    .customVideoPlayerController
+                    .videoPlayerController
+                    .value
+                    .aspectRatio,
                 child: IgnorePointer(
                   child: VideoPlayer(
                     widget.customVideoPlayerController.videoPlayerController,
@@ -65,16 +77,20 @@ class _EmbeddedVideoPlayerState extends State<EmbeddedVideoPlayer> {
               customVideoPlayerController: widget.customVideoPlayerController,
               updateVideoState: _updateVideoState,
             ),
-            if (widget.customVideoPlayerController.customVideoPlayerSettings
+            if (widget
+                .customVideoPlayerController
+                .customVideoPlayerSettings
                 .showSeekButtons)
               SeekButtons(
                 customVideoPlayerController: widget.customVideoPlayerController,
-              )
+              ),
           ],
         ),
       );
     } else {
-      return widget.customVideoPlayerController.customVideoPlayerSettings
+      return widget
+              .customVideoPlayerController
+              .customVideoPlayerSettings
               .placeholderWidget ??
           const SizedBox.shrink();
     }
