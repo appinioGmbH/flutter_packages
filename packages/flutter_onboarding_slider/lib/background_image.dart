@@ -25,7 +25,7 @@ class BackgroundImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(pageOffsetNotifierProvider(pageController));
+    final state = ref.watch(pageOffsetProvider(pageController));
     return Stack(children: [
       Positioned(
         top: imageVerticalOffset,
