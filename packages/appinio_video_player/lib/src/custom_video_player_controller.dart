@@ -257,14 +257,12 @@ class CustomVideoPlayerController {
   Future<void> _safelyCleanupSurface() async {
     try {
       if (videoPlayerController.value.isInitialized) {
-        await _safelyPauseVideo();
-        await Future.delayed(const Duration(milliseconds: 200));
+          await _safelyPauseVideo();
         try {
           await videoPlayerController.seekTo(Duration.zero);
         } catch (e) {
           debugPrint('Error seeking to beginning during cleanup: $e');
         }
-        await Future.delayed(const Duration(milliseconds: 100));
       }
     } catch (e) {
       debugPrint('Error during surface cleanup: $e');
@@ -435,7 +433,6 @@ class CustomVideoPlayerController {
       _timer?.cancel();
       _timer = null;
       await _safelyCleanupSurface();
-      await Future.delayed(const Duration(milliseconds: 100));
       if (videoPlayerController.value.isInitialized) {
         videoPlayerController.removeListener(_videoListeners);
       }
