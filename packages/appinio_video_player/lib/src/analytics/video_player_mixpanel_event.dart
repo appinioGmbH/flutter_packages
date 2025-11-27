@@ -48,7 +48,6 @@ class VideoPlayerMixpanelEvent {
     Map<String, dynamic>? properties,
   }) : properties = properties ?? const {};
 
-  /// The default event name that should be sent to Mixpanel.
   String get eventName => type.name;
 
   /// A helper payload that merges the default bookkeeping fields with the
