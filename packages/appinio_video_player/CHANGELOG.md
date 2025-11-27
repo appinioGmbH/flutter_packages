@@ -1,5 +1,6 @@
 ## [1.2.6] - 2025.11.27
 - Chore: Add support for tracking
+- Update video_player version
 
 ## [1.2.5] - 2025.10.23
 - Fix: Abrupt full screen exit after Video ends
