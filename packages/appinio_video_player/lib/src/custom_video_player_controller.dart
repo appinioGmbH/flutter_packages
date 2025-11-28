@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:appinio_video_player/src/models/custom_video_player_settings.dart';
 import 'package:appinio_video_player/src/helpers/platform_helper.dart';
+import 'package:appinio_video_player/src/analytics/video_player_mixpanel_event.dart';
 
 /// The extension on the class is able to call private methods
 /// only the package can use these methods and not the public beacuse of the hide keyword in the package exports
@@ -23,6 +24,8 @@ class CustomVideoPlayerController {
   VideoPlayerController videoPlayerController;
   final CustomVideoPlayerSettings customVideoPlayerSettings;
   final Map<String, VideoPlayerController>? additionalVideoSources;
+  final VideoPlayerMixpanelEventCallback? mixpanelEventCallback;
+  final String? contextId;
   final ValueNotifier<bool> areControlsVisible = ValueNotifier<bool>(true);
   final PlatformHelper _platformHelper = const PlatformHelper();
 
@@ -35,6 +38,8 @@ class CustomVideoPlayerController {
     required this.videoPlayerController,
     this.customVideoPlayerSettings = const CustomVideoPlayerSettings(),
     this.additionalVideoSources,
+    this.mixpanelEventCallback,
+    this.contextId,
   }) {
     videoPlayerController.addListener(_videoListeners);
   }
@@ -44,7 +49,12 @@ class CustomVideoPlayerController {
 
   Future<void> setFullscreen(bool fullscreen) async {
     if (_isDisposed || _isDisposing) {
-      debugPrint('Cannot set fullscreen: controller is disposed');
+      const message = 'Cannot set fullscreen: controller is disposed';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoControllerInvalidState,
+        message,
+      );
       return;
     }
 
@@ -84,6 +94,32 @@ class CustomVideoPlayerController {
   final ValueNotifier<double> _playbackSpeedNotifier = ValueNotifier(1.0);
   final ValueNotifier<bool> _isPlayingNotifier = ValueNotifier(false);
 
+  void _trackMixpanelEvent(
+    VideoPlayerMixpanelEventType type,
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, dynamic>? properties,
+  }) {
+    final callback = mixpanelEventCallback;
+    if (callback == null) {
+      return;
+    }
+
+    callback(
+      VideoPlayerMixpanelEvent(
+        type: type,
+        message: message,
+        error: error,
+        stackTrace: stackTrace,
+        properties: {
+          if (contextId != null) 'id': contextId,
+          ...?properties,
+        },
+      ),
+    );
+  }
+
   Future<void> _enterFullscreen() async {
     try {
       final TransitionRoute<void> route = PageRouteBuilder<void>(
@@ -104,10 +140,22 @@ class CustomVideoPlayerController {
       );
 
       if (context.mounted) {
+        const successMessage = 'Entered fullscreen successfully';
+        _trackMixpanelEvent(
+          VideoPlayerMixpanelEventType.enterFullscreenSuccess,
+          successMessage,
+        );
         await Navigator.of(context).push(route);
       }
-    } catch (e) {
-      debugPrint('Error entering fullscreen: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error entering fullscreen: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoPlayerEnterFullscreen,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
       _isFullscreen = false; // Reset state on error
     }
   }
@@ -135,12 +183,29 @@ class CustomVideoPlayerController {
         final navigator = Navigator.of(context);
         if (navigator.canPop()) {
           navigator.pop();
+          const successMessage = 'Exited fullscreen successfully';
+          _trackMixpanelEvent(
+            VideoPlayerMixpanelEventType.exitFullscreenSuccess,
+            successMessage,
+          );
         } else {
-          debugPrint('Cannot pop from fullscreen - no route to pop');
+          const message = 'Cannot pop from fullscreen - no route to pop';
+          debugPrint(message);
+          _trackMixpanelEvent(
+            VideoPlayerMixpanelEventType.videoPlayerExitFullscreen,
+            message,
+          );
         }
       }
-    } catch (e) {
-      debugPrint('Error exiting fullscreen: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error exiting fullscreen: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoPlayerExitFullscreen,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
       _isFullscreen = false; // Ensure state is reset even on error
     } finally {
       _isExitingFullscreen = false;
@@ -206,27 +271,51 @@ class CustomVideoPlayerController {
         }
         _updateViewAfterFullscreen?.call();
       }
-    } catch (e) {
-      debugPrint('Error switching video source: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error switching video source: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.switchVideoSource,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
   Future<void> _safelyInitializeVideo() async {
     if (_isDisposed || _isDisposing) {
-      debugPrint('Cannot initialize video: controller is in invalid state');
+      const message = 'Cannot initialize video: controller is in invalid state';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoControllerInvalidState,
+        message,
+      );
       return;
     }
 
     try {
       await videoPlayerController.initialize();
-    } catch (e) {
-      debugPrint('Video initialization failed: $e');
+    } catch (e, stackTrace) {
+      final message = 'Video initialization failed: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoControllerInitializeVideo,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
   Future<void> _safelyPauseVideo() async {
     if (_isDisposed || _isDisposing) {
-      debugPrint('Cannot pause video: controller is in invalid state');
+      const message = 'Cannot pause video: controller is in invalid state';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoControllerInvalidState,
+        message,
+      );
       return;
     }
 
@@ -234,14 +323,26 @@ class CustomVideoPlayerController {
       if (_isVideoPlayerValid) {
         await videoPlayerController.pause();
       }
-    } catch (e) {
-      debugPrint('Error pausing video: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error pausing video: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.pauseVideo,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
   Future<void> _safelyPlayVideo() async {
     if (_isDisposed || _isDisposing) {
-      debugPrint('Cannot play video: controller is in invalid state');
+      const message = 'Cannot play video: controller is in invalid state';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoControllerInvalidState,
+        message,
+      );
       return;
     }
 
@@ -249,23 +350,44 @@ class CustomVideoPlayerController {
       if (_isVideoPlayerValid) {
         await videoPlayerController.play();
       }
-    } catch (e) {
-      debugPrint('Error playing video: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error playing video: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.playVideo,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
   Future<void> _safelyCleanupSurface() async {
     try {
       if (videoPlayerController.value.isInitialized) {
-          await _safelyPauseVideo();
+        await _safelyPauseVideo();
         try {
           await videoPlayerController.seekTo(Duration.zero);
-        } catch (e) {
-          debugPrint('Error seeking to beginning during cleanup: $e');
+        } catch (e, stackTrace) {
+          final message = 'Error seeking to beginning during cleanup: $e';
+          debugPrint(message);
+          _trackMixpanelEvent(
+            VideoPlayerMixpanelEventType.videoPlayerCleanupSeek,
+            message,
+            error: e,
+            stackTrace: stackTrace,
+          );
         }
       }
-    } catch (e) {
-      debugPrint('Error during surface cleanup: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error during surface cleanup: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoPlayerCleanupSurface,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -279,8 +401,15 @@ class CustomVideoPlayerController {
       _playbackSpeedListener();
       _onVideoEndListener();
       _onVideoErrorListener();
-    } catch (e) {
-      debugPrint('Error in video listeners: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error in video listeners: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoListeners,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -288,8 +417,14 @@ class CustomVideoPlayerController {
   void _onVideoErrorListener() {
     try {
       if (videoPlayerController.value.hasError) {
-        debugPrint(
-          'Video player error detected: ${videoPlayerController.value.errorDescription}',
+        final description =
+            videoPlayerController.value.errorDescription ?? 'Unknown error';
+        final message = 'Video player error detected: $description';
+        debugPrint(message);
+        _trackMixpanelEvent(
+          VideoPlayerMixpanelEventType.videoPlayerErrorDetected,
+          message,
+          properties: {'errorDescription': description},
         );
         // Cancel any ongoing timers
         _timer?.cancel();
@@ -297,8 +432,15 @@ class CustomVideoPlayerController {
         // Update playing state
         _isPlayingNotifier.value = false;
       }
-    } catch (e) {
-      debugPrint('Error in video error listener: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error in video error listener: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoErrorListener,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -332,8 +474,15 @@ class CustomVideoPlayerController {
                 await videoPlayerController.position ??
                 _videoProgressNotifier.value;
           }
-        } catch (e) {
-          debugPrint('Error getting video position: $e');
+        } catch (e, stackTrace) {
+          final message = 'Error getting video position: $e';
+          debugPrint(message);
+          _trackMixpanelEvent(
+            VideoPlayerMixpanelEventType.videoProgress,
+            message,
+            error: e,
+            stackTrace: stackTrace,
+          );
           timer.cancel();
         }
       });
@@ -360,8 +509,15 @@ class CustomVideoPlayerController {
           playedOnceNotifier.value = true;
         }
       }
-    } catch (e) {
-      debugPrint('Error in video end listener: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error in video end listener: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.videoEnd,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -385,8 +541,15 @@ class CustomVideoPlayerController {
           !_isFullscreen) {
         setFullscreen(true);
       }
-    } catch (e) {
-      debugPrint('Error in fullscreen functionality listener: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error in fullscreen functionality listener: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.fullscreenFunctionalityError,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -405,8 +568,15 @@ class CustomVideoPlayerController {
       } else {
         _isPlayingNotifier.value = false;
       }
-    } catch (e) {
-      debugPrint('Error in play/pause listener: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error in play/pause listener: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.playPauseListenerError,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -417,15 +587,27 @@ class CustomVideoPlayerController {
 
     try {
       _playbackSpeedNotifier.value = videoPlayerController.value.playbackSpeed;
-    } catch (e) {
-      debugPrint('Error in playback speed listener: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error in playback speed listener: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.playbackSpeedListenerError,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
   /// call dispose on the dispose method in your parent widget to be sure that every values is disposed
   Future<void> dispose() async {
     if (_isDisposed || _isDisposing) {
-      debugPrint('Video player already disposed or disposing');
+      const message = 'Video player already disposed or disposing';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.disposeAlreadyInProgress,
+        message,
+      );
       return;
     }
     _isDisposing = true;
@@ -458,8 +640,15 @@ class CustomVideoPlayerController {
 
       _isDisposed = true;
       debugPrint('Video player disposal completed');
-    } catch (e) {
-      debugPrint('Error during dispose: $e');
+    } catch (e, stackTrace) {
+      final message = 'Error during dispose: $e';
+      debugPrint(message);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.disposalError,
+        message,
+        error: e,
+        stackTrace: stackTrace,
+      );
     } finally {
       _isDisposing = false;
     }
