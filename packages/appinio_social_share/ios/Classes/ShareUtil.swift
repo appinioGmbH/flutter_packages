@@ -156,8 +156,8 @@ public class ShareUtil{
             let backgroundVideoUrl = URL(fileURLWithPath: videoFile!)
             let videoData = try? Data(contentsOf: backgroundVideoUrl) as NSData
 
-            getLibraryPermissionIfNecessary { granted in
 
+            getLibraryPermissionIfNecessary { granted in
                 guard granted else {
                     result(self.ERROR)
                     return
@@ -166,14 +166,15 @@ public class ShareUtil{
 
 
             PHPhotoLibrary.shared().performChanges({
-
                 let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
-                let filePath:String
-                     filePath = "\(documentsPath)/\(Date().description).jpeg"
+                let filePath: String
+                 
+                // Use .png instead of .jpeg to preserve transparency
+                filePath = "\(documentsPath)/\(Date().description).png"
 
 
                 videoData!.write(toFile: filePath, atomically: true)
-                    PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(fileURLWithPath: filePath))
+                PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(fileURLWithPath: filePath))
 
             },
             completionHandler: { success, error in
@@ -183,53 +184,41 @@ public class ShareUtil{
                     let fetchOptions = PHFetchOptions()
 
                     fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-                    let type:PHAssetMediaType;
-                        type = PHAssetMediaType.image
-
+                    let type:PHAssetMediaType = PHAssetMediaType.image
 
                     let fetchResult = PHAsset.fetchAssets(with: type, options: fetchOptions)
 
                     if let lastAsset = fetchResult.firstObject {
-
                         let localIdentifier = lastAsset.localIdentifier
                         let urlFeed = "instagram://library?LocalIdentifier=" + localIdentifier
 
-                        guard
-                            let url = URL(string: urlFeed)
-                        else {
-
+                        guard let url = URL(string: urlFeed) else {
                             result(self.ERROR_APP_NOT_AVAILABLE)
                             return
                         }
+                         
                         DispatchQueue.main.async {
-
                             if UIApplication.shared.canOpenURL(url) {
-
                                 if #available(iOS 10.0, *) {
-
                                     UIApplication.shared.open(url, options: [:], completionHandler: { (success) in
                                         result(self.SUCCESS)
                                     })
                                 }
                                 else {
-
                                     UIApplication.shared.openURL(url)
                                     result(self.SUCCESS)
                                 }
                             }
                             else {
-
                                 result(self.ERROR)
                             }
                         }
                     }
                 }
                 else if let error = error {
-
                     print(error.localizedDescription)
                 }
                 else {
-
                     result(self.ERROR)
                 }
             })
@@ -550,42 +539,62 @@ public class ShareUtil{
     public func shareImageToWhatsApp(args : [String: Any?],result: @escaping FlutterResult, delegate: SharingDelegate) {
       let imagePath = args[self.argImagePath] as? String
 
-      guard let url = URL(string: imagePath!) else {
+      guard let imagePath = imagePath else {
         result(FlutterError(code: "INVALID_PATH", message: "The image path is invalid", details: nil))
         return
       }
-      
-      guard let image = UIImage(contentsOfFile: url.path) else {
-        result(FlutterError(code: "IMAGE_ERROR", message: "Could not load image", details: nil))
+       
+      let fileURL = URL(fileURLWithPath: imagePath)
+       
+      // Check if file exists
+      guard FileManager.default.fileExists(atPath: fileURL.path) else {
+        result(FlutterError(code: "FILE_NOT_FOUND", message: "Image file not found", details: nil))
         return
       }
-    
-    
-        let urlWhats = "whatsapp://app"
-        if let urlString = urlWhats.addingPercentEncoding(withAllowedCharacters:CharacterSet.urlQueryAllowed) {
-            if let whatsappURL = URL(string: urlString) {
 
-                if UIApplication.shared.canOpenURL(whatsappURL as URL) {
+      let urlWhats = "whatsapp://app"
+      guard let whatsappURL = URL(string: urlWhats) else {
+          result(self.ERROR)
+          return
+      }
 
-                        if let imageData = image.jpegData(compressionQuality: 1.0) {
-                            let tempFile = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Documents/whatsAppTmp.wai")
-                            do {
-                                try imageData.write(to: tempFile, options: .atomic)
-                                let documentInteractionController = UIDocumentInteractionController(url: tempFile)
-                                documentInteractionController.uti = "net.whatsapp.image"
-                                documentInteractionController.presentOpenInMenu(from: CGRect.zero, in: UIApplication.topViewController()!.view, animated: true)
-
-                            } catch {
-                                print(error)
-                            }
-                        }
-                    
-
-                } else {
-                   print("Cannot open whatsapp")
-                }
-            }
-        }
+      if UIApplication.shared.canOpenURL(whatsappURL) {
+          DispatchQueue.main.async {
+              guard let topViewController = UIApplication.topViewController() else {
+                  result(self.ERROR)
+                  return
+              }
+               
+              // Share file URL directly instead of converting to UIImage
+              // This preserves PNG format and transparency
+              let activityViewController = UIActivityViewController(
+                  activityItems: [fileURL],  // Share URL, not UIImage
+                  applicationActivities: nil
+              )
+               
+              activityViewController.excludedActivityTypes = [
+                  .addToReadingList,
+                  .assignToContact,
+                  .openInIBooks,
+                  .print,
+                  .saveToCameraRoll
+              ]
+               
+              if UIDevice.current.userInterfaceIdiom == .pad {
+                  activityViewController.modalPresentationStyle = .popover
+                  let popover = activityViewController.popoverPresentationController
+                  popover?.permittedArrowDirections = []
+                  popover?.sourceRect = CGRect(x: topViewController.view.bounds.midX, y: topViewController.view.bounds.midY, width: 0, height: 0)
+                  popover?.sourceView = topViewController.view
+              }
+               
+              topViewController.present(activityViewController, animated: true) {
+                  result(self.SUCCESS)
+              }
+          }
+      } else {
+         result(self.ERROR_APP_NOT_AVAILABLE)
+      }
     }
     
 }
