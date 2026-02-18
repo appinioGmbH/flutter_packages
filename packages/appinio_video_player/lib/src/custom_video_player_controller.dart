@@ -32,6 +32,13 @@ class CustomVideoPlayerController {
   bool _isDisposed = false;
   bool _isDisposing = false;
   bool _isExitingFullscreen = false;
+  bool _isAttemptingFallback = false;
+
+  /// Prevents overlapping position updates in the progress timer callback (avoids main-thread load on slow devices).
+  bool _progressUpdateInProgress = false;
+
+  /// Tracks which additional source key is currently active; null when using the main [videoPlayerController].
+  String? _currentSourceKey;
 
   CustomVideoPlayerController({
     required this.context,
@@ -269,6 +276,7 @@ class CustomVideoPlayerController {
         if (_wasPlaying) {
           await _safelyPlayVideo();
         }
+        _currentSourceKey = selectedSource;
         _updateViewAfterFullscreen?.call();
       }
     } catch (e, stackTrace) {
@@ -413,6 +421,69 @@ class CustomVideoPlayerController {
     }
   }
 
+  /// Returns true if [description] looks like a codec/renderer error (e.g. MediaCodecVideoRenderer on Android).
+  bool _isCodecOrRendererError(String description) {
+    final lower = description.toLowerCase();
+    return lower.contains('mediacodec') ||
+        lower.contains('mediacodecvideorenderer') ||
+        lower.contains('had error');
+  }
+
+  /// Returns additional source keys sorted by quality ascending (lowest first),
+  /// using numbers parsed from keys (e.g. 240p, 480p).
+  List<String> _getOrderedQualityKeys() {
+    final sources = additionalVideoSources;
+    if (sources == null || sources.isEmpty) return [];
+    final keys = sources.keys.toList();
+    keys.sort((a, b) {
+      final aNum = RegExp(r'(\d+)').firstMatch(a);
+      final bNum = RegExp(r'(\d+)').firstMatch(b);
+      final aVal = aNum != null ? (int.tryParse(aNum.group(1)!) ?? 9999) : 9999;
+      final bVal = bNum != null ? (int.tryParse(bNum.group(1)!) ?? 9999) : 9999;
+      return aVal.compareTo(bVal);
+    });
+    return keys;
+  }
+
+  /// Attempts to switch to a lower quality source when a codec/renderer error is detected.
+  Future<void> _attemptFallbackToLowerQuality(String errorDescription) async {
+    if (_isDisposed || _isDisposing || _isAttemptingFallback) return;
+    final sources = additionalVideoSources;
+    if (sources == null || sources.isEmpty) return;
+
+    final orderedKeys = _getOrderedQualityKeys();
+    if (orderedKeys.isEmpty) return;
+
+    final String? fallbackKey;
+    if (_currentSourceKey == null) {
+      fallbackKey = orderedKeys.first;
+    } else {
+      final index = orderedKeys.indexOf(_currentSourceKey!);
+      if (index <= 0) return;
+      fallbackKey = orderedKeys[index - 1];
+    }
+
+    if (fallbackKey == null || sources[fallbackKey] == null) return;
+
+    _isAttemptingFallback = true;
+    try {
+      await _switchVideoSource(fallbackKey);
+      _trackMixpanelEvent(
+        VideoPlayerMixpanelEventType.fallbackToLowerQualityDueToError,
+        'Switched to lower quality due to codec/renderer error',
+        properties: {
+          'fallbackTo': fallbackKey,
+          'previousError': errorDescription,
+        },
+      );
+      debugPrint(
+        'Fallback to lower quality: switched to "$fallbackKey" after error: $errorDescription',
+      );
+    } finally {
+      _isAttemptingFallback = false;
+    }
+  }
+
   /// Handle video player errors
   void _onVideoErrorListener() {
     try {
@@ -431,6 +502,11 @@ class CustomVideoPlayerController {
         _timer = null;
         // Update playing state
         _isPlayingNotifier.value = false;
+
+        // Attempt automatic fallback to lower quality on codec/renderer errors
+        if (_isCodecOrRendererError(description)) {
+          Future.microtask(() => _attemptFallbackToLowerQuality(description));
+        }
       }
     } catch (e, stackTrace) {
       final message = 'Error in video error listener: $e';
@@ -444,46 +520,55 @@ class CustomVideoPlayerController {
     }
   }
 
-  /// used to make progress more fluid
+  /// Used to make progress more fluid. Only one timer is created while playing; overlapping position fetches are skipped to avoid freezing on slow devices.
   Future<void> _fluidVideoProgressListener() async {
     _checkDisposalStatus();
 
     if (videoPlayerController.value.isPlaying) {
-      _timer = Timer.periodic(const Duration(milliseconds: 100), (
+      // Avoid creating multiple timers: _videoListeners() runs on every video value change, so without this we would leak a new timer each time and freeze the app.
+      if (_timer != null) return;
+
+      final interval = customVideoPlayerSettings.progressUpdateInterval;
+      _timer = Timer.periodic(interval, (
         Timer timer,
       ) async {
+        if (_isDisposed || _isDisposing) {
+          timer.cancel();
+          _timer = null;
+          return;
+        }
+        if (!videoPlayerController.value.isInitialized ||
+            videoPlayerController.value.hasError) {
+          timer.cancel();
+          _timer = null;
+          return;
+        }
+        if (_progressUpdateInProgress) return;
+
+        _progressUpdateInProgress = true;
         try {
-          if (_isDisposed || _isDisposing) {
-            timer.cancel();
-            return;
-          }
-
-          if (!videoPlayerController.value.isInitialized) {
-            timer.cancel();
-            return;
-          }
-
-          if (videoPlayerController.value.hasError) {
-            debugPrint('Video player has error, cancelling timer');
-            timer.cancel();
-            return;
-          }
-
-          if (videoPlayerController.value.isInitialized) {
+          final position = await videoPlayerController.position;
+          if (_isDisposed || _isDisposing) return;
+          if (videoPlayerController.value.isInitialized &&
+              !videoPlayerController.value.hasError) {
             _videoProgressNotifier.value =
-                await videoPlayerController.position ??
-                _videoProgressNotifier.value;
+                position ?? _videoProgressNotifier.value;
           }
         } catch (e, stackTrace) {
-          final message = 'Error getting video position: $e';
-          debugPrint(message);
-          _trackMixpanelEvent(
-            VideoPlayerMixpanelEventType.videoProgress,
-            message,
-            error: e,
-            stackTrace: stackTrace,
-          );
+          if (!_isDisposed && !_isDisposing) {
+            final message = 'Error getting video position: $e';
+            debugPrint(message);
+            _trackMixpanelEvent(
+              VideoPlayerMixpanelEventType.videoProgress,
+              message,
+              error: e,
+              stackTrace: stackTrace,
+            );
+          }
           timer.cancel();
+          _timer = null;
+        } finally {
+          _progressUpdateInProgress = false;
         }
       });
     } else {

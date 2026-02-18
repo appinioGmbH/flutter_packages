@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:appinio_video_player/src/helpers/device_capability.dart';
 import 'package:appinio_video_player/src/controls/fullscreen_button.dart';
 import 'package:appinio_video_player/src/controls/play_button.dart';
 import 'package:appinio_video_player/src/controls/video_settings_button.dart';
@@ -91,6 +92,10 @@ class CustomVideoPlayerSettings {
   /// The duration after which the controls will fade out. Recommended duration is >= 2 seconds.
   final Duration durationAfterControlsFadeOut;
 
+  /// Interval for updating the progress bar while playing. Shorter values (e.g. 100 ms) give smoother UI but may cause jank or freezes on low-end devices; use 200–250 ms for those.
+  /// For an automatic choice based on device, use [DeviceCapability.recommendedProgressUpdateIntervalForDevice].
+  final Duration progressUpdateInterval;
+
   /// The [TextStyle] of the played duration left from the progress bar.
   final TextStyle durationPlayedTextStyle;
 
@@ -157,6 +162,7 @@ class CustomVideoPlayerSettings {
     this.playOnlyOnce = false,
     this.autoFadeOutControls = true,
     this.durationAfterControlsFadeOut = const Duration(seconds: 3),
+    this.progressUpdateInterval = const Duration(milliseconds: 100),
     this.showFullscreenButton = !kIsWeb,
     this.systemUIModeAfterFullscreen = SystemUiMode.edgeToEdge,
     this.systemUIModeInsideFullscreen = SystemUiMode.leanBack,
