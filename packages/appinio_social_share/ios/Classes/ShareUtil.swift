@@ -258,8 +258,19 @@ public class ShareUtil{
             }
         }
         let activityViewController = UIActivityViewController(activityItems: data, applicationActivities: nil)
-        UIApplication.topViewController()?.present(activityViewController, animated: true, completion: nil)
-        result(SUCCESS)
+        if let topViewController = UIApplication.topViewController() {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                activityViewController.modalPresentationStyle = .popover
+                let popver = activityViewController.popoverPresentationController
+                popver?.permittedArrowDirections = []
+                popver?.sourceRect = CGRect(x: topViewController.view.bounds.midX, y: topViewController.view.bounds.midY, width: 0, height: 0)
+                popver?.sourceView = topViewController.view
+            }
+            topViewController.present(activityViewController, animated: true, completion: nil)
+            result(SUCCESS)
+        } else {
+            result("No Share Top Controller")
+        }
     }
     
     
@@ -280,7 +291,7 @@ public class ShareUtil{
         let whatsAppURL  = NSURL(string: whatsURL.addingPercentEncoding(withAllowedCharacters: characterSet)!)
         if UIApplication.shared.canOpenURL(whatsAppURL! as URL)
         {
-            UIApplication.shared.open(whatsAppURL! as URL)
+            UIApplication.shared.open(whatsAppURL! as URL, options: [:], completionHandler: nil)
             result(SUCCESS);
         }
         else
@@ -337,7 +348,7 @@ public class ShareUtil{
             let tgUrl = URL.init(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!)
             
             if UIApplication.shared.canOpenURL(tgUrl!) {
-                UIApplication.shared.open(tgUrl!)
+                UIApplication.shared.open(tgUrl!, options: [:], completionHandler: nil)
                 result(SUCCESS)
             } else {
                 result(ERROR_APP_NOT_AVAILABLE)
@@ -456,7 +467,7 @@ public class ShareUtil{
                         UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(60 * 5)
                     ]
                     UIPasteboard.general.setItems([pasteboardItems], options: pasteboardOptions)
-                    UIApplication.shared.open(facebookURL, options: [:])
+                    UIApplication.shared.open(facebookURL, options: [:], completionHandler: nil)
                 }
                 result(self.SUCCESS)
                 return
@@ -484,9 +495,20 @@ public class ShareUtil{
                 composeCtl?.add(UIImage.init(contentsOfFile: image))
             }
         }
-        composeCtl?.setInitialText(title!)
-        UIApplication.topViewController()?.present(composeCtl!,animated:true,completion:nil);
-        result(SUCCESS)
+        if let topViewController = UIApplication.topViewController() {
+            composeCtl?.modalPresentationStyle = .popover
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                let popver = composeCtl?.popoverPresentationController
+                popver?.permittedArrowDirections = []
+                popver?.sourceRect = CGRect(x: topViewController.view.bounds.midX, y: topViewController.view.bounds.midY, width: 0, height: 0)
+                popver?.sourceView = topViewController.view
+            }
+            composeCtl?.setInitialText(title!)
+            topViewController.present(composeCtl!,animated:true,completion:nil);
+            result(SUCCESS)
+        } else {
+            result("No Share Top Controller")
+        }
     }
 
     
@@ -535,7 +557,7 @@ public class ShareUtil{
                     UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(60 * 5)
                 ]
                 UIPasteboard.general.setItems(pasteboardItems, options: pasteboardOptions)
-                UIApplication.shared.open(instagramURL, options: [:])
+                UIApplication.shared.open(instagramURL, options: [:], completionHandler: nil)
                 result(self.SUCCESS)
             } else {
                 result(ERROR_APP_NOT_AVAILABLE)
