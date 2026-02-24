@@ -33,6 +33,9 @@ class CustomVideoPlayerController {
   bool _isDisposing = false;
   bool _isExitingFullscreen = false;
 
+  // Prevents overlapping position updates in the progress timer callback (avoids main-thread load on slow devices)
+  bool _progressUpdateInProgress = false;
+
   CustomVideoPlayerController({
     required this.context,
     required this.videoPlayerController,
@@ -79,7 +82,7 @@ class CustomVideoPlayerController {
 
   /// Check if video player is in a valid state for operations
   bool get _isVideoPlayerValid =>
-      videoPlayerController.value.isInitialized && 
+      videoPlayerController.value.isInitialized &&
       !videoPlayerController.value.hasError;
 
   /// private fields
@@ -112,10 +115,7 @@ class CustomVideoPlayerController {
         message: message,
         error: error,
         stackTrace: stackTrace,
-        properties: {
-          if (contextId != null) 'id': contextId,
-          ...?properties,
-        },
+        properties: {if (contextId != null) 'id': contextId, ...?properties},
       ),
     );
   }
@@ -444,46 +444,55 @@ class CustomVideoPlayerController {
     }
   }
 
-  /// used to make progress more fluid
+  /// Used to make progress more fluid. Only one timer is created while playing
+  /// overlapping position fetches are skipped to avoid freezing on slow devices.
   Future<void> _fluidVideoProgressListener() async {
     _checkDisposalStatus();
 
     if (videoPlayerController.value.isPlaying) {
-      _timer = Timer.periodic(const Duration(milliseconds: 100), (
-        Timer timer,
-      ) async {
+      // _videoListeners() runs on every video value change, so without this we
+      // could leak a new timer each time and could freeze the app
+      if (_timer != null) return;
+
+      final interval = customVideoPlayerSettings.progressUpdateInterval;
+      _timer = Timer.periodic(interval, (Timer timer) async {
+        if (_isDisposed || _isDisposing) {
+          timer.cancel();
+          _timer = null;
+          return;
+        }
+        if (!videoPlayerController.value.isInitialized ||
+            videoPlayerController.value.hasError) {
+          timer.cancel();
+          _timer = null;
+          return;
+        }
+        if (_progressUpdateInProgress) return;
+
+        _progressUpdateInProgress = true;
         try {
-          if (_isDisposed || _isDisposing) {
-            timer.cancel();
-            return;
-          }
-
-          if (!videoPlayerController.value.isInitialized) {
-            timer.cancel();
-            return;
-          }
-
-          if (videoPlayerController.value.hasError) {
-            debugPrint('Video player has error, cancelling timer');
-            timer.cancel();
-            return;
-          }
-
-          if (videoPlayerController.value.isInitialized) {
+          final position = await videoPlayerController.position;
+          if (_isDisposed || _isDisposing) return;
+          if (videoPlayerController.value.isInitialized &&
+              !videoPlayerController.value.hasError) {
             _videoProgressNotifier.value =
-                await videoPlayerController.position ??
-                _videoProgressNotifier.value;
+                position ?? _videoProgressNotifier.value;
           }
         } catch (e, stackTrace) {
-          final message = 'Error getting video position: $e';
-          debugPrint(message);
-          _trackMixpanelEvent(
-            VideoPlayerMixpanelEventType.videoProgress,
-            message,
-            error: e,
-            stackTrace: stackTrace,
-          );
+          if (!_isDisposed && !_isDisposing) {
+            final message = 'Error getting video position: $e';
+            debugPrint(message);
+            _trackMixpanelEvent(
+              VideoPlayerMixpanelEventType.videoProgress,
+              message,
+              error: e,
+              stackTrace: stackTrace,
+            );
+          }
           timer.cancel();
+          _timer = null;
+        } finally {
+          _progressUpdateInProgress = false;
         }
       });
     } else {
