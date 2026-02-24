@@ -33,7 +33,7 @@ class CustomVideoPlayerController {
   bool _isDisposing = false;
   bool _isExitingFullscreen = false;
 
-  /// Prevents overlapping position updates in the progress timer callback (avoids main-thread load on slow devices).
+  // Prevents overlapping position updates in the progress timer callback (avoids main-thread load on slow devices)
   bool _progressUpdateInProgress = false;
 
   CustomVideoPlayerController({
@@ -82,7 +82,7 @@ class CustomVideoPlayerController {
 
   /// Check if video player is in a valid state for operations
   bool get _isVideoPlayerValid =>
-      videoPlayerController.value.isInitialized && 
+      videoPlayerController.value.isInitialized &&
       !videoPlayerController.value.hasError;
 
   /// private fields
@@ -115,10 +115,7 @@ class CustomVideoPlayerController {
         message: message,
         error: error,
         stackTrace: stackTrace,
-        properties: {
-          if (contextId != null) 'id': contextId,
-          ...?properties,
-        },
+        properties: {if (contextId != null) 'id': contextId, ...?properties},
       ),
     );
   }
@@ -447,18 +444,18 @@ class CustomVideoPlayerController {
     }
   }
 
-  /// Used to make progress more fluid. Only one timer is created while playing; overlapping position fetches are skipped to avoid freezing on slow devices.
+  /// Used to make progress more fluid. Only one timer is created while playing
+  /// overlapping position fetches are skipped to avoid freezing on slow devices.
   Future<void> _fluidVideoProgressListener() async {
     _checkDisposalStatus();
 
     if (videoPlayerController.value.isPlaying) {
-      // Avoid creating multiple timers: _videoListeners() runs on every video value change, so without this we would leak a new timer each time and freeze the app.
+      // _videoListeners() runs on every video value change, so without this we
+      // could leak a new timer each time and could freeze the app
       if (_timer != null) return;
 
       final interval = customVideoPlayerSettings.progressUpdateInterval;
-      _timer = Timer.periodic(interval, (
-        Timer timer,
-      ) async {
+      _timer = Timer.periodic(interval, (Timer timer) async {
         if (_isDisposed || _isDisposing) {
           timer.cancel();
           _timer = null;

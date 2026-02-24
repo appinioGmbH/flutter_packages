@@ -92,7 +92,7 @@ class CustomVideoPlayerSettings {
   /// The duration after which the controls will fade out. Recommended duration is >= 2 seconds.
   final Duration durationAfterControlsFadeOut;
 
-  /// Interval for updating the progress bar while playing. Shorter values (e.g. 100 ms) give smoother UI but may cause jank or freezes on low-end devices; use 200–250 ms for those.
+  /// Interval for updating the progress bar while playing. Uses 100ms by default, on low-end devices uses 250 ms.
   /// For an automatic choice based on device, use [DeviceCapability.recommendedProgressUpdateIntervalForDevice].
   final Duration progressUpdateInterval;
 
