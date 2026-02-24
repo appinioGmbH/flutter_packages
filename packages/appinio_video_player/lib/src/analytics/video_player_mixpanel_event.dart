@@ -21,9 +21,6 @@ enum VideoPlayerMixpanelEventType {
   disposeAlreadyInProgress,
   enterFullscreenSuccess,
   exitFullscreenSuccess,
-
-  /// Fired when a codec/renderer error triggered an automatic switch to a lower quality source.
-  fallbackToLowerQualityDueToError,
 }
 
 /// Payload describing a failure that should be tracked.
