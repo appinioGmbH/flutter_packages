@@ -1,3 +1,6 @@
+## [1.2.7] - 2026.02.25
+- Chore: Added improvements in Video Player(Timer leakage and updated playback progress)
+
 ## [1.2.6] - 2025.11.27
 - Chore: Add support for tracking
 - Update video_player version
