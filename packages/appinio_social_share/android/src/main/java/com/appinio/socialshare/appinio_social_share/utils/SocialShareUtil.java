@@ -205,7 +205,7 @@ public class SocialShareUtil {
     }
 
 
-    public String shareToInstagramStory(String appId, String stickerImage, String backgroundImage, String backgroundTopColor, String backgroundBottomColor, String attributionURL, Context activity) {
+    public String shareToInstagramStory(String appId, String stickerImage, String backgroundImage, String backgroundTopColor, String backgroundBottomColor, String attributionURL, String linkText, String linkUrl, Context activity) {
 
         try {
 
@@ -229,6 +229,8 @@ public class SocialShareUtil {
             shareIntent.putExtra("content_url", attributionURL);
             shareIntent.putExtra("top_background_color", backgroundTopColor);
             shareIntent.putExtra("bottom_background_color", backgroundBottomColor);
+            shareIntent.putExtra("link_text", linkText);
+            shareIntent.putExtra("link_url", linkUrl);
             activity.startActivity(shareIntent);
             return SUCCESS;
         } catch (Exception e) {

@@ -83,7 +83,9 @@ abstract class AppinioSocialSharePlatform extends PlatformInterface {
       String? backgroundVideo,
       String? backgroundTopColor,
       String? backgroundBottomColor,
-      String? attributionURL}) {
+      String? attributionURL,
+      String? linkText,
+      String? linkUrl}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
