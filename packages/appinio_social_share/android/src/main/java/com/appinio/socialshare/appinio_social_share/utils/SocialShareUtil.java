@@ -23,6 +23,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
@@ -271,6 +272,39 @@ public class SocialShareUtil {
                 .setPhotos(sharePhotos)
                 .build();
         if (ShareDialog.canShow(SharePhotoContent.class)) {
+            shareDialog.show(content);
+        }
+    }
+
+    public void shareLinkToFacebook(String link, Activity activity, MethodChannel.Result result) {
+        FacebookSdk.fullyInitialize();
+        FacebookSdk.setApplicationId(getFacebookAppId(activity));
+        callbackManager = callbackManager == null ? CallbackManager.Factory.create() : callbackManager;
+        ShareDialog shareDialog = new ShareDialog(activity);
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result1) {
+                System.out.println("---------------onSuccess");
+                result.success(SUCCESS);
+            }
+
+            @Override
+            public void onCancel() {
+                result.success(ERROR_CANCELLED);
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                System.out.println("---------------onError");
+                result.success(error.getLocalizedMessage());
+            }
+        });
+    
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(link))
+                .build();
+
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
             shareDialog.show(content);
         }
     }
