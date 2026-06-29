@@ -13,7 +13,8 @@ A new Flutter plugin project.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  # Shared with the Swift Package Manager target — single source of truth.
+  s.source_files = 'disable_screenshot/Sources/disable_screenshot/**/*.swift'
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
 

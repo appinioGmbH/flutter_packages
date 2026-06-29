@@ -1,7 +1,7 @@
 ## [0.3.3]
 * Added iOS Swift Package Manager (SwiftPM) support via `ios/appinio_social_share/Package.swift`.
 * FBSDKCoreKit / FBSDKShareKit are declared as SwiftPM dependencies on `facebook-ios-sdk`.
-* CocoaPods support (`ios/Classes`, podspec) is unchanged — full backward compatibility.
+* Unified the iOS sources under `ios/appinio_social_share/Sources` (single source of truth); the podspec now points there and the legacy `ios/Classes` Objective-C shim was removed. The plugin is now pure Swift on iOS and builds under both CocoaPods and SwiftPM.
 
 ## [0.3.2] - 2024.08.01
 * Many bug fixes and improvements.
