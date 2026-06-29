@@ -1,3 +1,4 @@
+import Flutter
 import Photos
 import FBSDKCoreKit
 import FBSDKShareKit

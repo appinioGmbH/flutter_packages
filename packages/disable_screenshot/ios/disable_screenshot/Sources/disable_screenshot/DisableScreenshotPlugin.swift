@@ -24,21 +24,6 @@ public class DisableScreenshotPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        /*
-        if call.method == "disableScreenshots" {
-            if let arg = call.arguments as? Dictionary<String, Any>, let disable = arg["disable"] as? Bool {
-                if disable {
-                    //禁用截屏
-                } else {
-                    //允许截屏
-                }
-            } else {
-                print("【SwiftDisableScreenshotsPlugin】disableScreenshots 收到错误参数")
-            }
-        } else {
-            result(FlutterMethodNotImplemented)
-        }
-        */
         result(FlutterMethodNotImplemented)
     }
 }
