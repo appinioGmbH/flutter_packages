@@ -11,10 +11,15 @@ let package = Package(
     products: [
         .library(name: "disable-screenshot", targets: ["disable_screenshot"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(name: "FlutterFramework", path: "../FlutterFramework")
+    ],
     targets: [
         .target(
-            name: "disable_screenshot"
+            name: "disable_screenshot",
+            dependencies: [
+                .product(name: "FlutterFramework", package: "FlutterFramework")
+            ]
         )
     ]
 )
