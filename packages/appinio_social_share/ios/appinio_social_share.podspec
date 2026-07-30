@@ -13,7 +13,8 @@ A new Flutter project.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  # Shared with the Swift Package Manager target — single source of truth.
+  s.source_files = 'appinio_social_share/Sources/appinio_social_share/**/*.swift'
   s.dependency 'Flutter'
   s.dependency 'FBSDKCoreKit', '17.0.2'
   s.dependency 'FBSDKShareKit', '17.0.2'

@@ -1,10 +1,3 @@
-//
-//  MyActivityItemSource.swift
-//  appinio_social_share
-//
-//  Created by Mujeeb khan on 23.09.22.
-//
-
 import Foundation
 import LinkPresentation
 
