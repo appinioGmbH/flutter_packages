@@ -1,6 +1,6 @@
 library appinio_video_player;
 
-export 'package:cached_video_player/cached_video_player.dart';
+export 'package:cached_video_player_plus/cached_video_player_plus.dart';
 export 'src/custom_video_player.dart';
 export 'src/web_video_player/conditional_native_web_video_player/conditional_native_web_video_player.dart';
 export 'src/models/custom_video_player_progress_bar_settings.dart';
