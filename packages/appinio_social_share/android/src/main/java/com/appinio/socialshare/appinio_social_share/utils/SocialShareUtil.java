@@ -51,6 +51,7 @@ public class SocialShareUtil {
     private final String INSTAGRAM_FEED_PACKAGE = "com.instagram.share.ADD_TO_FEED";
     private final String WHATSAPP_PACKAGE = "com.whatsapp";
     private final String TELEGRAM_PACKAGE = "org.telegram.messenger";
+    private final String TELEGRAM_WEB_PACKAGE = "org.telegram.messenger.web";
     private final String TIKTOK_PACKAGE = "com.zhiliaoapp.musically";
     private final String FACEBOOK_STORY_PACKAGE = "com.facebook.stories.ADD_TO_STORY";
     private final String FACEBOOK_PACKAGE = "com.facebook.katana";
@@ -97,11 +98,27 @@ public class SocialShareUtil {
     }
 
     public String shareToTelegram(String imagePath, Context activity, String text) {
-        return shareFileAndTextToPackage(imagePath, text, activity, TELEGRAM_PACKAGE);
+        // Trying to launch Telegram downloaded from Google Play
+        String result = shareFileAndTextToPackage(imagePath, text, activity, TELEGRAM_PACKAGE);
+
+        // Trying to launch Telegram downloaded from It's website
+        if (!result.equals(SUCCESS)) {
+            result = shareFileAndTextToPackage(imagePath, text, activity, TELEGRAM_WEB_PACKAGE);
+        }
+
+        return result;
     }
 
     public String shareToTelegramFiles(ArrayList<String> imagePaths, Context activity) {
-        return shareFilesToPackage(imagePaths, activity, TELEGRAM_PACKAGE);
+        // Trying to launch Telegram downloaded from Google Play
+        String result = shareFilesToPackage(imagePaths, activity, TELEGRAM_PACKAGE);
+
+        // Trying to launch Telegram downloaded from It's website
+        if (!result.equals(SUCCESS)) {
+            result = shareFilesToPackage(imagePaths, activity, TELEGRAM_WEB_PACKAGE);
+        }
+
+        return result;
     }
 
 
@@ -391,11 +408,12 @@ public class SocialShareUtil {
     }
 
     public Map<String, Boolean> getInstalledApps(Context context) {
-        Map<String, String> appsMap = new HashMap();
+        Map<String, String> appsMap = new HashMap<>();
+        String telegramApp = "telegram";
         appsMap.put("instagram", INSTAGRAM_PACKAGE);
         appsMap.put("facebook_stories", FACEBOOK_PACKAGE);
         appsMap.put("whatsapp", WHATSAPP_PACKAGE);
-        appsMap.put("telegram", TELEGRAM_PACKAGE);
+        appsMap.put(telegramApp, TELEGRAM_PACKAGE);
         appsMap.put("messenger", FACEBOOK_MESSENGER_PACKAGE);
         appsMap.put("messenger-lite", FACEBOOK_MESSENGER_LITE_PACKAGE);
         appsMap.put("facebook", FACEBOOK_PACKAGE);
@@ -403,27 +421,44 @@ public class SocialShareUtil {
         appsMap.put("instagram_stories", INSTAGRAM_PACKAGE);
         appsMap.put("twitter", TWITTER_PACKAGE);
         appsMap.put("tiktok", TIKTOK_PACKAGE);
-
-        Map<String, Boolean> apps = new HashMap<String, Boolean>();
-
+    
+        Map<String, Boolean> apps = new HashMap<>();
         PackageManager pm = context.getPackageManager();
 
+        // Check for default messaging apps
         Intent intent = new Intent(Intent.ACTION_SENDTO).addCategory(Intent.CATEGORY_DEFAULT);
         intent.setType("vnd.android-dir/mms-sms");
         intent.setData(Uri.parse("sms:"));
         List<ResolveInfo> resolvedActivities = pm.queryIntentActivities(intent, 0);
         apps.put("message", !resolvedActivities.isEmpty());
+    
         String[] appNames = {"instagram", "facebook_stories", "whatsapp", "telegram", "messenger", "facebook", "facebook-lite", "messenger-lite", "instagram_stories", "twitter", "tiktok"};
-
-        for (int i = 0; i < appNames.length; i++) {
-            try {
-                pm.getPackageInfo(appsMap.get(appNames[i]), PackageManager.GET_META_DATA);
-                apps.put(appNames[i], true);
-            } catch (Exception e) {
-                apps.put(appNames[i], false);
+    
+        for (String appName : appNames) {
+            // Telegram has two types of package ids
+            // Downloaded from Google play store & Directly from It's website 
+            if (appName.equals(telegramApp)) {
+                // Check both packages
+                boolean isTelegramInstalled = isPackageInstalled(TELEGRAM_PACKAGE, pm) 
+                                              || isPackageInstalled(TELEGRAM_WEB_PACKAGE, pm);
+                apps.put(telegramApp, isTelegramInstalled);
+            } else {
+                apps.put(appName, isPackageInstalled(appsMap.get(appName), pm));
             }
         }
         return apps;
+    }
+    
+    /**
+     * Helper method to check if a package is installed
+     */
+    private boolean isPackageInstalled(String packageName, PackageManager pm) {
+        try {
+            pm.getPackageInfo(packageName, pm.GET_META_DATA);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     private static String getMimeTypeOfFile(String pathName) {
