@@ -25,72 +25,75 @@ class CustomVideoPlayerControlBar extends StatelessWidget {
           .customVideoPlayerSettings.controlBarPadding,
       decoration: customVideoPlayerController
           .customVideoPlayerSettings.controlBarDecoration,
-      child: Row(
-        children: [
-          if (customVideoPlayerController
-              .customVideoPlayerSettings.showMuteButton)
-            CustomVideoPlayerMuteButton(
-              customVideoPlayerController: customVideoPlayerController,
-              fadeOutOnPlay: fadeOutOnPlay,
-            ),
-          if (customVideoPlayerController
-              .customVideoPlayerSettings.showPlayButton)
-            CustomVideoPlayerPlayPauseButton(
-              customVideoPlayerController: customVideoPlayerController,
-              fadeOutOnPlay: fadeOutOnPlay,
-            ),
-          if (customVideoPlayerController
-              .customVideoPlayerSettings.showDurationPlayed)
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 5.0,
-                right: 5.0,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Row(
+          children: [
+            if (customVideoPlayerController
+                .customVideoPlayerSettings.showMuteButton)
+              CustomVideoPlayerMuteButton(
+                customVideoPlayerController: customVideoPlayerController,
+                fadeOutOnPlay: fadeOutOnPlay,
               ),
-              child: ValueListenableBuilder<Duration>(
-                valueListenable:
-                    customVideoPlayerController.videoProgressNotifier,
-                builder: ((context, progress, child) {
-                  return Text(
-                    getDurationAsString(progress),
-                    style: customVideoPlayerController
-                        .customVideoPlayerSettings.durationPlayedTextStyle,
-                  );
-                }),
+            if (customVideoPlayerController
+                .customVideoPlayerSettings.showPlayButton)
+              CustomVideoPlayerPlayPauseButton(
+                customVideoPlayerController: customVideoPlayerController,
+                fadeOutOnPlay: fadeOutOnPlay,
               ),
-            ),
-          Expanded(
-            child: CustomVideoPlayerProgressBar(
-              customVideoPlayerController: customVideoPlayerController,
-            ),
-          ),
-          if (customVideoPlayerController
-              .customVideoPlayerSettings.showDurationRemaining)
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 5.0,
-                right: 5.0,
+            if (customVideoPlayerController
+                .customVideoPlayerSettings.showDurationPlayed)
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 5.0,
+                  right: 5.0,
+                ),
+                child: ValueListenableBuilder<Duration>(
+                  valueListenable:
+                      customVideoPlayerController.videoProgressNotifier,
+                  builder: ((context, progress, child) {
+                    return Text(
+                      getDurationAsString(progress),
+                      style: customVideoPlayerController
+                          .customVideoPlayerSettings.durationPlayedTextStyle,
+                    );
+                  }),
+                ),
               ),
-              child: ValueListenableBuilder<Duration>(
-                valueListenable:
-                    customVideoPlayerController.videoProgressNotifier,
-                builder: ((context, progress, child) {
-                  return Text(
-                    "-" +
-                        getDurationAsString(customVideoPlayerController
-                                .videoPlayerController.value.duration -
-                            progress),
-                    style: customVideoPlayerController
-                        .customVideoPlayerSettings.durationRemainingTextStyle,
-                  );
-                }),
+            Expanded(
+              child: CustomVideoPlayerProgressBar(
+                customVideoPlayerController: customVideoPlayerController,
               ),
             ),
-          if (customVideoPlayerController
-              .customVideoPlayerSettings.showFullscreenButton)
-            CustomVideoPlayerFullscreenButton(
-              customVideoPlayerController: customVideoPlayerController,
-            )
-        ],
+            if (customVideoPlayerController
+                .customVideoPlayerSettings.showDurationRemaining)
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 5.0,
+                  right: 5.0,
+                ),
+                child: ValueListenableBuilder<Duration>(
+                  valueListenable:
+                      customVideoPlayerController.videoProgressNotifier,
+                  builder: ((context, progress, child) {
+                    return Text(
+                      "-" +
+                          getDurationAsString(customVideoPlayerController
+                                  .videoPlayerController.value.duration -
+                              progress),
+                      style: customVideoPlayerController
+                          .customVideoPlayerSettings.durationRemainingTextStyle,
+                    );
+                  }),
+                ),
+              ),
+            if (customVideoPlayerController
+                .customVideoPlayerSettings.showFullscreenButton)
+              CustomVideoPlayerFullscreenButton(
+                customVideoPlayerController: customVideoPlayerController,
+              )
+          ],
+        ),
       ),
     );
   }

@@ -39,54 +39,60 @@ class _VideoSettingsPlaybackSpeedDialogState
                 .borderRadius ??
             BorderRadius.zero,
       ),
-      child: Container(
-        padding: widget.customVideoPlayerController.customVideoPlayerSettings
-            .customVideoPlayerPopupSettings.popupPadding,
-        width: widget.customVideoPlayerController.customVideoPlayerSettings
-            .customVideoPlayerPopupSettings.popupWidth,
-        decoration: widget.customVideoPlayerController.customVideoPlayerSettings
-            .customVideoPlayerPopupSettings.popupDecoration,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              widget.customVideoPlayerController.customVideoPlayerSettings
-                  .customVideoPlayerPopupSettings.popupPlaybackSpeedTitle,
-              style: widget
-                  .customVideoPlayerController
-                  .customVideoPlayerSettings
-                  .customVideoPlayerPopupSettings
-                  .popupTitleTextStyle,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Flexible(
-              child: ListView(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(0),
-                controller: ScrollController(),
-                children: [
-                  for (double playbackSpeed in _playbackSpeeds)
-                    VideoSettingsDialogItem(
-                      title: playbackSpeed == 1.0
-                          ? "${playbackSpeed}x (${widget.customVideoPlayerController.customVideoPlayerSettings.customVideoPlayerPopupSettings.defaultPlaybackspeedDescription})"
-                          : "${playbackSpeed}x",
-                      popupSettings: widget
-                          .customVideoPlayerController
-                          .customVideoPlayerSettings
-                          .customVideoPlayerPopupSettings,
-                      onPressed: () =>
-                          _changeVideoPlayBackSpeed(context, playbackSpeed),
-                      selected: widget.customVideoPlayerController
-                              .playbackSpeedNotifier.value ==
-                          playbackSpeed,
-                    ),
-                ],
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Container(
+          padding: widget.customVideoPlayerController.customVideoPlayerSettings
+              .customVideoPlayerPopupSettings.popupPadding,
+          width: widget.customVideoPlayerController.customVideoPlayerSettings
+              .customVideoPlayerPopupSettings.popupWidth,
+          decoration: widget
+              .customVideoPlayerController
+              .customVideoPlayerSettings
+              .customVideoPlayerPopupSettings
+              .popupDecoration,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                widget.customVideoPlayerController.customVideoPlayerSettings
+                    .customVideoPlayerPopupSettings.popupPlaybackSpeedTitle,
+                style: widget
+                    .customVideoPlayerController
+                    .customVideoPlayerSettings
+                    .customVideoPlayerPopupSettings
+                    .popupTitleTextStyle,
               ),
-            )
-          ],
+              const SizedBox(
+                height: 8,
+              ),
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(0),
+                  controller: ScrollController(),
+                  children: [
+                    for (double playbackSpeed in _playbackSpeeds)
+                      VideoSettingsDialogItem(
+                        title: playbackSpeed == 1.0
+                            ? "${playbackSpeed}x (${widget.customVideoPlayerController.customVideoPlayerSettings.customVideoPlayerPopupSettings.defaultPlaybackspeedDescription})"
+                            : "${playbackSpeed}x",
+                        popupSettings: widget
+                            .customVideoPlayerController
+                            .customVideoPlayerSettings
+                            .customVideoPlayerPopupSettings,
+                        onPressed: () =>
+                            _changeVideoPlayBackSpeed(context, playbackSpeed),
+                        selected: widget.customVideoPlayerController
+                                .playbackSpeedNotifier.value ==
+                            playbackSpeed,
+                      ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
