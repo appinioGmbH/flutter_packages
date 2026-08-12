@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_onboarding_slider/background_image.dart';
+
+import 'background_image.dart';
 
 class Background extends StatelessWidget {
   final Widget child;
@@ -9,8 +11,10 @@ class Background extends StatelessWidget {
   final double imageVerticalOffset;
   final double imageHorizontalOffset;
   final bool centerBackground;
+  final PageController pageController;
 
-  Background({
+  const Background({
+    super.key,
     required this.imageVerticalOffset,
     required this.child,
     required this.centerBackground,
@@ -18,6 +22,7 @@ class Background extends StatelessWidget {
     required this.background,
     required this.speed,
     required this.imageHorizontalOffset,
+    required this.pageController,
   });
 
   @override
@@ -27,12 +32,14 @@ class Background extends StatelessWidget {
       children: [
         for (int i = 0; i < totalPage; i++)
           BackgroundImage(
-              centerBackground: centerBackground,
-              imageHorizontalOffset: imageHorizontalOffset,
-              imageVerticalOffset: imageVerticalOffset,
-              id: totalPage - i,
-              speed: speed,
-              background: background[totalPage - i - 1]),
+            centerBackground: centerBackground,
+            imageHorizontalOffset: imageHorizontalOffset,
+            imageVerticalOffset: imageVerticalOffset,
+            id: totalPage - i,
+            speed: speed,
+            background: background[totalPage - i - 1],
+            pageController: pageController,
+          ),
         child,
       ],
     );

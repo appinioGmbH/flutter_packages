@@ -46,7 +46,8 @@ class BackgroundFinalButton extends StatelessWidget {
   final Icon skipIcon;
   final FinishButtonStyle? finishButtonStyle;
 
-  BackgroundFinalButton({
+  const BackgroundFinalButton({
+    super.key,
     required this.currentPage,
     required this.pageController,
     required this.totalPage,

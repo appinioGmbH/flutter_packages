@@ -1,15 +1,34 @@
-library flutter_onboarding_slider;
+/*
+The MIT License (MIT)
 
+Copyright (c) 2021 APPINIO GmbH
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_onboarding_slider/background_controller.dart';
-import 'package:flutter_onboarding_slider/background_final_button.dart';
-import 'package:flutter_onboarding_slider/onboarding_navigation_bar.dart';
-import 'package:flutter_onboarding_slider/page_offset_provider.dart';
-import 'package:provider/provider.dart';
 
 import 'background.dart';
 import 'background_body.dart';
+import 'background_controller.dart';
+import 'background_final_button.dart';
+import 'onboarding_navigation_bar.dart';
 
 export 'background.dart';
 export 'background_final_button.dart';
@@ -28,7 +47,7 @@ class OnBoardingSlider extends StatefulWidget {
   final double speed;
 
   /// Background Color of whole screen apart from the NavigationBar.
-  final Color? pageBackgroundColor;
+  final Color pageBackgroundColor;
 
   /// Background Gradient of whole screen apart from the NavigationBar.
   final Gradient? pageBackgroundGradient;
@@ -101,17 +120,18 @@ class OnBoardingSlider extends StatefulWidget {
   /// override the function for kip button in the navigator.
   final Function? skipFunctionOverride;
 
-  OnBoardingSlider({
+  const OnBoardingSlider({
+    super.key,
     required this.totalPage,
     required this.headerBackgroundColor,
     required this.background,
     required this.speed,
     required this.pageBodies,
+    required this.pageBackgroundColor,
     this.onFinish,
     this.trailingFunction,
     this.trailing,
     this.skipTextButton,
-    this.pageBackgroundColor,
     this.pageBackgroundGradient,
     this.finishButtonStyle,
     this.finishButtonText,
@@ -139,13 +159,13 @@ class OnBoardingSlider extends StatefulWidget {
   });
 
   @override
-  _OnBoardingSliderState createState() => _OnBoardingSliderState();
+  OnBoardingSliderState createState() => OnBoardingSliderState();
 }
 
-class _OnBoardingSliderState extends State<OnBoardingSlider> {
+class OnBoardingSliderState extends State<OnBoardingSlider> {
   final PageController _pageController = PageController(initialPage: 0);
 
-  int _currentPage = 0;
+  int currentPage = 0;
 
   @override
   void initState() {
@@ -154,75 +174,74 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) => PageOffsetNotifier(_pageController),
-      child: Scaffold(
-        backgroundColor: widget.pageBackgroundColor ?? null,
-        floatingActionButton: widget.hasFloatingButton
-            ? BackgroundFinalButton(
-                buttonTextStyle: widget.finishButtonTextStyle,
-                skipIcon: widget.skipIcon,
-                addButton: widget.addButton,
-                currentPage: _currentPage,
-                pageController: _pageController,
-                totalPage: widget.totalPage,
-                onPageFinish: widget.onFinish,
-                finishButtonStyle: widget.finishButtonStyle,
-                buttonText: widget.finishButtonText,
-                hasSkip: widget.hasSkip,
-              )
-            : SizedBox.shrink(),
-        body: CupertinoPageScaffold(
-          navigationBar: OnBoardingNavigationBar(
-            skipFunctionOverride: widget.skipFunctionOverride,
-            leading: widget.leading,
-            middle: widget.middle,
-            totalPage: widget.totalPage,
-            currentPage: _currentPage,
-            onSkip: _onSkip,
-            headerBackgroundColor: widget.headerBackgroundColor,
-            onFinish: widget.trailingFunction,
-            finishButton: widget.trailing,
-            skipTextButton: widget.skipTextButton,
+    return Scaffold(
+      backgroundColor: widget.pageBackgroundColor,
+      floatingActionButton: widget.hasFloatingButton
+          ? BackgroundFinalButton(
+              buttonTextStyle: widget.finishButtonTextStyle,
+              skipIcon: widget.skipIcon,
+              addButton: widget.addButton,
+              currentPage: currentPage,
+              pageController: _pageController,
+              totalPage: widget.totalPage,
+              onPageFinish: widget.onFinish,
+              finishButtonStyle: widget.finishButtonStyle,
+              buttonText: widget.finishButtonText,
+              hasSkip: widget.hasSkip,
+            )
+          : SizedBox.shrink(),
+      body: CupertinoPageScaffold(
+        navigationBar: OnBoardingNavigationBar(
+          skipFunctionOverride: widget.skipFunctionOverride,
+          leading: widget.leading,
+          middle: widget.middle,
+          totalPage: widget.totalPage,
+          currentPage: currentPage,
+          onSkip: _onSkip,
+          headerBackgroundColor: widget.headerBackgroundColor,
+          onFinish: widget.trailingFunction,
+          finishButton: widget.trailing,
+          skipTextButton: widget.skipTextButton,
+        ),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            gradient: widget.pageBackgroundGradient,
+            color: widget.pageBackgroundColor,
           ),
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              gradient: widget.pageBackgroundGradient ?? null,
-              color: widget.pageBackgroundColor ?? null,
-            ),
-            child: SafeArea(
-              child: Background(
-                centerBackground: widget.centerBackground,
-                imageHorizontalOffset: widget.imageHorizontalOffset,
-                imageVerticalOffset: widget.imageVerticalOffset,
-                background: widget.background,
-                speed: widget.speed,
-                totalPage: widget.totalPage,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: BackgroundBody(
-                          controller: _pageController,
-                          function: slide,
-                          totalPage: widget.totalPage,
-                          bodies: widget.pageBodies,
-                        ),
+          child: SafeArea(
+            child: Background(
+              centerBackground: widget.centerBackground,
+              imageHorizontalOffset: widget.imageHorizontalOffset,
+              imageVerticalOffset: widget.imageVerticalOffset,
+              background: widget.background,
+              speed: widget.speed,
+              totalPage: widget.totalPage,
+              pageController: _pageController,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: BackgroundBody(
+                        controller: _pageController,
+                        function: slide,
+                        totalPage: widget.totalPage,
+                        bodies: widget.pageBodies,
                       ),
-                      widget.addController
-                          ? BackgroundController(
-                              hasFloatingButton: widget.hasFloatingButton,
-                              indicatorPosition: widget.indicatorPosition,
-                              indicatorAbove: widget.indicatorAbove,
-                              currentPage: _currentPage,
-                              totalPage: widget.totalPage,
-                              controllerColor: widget.controllerColor,
-                            )
-                          : SizedBox.shrink(),
-                    ]),
-              ),
+                    ),
+                    widget.addController
+                        ? BackgroundController(
+                            backgroundColor: widget.pageBackgroundColor,
+                            hasFloatingButton: widget.hasFloatingButton,
+                            indicatorPosition: widget.indicatorPosition,
+                            indicatorAbove: widget.indicatorAbove,
+                            currentPage: currentPage,
+                            totalPage: widget.totalPage,
+                            controllerColor: widget.controllerColor,
+                          )
+                        : SizedBox.shrink(),
+                  ]),
             ),
           ),
         ),
@@ -233,7 +252,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
   /// Slide to Next Page.
   void slide(int page) {
     setState(() {
-      _currentPage = page;
+      currentPage = page;
     });
   }
 
@@ -241,7 +260,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
   void _onSkip() {
     _pageController.jumpToPage(widget.totalPage - 1);
     setState(() {
-      _currentPage = widget.totalPage - 1;
+      currentPage = widget.totalPage - 1;
     });
   }
 }
